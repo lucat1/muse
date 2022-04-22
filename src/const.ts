@@ -3,9 +3,10 @@ import { useParams } from "react-router";
 import { Setter } from "use-local-storage";
 
 export const LOCAL_STORAGE_KEY = "muse";
+export const SUBSONIC_PROTOCOL_VERSION = "1.16.1";
 
 export interface RouterParams {
-  server?: number;
+  server?: string;
 }
 
 export interface Connection {
@@ -15,6 +16,8 @@ export interface Connection {
 export const ConnectionsConext = createContext<
   [Connection[], Setter<Connection[]>]
 >([[], void 0 as any]);
+
+export const useConnections = () => useContext(ConnectionsConext);
 
 export const useConnection = (i: numer | null = null) => {
   if (i == null) i = useParams<RouterParams>().server!;

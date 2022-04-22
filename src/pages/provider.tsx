@@ -1,16 +1,29 @@
-import * as React from 'react'
-import {
-  Routes,
-  Route,
-  useParams,
-} from 'react-router-dom'
+import * as React from "react";
+import { Routes, Route, Outlet, useParams } from "react-router-dom";
+import { RouterParams, useConnections } from "../const";
+
+import Artists from "./artists";
+import NotFound from "./not-found";
 
 const Welcome: React.FunctionComponent = () => {
-  return <Routes>
-    <Route index element={<h1>index</h1>} />
-    <Route path="artists" element={<h1>artists</h1>} />
-    <Route path="artist/:id" element={<h1>artist #{useParams().id}</h1>} />
-  </Routes>
-}
+  const { server } = useParams<RouterParams>();
+  const [connections] = useConnections();
+  let i;
+  if (server == undefined || (i = parseInt(server)) === NaN || !connections[i])
+    return <NotFound />;
+  console.log(i);
 
-export default Welcome
+  return (
+    <>
+      <Routes>
+        <Route index element={<h1>index</h1>} />
+        <Route path="artists" element={<Artists />} />
+        <Route path="artist/:id" element={<h1>artist #{useParams().id}</h1>} />
+        <Route path="*" element={<NotFound />} />
+      </Routes>
+      <Outlet />
+    </>
+  );
+};
+
+export default Welcome;

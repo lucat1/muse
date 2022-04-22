@@ -1,13 +1,15 @@
 import * as React from "react";
 import { useForm } from "react-hook-form";
+import { useConnections, Connection } from "../const";
 
 const Welcome = () => {
+  const [connections, setConnections] = useConnections();
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm();
-  const onSubmit = (data: any) => console.log(data);
+  } = useForm<Connection>();
+  const onSubmit = (data: Connection) => setConnections([...connections, data]);
   console.log("errors", errors);
 
   return (
