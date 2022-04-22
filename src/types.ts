@@ -4,27 +4,27 @@ export interface SubsonicError {
 }
 
 export interface SubsonicArtistsResponse {
-  ignoredArticles: string
-  index: 
+  ignoredArticles: string;
+  index: SubsonicArtistsIndex[];
 }
 
 export interface SubsonicArtistsIndex {
-  name: string
-  artist: []
+  name: string[1];
+  artist: SubsonicArtistBase[];
 }
 
 export interface SubsonicArtistBase {
-  id: string
-  name: string
-  albumCount: number
+  id: string;
+  name: string;
+  albumCount: number;
 }
 
 export interface SubsonicArtist extends SubsonicArtistBase {
-  albums: SubsonicAlbumBase[]
+  albums: SubsonicAlbumBase[];
 }
 
 export interface SubsonicAlbumBase {
-  id: string
-  name: string
-  artist: string
+  id: string;
+  name: string;
+  artist: string;
 }

@@ -5,6 +5,10 @@ import { Setter } from "use-local-storage";
 export const LOCAL_STORAGE_KEY = "muse";
 export const SUBSONIC_PROTOCOL_VERSION = "1.16.1";
 
+export const GET_ARTISTS = "getArtists";
+export const GET_ARTIST = "getArtist";
+export const GET_ARTIST_INFO = "getArtistInfo2";
+
 export interface RouterParams {
   server?: string;
 }

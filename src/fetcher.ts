@@ -33,7 +33,7 @@ const fetcher =
   <T>(username: string, salted: string, salt: string) =>
   (url: string) => {
     const u = new URL(url);
-    const p = new URLSearchParams(url.search);
+    const p = new URLSearchParams(u.search);
     p.set("c", CLIENT_NAME);
     p.set("f", "json");
     p.set("u", username);
