@@ -1,6 +1,5 @@
 import { createContext, useContext } from "react";
 import { useParams } from "react-router";
-import { Setter } from "use-local-storage";
 
 export const LOCAL_STORAGE_KEY = "muse";
 export const SUBSONIC_PROTOCOL_VERSION = "1.16.1";
@@ -8,28 +7,37 @@ export const SUBSONIC_PROTOCOL_VERSION = "1.16.1";
 export const GET_ARTISTS = "getArtists";
 export const GET_ARTIST = "getArtist";
 export const GET_ARTIST_INFO = "getArtistInfo2";
-
-export interface RouterParams {
-  server?: string;
-}
-
+export const GET_ALBUM = "getAlbum";
+// export const GET_ALBUM_INFO = "getAlbumInfo2";
 export interface Connection {
   host: string;
+  username: string;
+  password: string;
+  saltLength: number;
 }
+type ConnectionsContextValue = [
+  Connection[],
+  React.Dispatch<React.SetStateAction<Connection[]>>
+];
+type ConnectionContextValue = [
+  Connection,
+  React.Dispatch<React.SetStateAction<Connection>>
+];
 
-export const ConnectionsConext = createContext<
-  [Connection[], Setter<Connection[]>]
->([[], void 0 as any]);
+export const ConnectionsContext = createContext<ConnectionsContextValue>([
+  [],
+  void 0 as any,
+]);
 
-export const useConnections = () => useContext(ConnectionsConext);
+export const useConnections = () => useContext(ConnectionsContext);
 
-export const useConnection = (i: numer | null = null) => {
-  if (i == null) i = useParams<RouterParams>().server!;
+export const useConnection = (i: number | null = null) => {
+  if (i == null) i = parseInt(useParams().server!);
 
-  const [ctx, setCtx] = useContext(ConnectionsConext);
+  const [ctx, setCtx] = useContext(ConnectionsContext);
   return [
     ctx[i],
     (connection: Connection) =>
       setCtx(ctx.map((conn, j) => (j == i ? connection : conn))),
-  ];
+  ] as ConnectionContextValue;
 };

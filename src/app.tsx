@@ -1,18 +1,20 @@
 import * as React from "react";
-import { Connection, ConnectionsConext, LOCAL_STORAGE_KEY } from "./const";
+import { Connection, ConnectionsContext, LOCAL_STORAGE_KEY } from "./const";
 import { BrowserRouter } from "react-router-dom";
 import useLocalStorage from "use-local-storage";
 
-const App: React.FunctionComponent = ({ children }) => {
+const App: React.FunctionComponent<React.PropsWithChildren<{}>> = ({
+  children,
+}) => {
   return (
     <React.StrictMode>
-      <ConnectionsConext.Provider
+      <ConnectionsContext.Provider
         value={useLocalStorage<Connection[]>(LOCAL_STORAGE_KEY, [])}
       >
         <React.Suspense fallback={<h1>loading</h1>}>
           <BrowserRouter>{children}</BrowserRouter>
         </React.Suspense>
-      </ConnectionsConext.Provider>
+      </ConnectionsContext.Provider>
     </React.StrictMode>
   );
 };

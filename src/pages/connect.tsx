@@ -9,7 +9,11 @@ const Welcome = () => {
     handleSubmit,
     formState: { errors },
   } = useForm<Connection>();
-  const onSubmit = (data: Connection) => setConnections([...connections, data]);
+  const onSubmit = (data: Connection) =>
+    setConnections([
+      ...connections,
+      { ...data, player: { state: "none", song: undefined } },
+    ]);
   console.log("errors", errors);
 
   return (
@@ -29,7 +33,7 @@ const Welcome = () => {
         {errors.host && <label for="host">invalid host</label>}
         <input
           type="text"
-          placeholder="username"
+          id="username"
           placeholder="Username"
           {...register("username", { required: true })}
         />
