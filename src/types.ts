@@ -69,6 +69,8 @@ export interface SubsonicArtistInfo {
   largeImageUrl: string;
   mediumImageUrl: string;
   smallImageUrl: string;
+
+  similarArtist: SubsonicArtistBase[] | undefined;
 }
 
 export interface SubsonicError {

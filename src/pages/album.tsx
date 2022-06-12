@@ -2,8 +2,8 @@ import * as React from "react";
 import { useParams, Link } from "react-router-dom";
 import formatDuration from "format-duration";
 import type { SubsonicAlbumResponse } from "../types";
-import useSubsonic, { gen, useURL } from "../fetcher";
-import { GET_ALBUM, useConnection } from "../const";
+import useSubsonic, { useURL } from "../fetcher";
+import { GET_ALBUM } from "../const";
 import { usePlayer } from "../components/player";
 
 const Album = () => {
