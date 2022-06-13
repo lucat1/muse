@@ -10,6 +10,7 @@ import useSubsonic from "../fetcher";
 import { GET_ARTIST, GET_ARTIST_INFO } from "../const";
 import { albumCondition, epCondition, singleCondition } from "../util";
 
+import Standard from "../components/standard";
 import Album from "../components/album";
 import Artist from "../components/artist";
 
@@ -42,7 +43,7 @@ const ArtistPage: React.FC = () => {
   ];
 
   return (
-    <main className="mx-8 md:mx-16 lg:mx-32 xl:mx-64 2xl:mx-96 flex flex-col">
+    <Standard>
       <Link to="../artists">artists</Link>
       <section className="py-4 flex flex-row items-end">
         <img
@@ -59,20 +60,19 @@ const ArtistPage: React.FC = () => {
           __html: artistInfo?.biography as string,
         }}
       />
-      {sections.map(
-        (section) =>
-          section[1].length && (
-            <section key={section[0]} className="py-4 flex flex-col">
-              <h2 className="text-lg md:text-xl xl:text-2xl font-semibold py-4">
-                {section[0]}
-              </h2>
-              <main className="flex flex-row flex-wrap justify-center">
-                {section[1].map((album) => (
-                  <Album key={album.id} album={album} />
-                ))}
-              </main>
-            </section>
-          )
+      {sections.map((section) =>
+        section[1].length ? (
+          <section key={section[0]} className="py-4 flex flex-col">
+            <h2 className="text-lg md:text-xl xl:text-2xl font-semibold py-4">
+              {section[0]}
+            </h2>
+            <main className="flex flex-row flex-wrap justify-center">
+              {section[1].map((album) => (
+                <Album key={album.id} album={album} />
+              ))}
+            </main>
+          </section>
+        ) : null
       )}
       {artistInfo?.similarArtist && (
         <section className="py-8 flex flex-col">
@@ -86,7 +86,7 @@ const ArtistPage: React.FC = () => {
           </main>
         </section>
       )}
-    </main>
+    </Standard>
   );
 };
 

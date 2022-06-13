@@ -55,6 +55,7 @@ export interface SubsonicSong extends SubsonicSongBase {
   path: string;
   size: number;
   suffix: string;
+  starred: string | undefined;
   track: number;
   type: "music" | "video" | "podcast";
   year: number;

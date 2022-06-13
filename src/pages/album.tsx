@@ -4,11 +4,13 @@ import formatDuration from "format-duration";
 import type { SubsonicAlbumResponse } from "../types";
 import useSubsonic, { useURL } from "../fetcher";
 import { GET_ALBUM } from "../const";
-import { usePlayer } from "../components/player";
+
+import Standard from "../components/standard";
+import {defaultFields} from "../components/song";
+import Songs from "../components/songs";
 
 const Album = () => {
   const { id } = useParams();
-  const [player, dispatch] = usePlayer();
   const { data: album } = useSubsonic<SubsonicAlbumResponse>(
     `${GET_ALBUM}?id=${id}`
   );
@@ -16,27 +18,31 @@ const Album = () => {
   // const { data: albumInfo } = useSubsonic<SubsonicAlbumInfoResponse>(
   //   `${GET_ALBUM_INFO}?id=${id}`
   // );
-  console.log(album);
   return (
-    <>
-      <h3>album {id}</h3>
-      <h1>{album?.name}</h1>
-      <h4>
-        <Link to={`../artist/${album?.artistId}`}>{album?.artist}</Link>
-      </h4>
-      <img src={albumArt} />
-      <ul>
-        {album?.song.map((song) => (
-          <li
-            key={song.id}
-            onClick={() => dispatch({ type: "play", payload: song })}
-          >
-            {song.title} - {formatDuration(song.duration * 1000)}{" "}
-            {player.song?.id == song.id && `[${player.state}]`}
-          </li>
-        ))}
-      </ul>
-    </>
+    <Standard>
+      <section className="py-4 flex flex-row items-start">
+        <img
+          className="w-32 md:w-48 lg:w-64 aspect-square rounded-lg border-2"
+          src={albumArt}
+        />
+        <div className="flex flex-col mx-8">
+          <h1 className="text-2xl md:text-3xl xl:text-4xl font-extrabold">
+            {album?.name}
+          </h1>
+          <h3 className="text-lg md:text-xl xl:text-2xl">
+            <Link to={`../artist/${album?.artistId}`}>{album?.artist}</Link>
+          </h3>
+          <span className="text-sm md:text-md">
+            {album?.year} {"\uFF65"}{" "}
+            {formatDuration((album?.duration || 0) * 1000)}
+          </span>
+        </div>
+      </section>
+      <Songs
+        fields={defaultFields}
+        songs={album?.song || []}
+      />
+    </Standard>
   );
 };
 

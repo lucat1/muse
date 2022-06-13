@@ -9,7 +9,7 @@ const Album: React.FC<{ album: SubsonicAlbum }> = ({ album }) => (
     <Link to={`../album/${album.id}`}>
       <img
         src={useURL(`getCoverArt?id=${album.coverArt}`)}
-        className="w-32 lg:w-64 aspect-square rounded-md border-1"
+        className="w-32 lg:w-64 aspect-square rounded-md"
       />
     </Link>
     <div className="mt-2 truncate">

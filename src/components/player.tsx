@@ -1,11 +1,11 @@
 import * as React from "react";
-import { gen, useURL } from "../fetcher";
+import { gen } from "../fetcher";
 import type { SubsonicSong } from "../types";
 import formatDuration from "format-duration";
-import { useParams } from "react-router";
-import useLocalStorage from "use-local-storage";
 import { useConnection } from "../const";
 import * as Slider from "@radix-ui/react-slider";
+
+import Standard from "./standard";
 
 interface Player {
   song: SubsonicSong | undefined;
@@ -93,28 +93,34 @@ const Player: React.FunctionComponent = () => {
   }, [player.song?.id, player.state]);
 
   return (
-    <div className="dark:bg-zinc-900 bg-zinc-500 p-6">
-      <button onClick={() => dispatch({ type: "toggle" })}>
-        {player.state}
-      </button>
-      : {player.song?.title}
-      {formatDuration(time * 1000)}/
-      {formatDuration((player.song?.duration || audio.duration || 0) * 1000)}
-      <Slider.Root
-        className="relative flex items-center w-full"
-        disabled={player.state == "none" || !canPlay}
-        value={[(seek != -1 ? seek : time) * timeScale]}
-        onValueChange={(value) => setSeek(value[0] / timeScale)}
-        onPointerUp={() => {
-          audio.currentTime = seek;
-          setSeek(-1);
-        }}
-      >
-        <Slider.Track className="bg-zinc-100 dark:bg-white-500 relative grow rounded-full h-2">
-          <Slider.Range className="bg-zinc-200 dark:bg-white-400 absolute h-full rounded-full" />
-        </Slider.Track>
-        <Slider.Thumb className="bg-zinc-300 dark:bg-white-300 block rounded-full w-4 h-4" />
-      </Slider.Root>
+    <div className="fixed bottom-8 w-screen">
+      <Standard>
+        <div className="p-4 border rounded-lg bg-neutral-200 border-neutral-300 dark:bg-neutral-800 dark:border-neutral-700">
+          <button onClick={() => dispatch({ type: "toggle" })}>
+            {player.state}
+          </button>
+          : {player.song?.title}
+          {formatDuration(time * 1000)}/
+          {formatDuration(
+            (player.song?.duration || audio.duration || 0) * 1000
+          )}
+          <Slider.Root
+            className="relative flex items-center w-full"
+            disabled={player.state == "none" || !canPlay}
+            value={[(seek != -1 ? seek : time) * timeScale]}
+            onValueChange={(value) => setSeek(value[0] / timeScale)}
+            onPointerUp={() => {
+              audio.currentTime = seek;
+              setSeek(-1);
+            }}
+          >
+            <Slider.Track className="bg-zinc-100 dark:bg-white-500 relative grow rounded-full h-2">
+              <Slider.Range className="bg-zinc-200 dark:bg-white-400 absolute h-full rounded-full" />
+            </Slider.Track>
+            <Slider.Thumb className="bg-zinc-300 dark:bg-white-300 block rounded-full w-4 h-4" />
+          </Slider.Root>
+        </div>
+      </Standard>
     </div>
   );
 };
