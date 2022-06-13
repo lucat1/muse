@@ -6,8 +6,9 @@ import useSubsonic, { useURL } from "../fetcher";
 import { GET_ALBUM } from "../const";
 
 import Standard from "../components/standard";
-import {defaultFields} from "../components/song";
+import { defaultFields } from "../components/song";
 import Songs from "../components/songs";
+import Image from "../components/img";
 
 const Album = () => {
   const { id } = useParams();
@@ -21,10 +22,7 @@ const Album = () => {
   return (
     <Standard>
       <section className="py-4 flex flex-row items-start">
-        <img
-          className="w-32 md:w-48 lg:w-64 aspect-square rounded-lg border-2"
-          src={albumArt}
-        />
+        <Image className="w-32 md:w-48 lg:w-64 hover:drop-shadow-lg" src={albumArt} />
         <div className="flex flex-col mx-8">
           <h1 className="text-2xl md:text-3xl xl:text-4xl font-extrabold">
             {album?.name}
@@ -38,10 +36,7 @@ const Album = () => {
           </span>
         </div>
       </section>
-      <Songs
-        fields={defaultFields}
-        songs={album?.song || []}
-      />
+      <Songs fields={defaultFields} songs={album?.song || []} />
     </Standard>
   );
 };

@@ -13,6 +13,7 @@ import { albumCondition, epCondition, singleCondition } from "../util";
 import Standard from "../components/standard";
 import Album from "../components/album";
 import Artist from "../components/artist";
+import Image from "../components/img";
 
 const ArtistPage: React.FC = () => {
   const { id } = useParams();
@@ -46,8 +47,8 @@ const ArtistPage: React.FC = () => {
     <Standard>
       <Link to="../artists">artists</Link>
       <section className="py-4 flex flex-row items-end">
-        <img
-          className="w-32 md:w-48 lg:w-64 aspect-square rounded-lg border-2"
+        <Image
+          className="w-32 md:w-48 lg:w-64 aspect-square rounded-lg"
           src={artistInfo?.mediumImageUrl}
         />
         <h1 className="mx-8 text-2xl md:text-3xl xl:text-4xl font-extrabold">
@@ -66,10 +67,12 @@ const ArtistPage: React.FC = () => {
             <h2 className="text-lg md:text-xl xl:text-2xl font-semibold py-4">
               {section[0]}
             </h2>
-            <main className="flex flex-row flex-wrap justify-center">
-              {section[1].map((album) => (
-                <Album key={album.id} album={album} />
-              ))}
+            <main className="flex justify-center">
+              <div className="flex flex-row flex-wrap">
+                {section[1].map((album) => (
+                  <Album key={album.id} album={album} />
+                ))}
+              </div>
             </main>
           </section>
         ) : null
@@ -79,10 +82,12 @@ const ArtistPage: React.FC = () => {
           <h2 className="text-lg md:text-xl xl:text-2xl font-semibold py-4">
             Similar Artists
           </h2>
-          <main className="flex flex-row flex-wrap">
-            {artistInfo?.similarArtist.map((artist) => (
-              <Artist key={artist.id} artist={artist} />
-            ))}
+          <main className="flex flex-row overflow-x-auto">
+            <div className="flex">
+              {artistInfo?.similarArtist.map((artist) => (
+                <Artist key={artist.id} artist={artist} />
+              ))}
+            </div>
           </main>
         </section>
       )}

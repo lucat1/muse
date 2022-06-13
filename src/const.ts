@@ -10,6 +10,7 @@ export const GET_ARTIST_INFO = "getArtistInfo2";
 export const GET_ALBUM = "getAlbum";
 // export const GET_ALBUM_INFO = "getAlbumInfo2";
 export interface Connection {
+  id: number;
   host: string;
   username: string;
   password: string;
@@ -36,7 +37,7 @@ export const useConnection = (i: number | null = null) => {
 
   const [ctx, setCtx] = useContext(ConnectionsContext);
   return [
-    ctx[i],
+    { ...ctx[i], id: i },
     (connection: Connection) =>
       setCtx(ctx.map((conn, j) => (j == i ? connection : conn))),
   ] as ConnectionContextValue;

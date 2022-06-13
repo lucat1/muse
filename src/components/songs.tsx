@@ -21,7 +21,9 @@ const Songs: React.FC<{
       }}
     >
       {fields.map((f) => (
-        <h4 className="font-bold">{f.name}</h4>
+        <h4 key={f.name} className="font-bold">
+          {f.name}
+        </h4>
       ))}
       {songs.map((song) => (
         <Song
@@ -29,8 +31,7 @@ const Songs: React.FC<{
           fields={fields}
           props={{
             song,
-            playing: player.song?.id == song.id,
-            liked: false,
+            playing: player?.song?.id == song.id,
             play,
           }}
         />
