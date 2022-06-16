@@ -89,3 +89,7 @@ export type SubsonicArtistResponse = SubsonicArtist;
 export type SubsonicArtistInfoResponse = SubsonicArtistInfo;
 
 export type SubsonicAlbumResponse = SubsonicAlbum;
+
+export interface SubsonicTopSongsResponse {
+  song: SubsonicSong[];
+}

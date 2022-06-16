@@ -9,6 +9,7 @@ export const GET_ARTIST = "getArtist";
 export const GET_ARTIST_INFO = "getArtistInfo2";
 export const GET_ALBUM = "getAlbum";
 // export const GET_ALBUM_INFO = "getAlbumInfo2";
+export const GET_TOP_SONGS = "getTopSongs";
 export interface Connection {
   id: number;
   host: string;

@@ -5,9 +5,10 @@ import type {
   SubsonicArtistInfoResponse,
   SubsonicArtistResponse,
   SubsonicAlbum,
+  SubsonicTopSongsResponse,
 } from "../types";
 import useSubsonic from "../fetcher";
-import { GET_ARTIST, GET_ARTIST_INFO } from "../const";
+import { GET_ARTIST, GET_ARTIST_INFO, GET_TOP_SONGS } from "../const";
 import { albumCondition, epCondition, singleCondition } from "../util";
 
 import Standard from "../components/standard";
@@ -23,6 +24,10 @@ const ArtistPage: React.FC = () => {
   const { data: artist } = useSubsonic<SubsonicArtistResponse>(
     `${GET_ARTIST}?id=${id}`
   );
+  const { data: topSongs } = useSubsonic<SubsonicTopSongsResponse>(
+    `${GET_TOP_SONGS}?count=10&artist=${artist.name}`
+  );
+  console.log("top songs:", topSongs);
 
   const albums = React.useMemo(
     () => artist!.album.filter(albumCondition),
