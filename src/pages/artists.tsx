@@ -1,11 +1,12 @@
 import * as React from "react";
-import { SubsonicArtistsResponse } from "../types";
-import useSubsonic from "../fetcher";
 import { Link } from "react-router-dom";
-import { GET_ARTISTS } from "../const";
+import useSubsonic from "../fetcher";
+import { useTitle, GET_ARTISTS } from "../const";
+import type { SubsonicArtistsResponse } from "../types";
 
 const Artists = () => {
   const { data } = useSubsonic<SubsonicArtistsResponse>(GET_ARTISTS);
+  useTitle("Artists");
 
   return (
     <>

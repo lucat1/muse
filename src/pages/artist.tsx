@@ -8,7 +8,7 @@ import type {
   SubsonicTopSongsResponse,
 } from "../types";
 import useSubsonic from "../fetcher";
-import { GET_ARTIST, GET_ARTIST_INFO, GET_TOP_SONGS } from "../const";
+import { useTitle, GET_ARTIST, GET_ARTIST_INFO, GET_TOP_SONGS } from "../const";
 import { albumCondition, epCondition, singleCondition } from "../util";
 
 import Standard from "../components/standard";
@@ -24,10 +24,10 @@ const ArtistPage: React.FC = () => {
   const { data: artist } = useSubsonic<SubsonicArtistResponse>(
     `${GET_ARTIST}?id=${id}`
   );
-  const { data: topSongs } = useSubsonic<SubsonicTopSongsResponse>(
-    `${GET_TOP_SONGS}?count=10&artist=${artist.name}`
-  );
-  console.log("top songs:", topSongs);
+  useTitle(artist?.name || "Unkown artist");
+  // const { data: topSongs } = useSubsonic<SubsonicTopSongsResponse>(
+  //   `${GET_TOP_SONGS}?count=10&artist=${artist?.name}`
+  // );
 
   const albums = React.useMemo(
     () => artist!.album.filter(albumCondition),
@@ -50,8 +50,7 @@ const ArtistPage: React.FC = () => {
 
   return (
     <Standard>
-      <Link to="../artists">artists</Link>
-      <section className="py-4 flex flex-row items-end">
+      <section className="py-4 pt-8 flex flex-row items-end">
         <Image
           className="w-32 md:w-48 lg:w-64 aspect-square rounded-lg"
           src={artistInfo?.mediumImageUrl}
@@ -61,7 +60,7 @@ const ArtistPage: React.FC = () => {
         </h1>
       </section>
       <article
-        className="w-full prose prose-sm xl:prose-base max-w-none"
+        className="w-full prose prose-sm xl:prose-base max-w-none text-justify font-serif"
         dangerouslySetInnerHTML={{
           __html: artistInfo?.biography as string,
         }}

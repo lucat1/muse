@@ -10,6 +10,7 @@ export const GET_ARTIST_INFO = "getArtistInfo2";
 export const GET_ALBUM = "getAlbum";
 // export const GET_ALBUM_INFO = "getAlbumInfo2";
 export const GET_TOP_SONGS = "getTopSongs";
+export const SEARCH = "search3";
 export interface Connection {
   id: number;
   host: string;
@@ -42,4 +43,8 @@ export const useConnection = (i: number | null = null) => {
     (connection: Connection) =>
       setCtx(ctx.map((conn, j) => (j == i ? connection : conn))),
   ] as ConnectionContextValue;
+};
+
+export const useTitle = (title: string) => {
+  document.title = `${title} - Muse`;
 };

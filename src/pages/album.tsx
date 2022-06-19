@@ -3,7 +3,7 @@ import { useParams, Link } from "react-router-dom";
 import formatDuration from "format-duration";
 import type { SubsonicAlbumResponse } from "../types";
 import useSubsonic, { useURL } from "../fetcher";
-import { GET_ALBUM } from "../const";
+import { useTitle, GET_ALBUM } from "../const";
 
 import Standard from "../components/standard";
 import { defaultFields } from "../components/song";
@@ -15,14 +15,20 @@ const Album = () => {
   const { data: album } = useSubsonic<SubsonicAlbumResponse>(
     `${GET_ALBUM}?id=${id}`
   );
+  useTitle(
+    `${album?.name || "Unkown Album"} - ${album?.artist || "Unkown Artist"}`
+  );
   const albumArt = useURL(`getCoverArt?id=${album?.coverArt}`);
   // const { data: albumInfo } = useSubsonic<SubsonicAlbumInfoResponse>(
   //   `${GET_ALBUM_INFO}?id=${id}`
   // );
   return (
     <Standard>
-      <section className="py-4 flex flex-row items-start">
-        <Image className="w-32 md:w-48 lg:w-64 hover:drop-shadow-lg" src={albumArt} />
+      <section className="py-4 pt-8 flex flex-row items-end">
+        <Image
+          className="w-32 md:w-48 lg:w-64 hover:drop-shadow-lg"
+          src={albumArt}
+        />
         <div className="flex flex-col mx-8">
           <h1 className="text-2xl md:text-3xl xl:text-4xl font-extrabold">
             {album?.name}

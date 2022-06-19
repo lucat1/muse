@@ -1,7 +1,7 @@
 import * as React from "react";
-import { Connection, ConnectionsContext, LOCAL_STORAGE_KEY } from "./const";
 import { BrowserRouter } from "react-router-dom";
 import useLocalStorage from "use-local-storage";
+import { Connection, ConnectionsContext, LOCAL_STORAGE_KEY } from "./const";
 
 const App: React.FunctionComponent<React.PropsWithChildren<{}>> = ({
   children,

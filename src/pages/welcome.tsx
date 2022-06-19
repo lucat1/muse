@@ -1,8 +1,17 @@
-import * as React from 'react'
-import { Link } from 'react-router-dom'
+import * as React from "react";
+import { Navigate, Link } from "react-router-dom";
+import { useConnections } from "../const";
 
 const Welcome = () => {
-  return <><h1>welcome</h1><Link to='/connect'>connect</Link></>
-}
+  const [connections] = useConnections();
+  if (connections.length > 0) return <Navigate to="/0/" replace />;
 
-export default Welcome
+  return (
+    <>
+      <h1>welcome</h1>
+      <Link to="/connect">connect</Link>
+    </>
+  );
+};
+
+export default Welcome;
