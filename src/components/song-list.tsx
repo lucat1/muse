@@ -1,9 +1,9 @@
 import * as React from "react";
 import type { SubsonicSong } from "src/types";
 import { usePlayer } from "../components/player";
-import Song, { Field } from "./song";
+import Song, { Field } from "./song-list-item";
 
-const Songs: React.FC<{
+const SongList: React.FC<{
   fields: Field[];
   songs: SubsonicSong[];
 }> = ({ fields, songs }) => {
@@ -40,4 +40,4 @@ const Songs: React.FC<{
   );
 };
 
-export default Songs;
+export default SongList;

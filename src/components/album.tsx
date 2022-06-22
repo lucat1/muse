@@ -1,12 +1,12 @@
 import * as React from "react";
 import { Link } from "react-router-dom";
 import formatDuration from "format-duration";
-import type { SubsonicAlbum } from "../types";
 import { useURL } from "../fetcher";
+import type { SubsonicAlbumBase } from "../types";
 
 import Image from "./img";
 
-const Album: React.FC<{ album: SubsonicAlbum }> = ({ album }) => (
+const Album: React.FC<{ album: SubsonicAlbumBase }> = ({ album }) => (
   <div className="w-32 lg:w-64 mx-8 my-4">
     <Link className="focus:outline-none" to={`../album/${album.id}`}>
       <Image

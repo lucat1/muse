@@ -20,6 +20,8 @@ export interface SubsonicAlbumBase {
   title: string;
   artist: string;
   coverArt: string;
+  duration: number;
+  year: number;
 }
 
 export interface SubsonicAlbum extends SubsonicAlbumBase {
@@ -27,8 +29,6 @@ export interface SubsonicAlbum extends SubsonicAlbumBase {
   artistId: string;
   created: string;
   genre: string;
-  duration: number;
-  year: number;
   songCount: number;
   song: SubsonicSong[];
 }
@@ -95,7 +95,7 @@ export interface SubsonicTopSongsResponse {
 }
 
 export interface SubsonicSearchResponse {
-  artist: SubsonicArtistBase[];
-  album: SubsonicAlbumBase[];
-  song: SubsonicSongBase[];
+  artist?: SubsonicArtistBase[];
+  album?: SubsonicAlbumBase[];
+  song?: SubsonicSongBase[];
 }
