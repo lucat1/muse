@@ -14,7 +14,7 @@ const SongList: React.FC<{
   );
 
   return (
-    <ul
+    <div
       className="grid auto-cols-min gap-x-4 gap-y-4"
       style={{
         gridTemplateColumns: fields.map((f) => f.size).join(" "),
@@ -36,7 +36,7 @@ const SongList: React.FC<{
           }}
         />
       ))}
-    </ul>
+    </div>
   );
 };
 

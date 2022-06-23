@@ -2,6 +2,15 @@ import * as React from "react";
 import { useForm } from "react-hook-form";
 import { useConnections, Connection } from "../const";
 
+const salt = (len: number) => {
+  let result = "";
+  const characters =
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+  for (let i = 0; i < len; ++i)
+    result += characters.charAt(Math.floor(Math.random() * characters.length));
+  return result;
+};
+
 const Welcome = () => {
   const [connections, setConnections] = useConnections();
   const {
@@ -9,10 +18,23 @@ const Welcome = () => {
     handleSubmit,
     formState: { errors },
   } = useForm<Connection>();
-  const onSubmit = (data: Connection) =>
+  const onSubmit = ({
+    id,
+    host,
+    username,
+    password,
+    saltLength,
+  }: Connection & { saltLength: number }) =>
     setConnections([
       ...connections,
-      { ...data, player: { state: "none", song: undefined } },
+      {
+        id,
+        host,
+        username,
+        password,
+        salt: salt(saltLength),
+        player: { state: "none", song: undefined },
+      },
     ]);
   console.log("errors", errors);
 

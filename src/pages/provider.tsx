@@ -9,8 +9,10 @@ import Album from "./album";
 import NotFound from "./not-found";
 import Player, { PlayerContext } from "../components/player";
 import Navbar, { NavbarContent } from "../components/nav";
+import ScrollToTop from "../components/scroll-to-top";
 
 const Provider: React.FunctionComponent = () => {
+  const ref = React.useRef<HTMLElement>();
   const { server } = useParams();
   const [connections] = useConnections();
   let i;
@@ -19,8 +21,9 @@ const Provider: React.FunctionComponent = () => {
 
   return (
     <PlayerContext>
+      <ScrollToTop ele={ref.current?.firstChild} />
       <Navbar />
-      <NavbarContent>
+      <NavbarContent ref={ref}>
         <React.Suspense fallback={<h1>loading in provider</h1>}>
           <Routes>
             <Route index element={<h1>index</h1>} />

@@ -16,7 +16,7 @@ export interface Connection {
   host: string;
   username: string;
   password: string;
-  saltLength: number;
+  salt: string;
 }
 type ConnectionsContextValue = [
   Connection[],

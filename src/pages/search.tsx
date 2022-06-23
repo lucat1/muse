@@ -76,7 +76,9 @@ const Search: React.FC = () => {
           Search for your music
         </label>
       </form>
-      <Results query={query} />
+      <React.Suspense fallback={<h1>loading</h1>}>
+        <Results query={query} />
+      </React.Suspense>
     </Standard>
   );
 };

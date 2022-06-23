@@ -7,7 +7,7 @@ export interface SubsonicArtistBase {
   id: string;
   name: string;
   albumCount: number;
-  coverArt?: string;
+  artistImageUrl?: string;
 }
 
 export interface SubsonicArtist extends SubsonicArtistBase {

@@ -2,19 +2,8 @@ import * as React from "react";
 import useSWR from "swr";
 import md5 from "blueimp-md5";
 import { useConnection, SUBSONIC_PROTOCOL_VERSION, Connection } from "./const";
-import { SubsonicError } from "./types";
-import { useMemo } from "react";
 
 const CLIENT_NAME = "muse";
-
-const salt = (len: number) => {
-  let result = "";
-  const characters =
-    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-  for (let i = 0; i < len; ++i)
-    result += characters.charAt(Math.floor(Math.random() * characters.length));
-  return result;
-};
 
 interface SubsonicBasicResponse {
   "subsonic-response": {
@@ -25,8 +14,7 @@ interface SubsonicBasicResponse {
 }
 
 export const gen = (path: string, conn: Connection) => {
-  const s = salt(conn.saltLength);
-  const pass = md5(conn.password + s);
+  const pass = md5(conn.password + conn.salt);
   const u = new URL(path, conn.host);
   const p = new URLSearchParams(u.search);
   p.set("c", CLIENT_NAME);
@@ -34,7 +22,7 @@ export const gen = (path: string, conn: Connection) => {
   p.set("u", conn.username);
   p.set("v", SUBSONIC_PROTOCOL_VERSION);
   p.set("t", pass);
-  p.set("s", s);
+  p.set("s", conn.salt);
   u.search = p.toString();
   return u.toString();
 };
