@@ -24,7 +24,7 @@ export const NavbarContent: React.FC<
 > = React.forwardRef(({ children }, ref) => (
   <main
     ref={ref}
-    className="fixed left-48 md:left-64 top-0 bottom-0 right-0 flex flex-col"
+    className="fixed left-48 md:left-64 xl:left-72 top-0 bottom-0 right-0 flex flex-col"
   >
     {children}
   </main>
@@ -73,7 +73,7 @@ const Navbar: React.FC = () => {
   );
 
   return (
-    <nav className="fixed w-48 md:w-64 h-screen flex flex-col border-r dark:border-neutral-700">
+    <nav className="fixed w-48 md:w-64 xl:w-72 h-screen flex flex-col border-r dark:border-neutral-700">
       <section className="flex flex-row justify-between items-center p-4 border-b dark:border-neutral-700">
         <Link to={`/${connection.id}/`}>
           <h1 className="text-3xl font-bold font-logo">Muse</h1>
@@ -92,14 +92,16 @@ const Navbar: React.FC = () => {
         {paths.map((path, i) => (
           <Link
             key={i}
-            className={`flex felx-row items-center rounded-full my-2 p-3 px-4 bg-neutral-200 dark:bg-neutral-800 ${path.selected ? "text-red-500 dark:text-red-400" : ""
-              }`}
+            className={`flex felx-row items-center rounded-full my-2 p-3 px-4 bg-neutral-200 dark:bg-neutral-800 ${
+              path.selected ? "text-red-500 dark:text-red-400" : ""
+            }`}
             to={path.link}
           >
             <path.icon className="w-6 h-6" />
             <span
-              className={`ml-3 ${path.selected ? "font-extrabold" : "font-semibold"
-                }`}
+              className={`ml-3 ${
+                path.selected ? "font-extrabold" : "font-semibold"
+              }`}
             >
               {path.name}
             </span>

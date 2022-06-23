@@ -7,7 +7,7 @@ import type { SubsonicAlbumBase } from "../types";
 import Image from "./img";
 
 const Album: React.FC<{ album: SubsonicAlbumBase }> = ({ album }) => (
-  <div className="w-32 lg:w-64 mx-8 my-4">
+  <div className="w-32 lg:w-64 mx-8 my-4 flex-shrink-0">
     <Link className="focus:outline-none" to={`../album/${album.id}`}>
       <Image
         src={useURL(`getCoverArt?id=${album.coverArt}`)}

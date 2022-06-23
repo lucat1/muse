@@ -1,6 +1,8 @@
 import * as React from "react";
+import { useInView } from "react-intersection-observer";
 import { createResource, Resource } from "../util";
 
+const CLASSES = "aspect-square rounded-lg drop-shadow-md";
 const cache = new Map<string, Resource<string>>();
 
 const fetchImage = (source: string): Resource<string> => {
@@ -17,46 +19,60 @@ const fetchImage = (source: string): Resource<string> => {
   return resource;
 };
 
-const RawImage: React.FC<
+const RawImage = React.forwardRef<
+  HTMLImageElement,
   React.DetailedHTMLProps<
     React.ImgHTMLAttributes<HTMLImageElement>,
     HTMLImageElement
   >
-> = ({ className, src, ...props }) => {
+>(({ className, src, alt, ...props }, ref) => {
   fetchImage(src!).read();
   return (
     <img
       {...props}
+      ref={ref}
       src={src}
-      className={`aspect-square rounded-lg drop-shadow-md ${className || ""}`}
+      alt={alt}
+      className={`${CLASSES} ${className || ""}`}
     />
   );
-};
+});
 
-export const ImageSkeleton: React.FC<{ className?: string; alt?: string }> = ({
-  className,
-  alt,
-}) => {
+export const ImageSkeleton = React.forwardRef<
+  HTMLDivElement,
+  {
+    className?: string;
+    alt?: string;
+  }
+>(({ className, alt }, ref) => {
   return (
     <div
+      ref={ref}
       role="img"
       aria-label={alt}
-      className={`aspect-square rounded-lg drop-shadow-md ${
+      className={`${CLASSES} ${
         className || ""
       } bg-neutral-200 dark:bg-neutral-700`}
     />
   );
-};
+});
 
 const Image: React.FC<
   React.DetailedHTMLProps<
     React.ImgHTMLAttributes<HTMLImageElement>,
     HTMLImageElement
   >
-> = ({ className, alt, ...props }) => (
-  <React.Suspense fallback={<ImageSkeleton className={className} alt={alt} />}>
-    <RawImage className={className} alt={alt} {...props} />
-  </React.Suspense>
-);
+> = ({ className, alt, ...props }) => {
+  const [ref, inView] = useInView();
+  if (!inView)
+    return <ImageSkeleton ref={ref} className={className} alt={alt} />;
+  return (
+    <React.Suspense
+      fallback={<ImageSkeleton ref={ref} className={className} alt={alt} />}
+    >
+      <RawImage ref={ref} className={className} alt={alt} {...props} />
+    </React.Suspense>
+  );
+};
 
 export default Image;

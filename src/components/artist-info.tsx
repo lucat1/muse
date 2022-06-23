@@ -1,27 +1,32 @@
 import * as React from "react";
 import type { SubsonicArtistInfoResponse, SubsonicArtist } from "../types";
 import useSubsonic from "../fetcher";
-import { GET_ARTIST_INFO } from "../const";
+import { GET_ARTIST, GET_ARTIST_INFO, useTitle } from "../const";
 
 import Image, { ImageSkeleton } from "../components/img";
 
-const RawArtistInfo: React.FC<{ artist: SubsonicArtist }> = ({ artist }) => {
+const SECITON_CLASSES = "py-4 pt-8 flex flex-row items-end";
+const IMAGE_CLASSES = "w-32 md:w-48 lg:w-64 aspect-square rounded-lg";
+const HEADING_CLASSES = "mx-8 text-2xl md:text-3xl xl:text-4xl font-extrabold";
+const ARTICLE_CLASSES =
+  "w-full prose prose-sm xl:prose-base max-w-none text-justify font-serif";
+
+const RawArtistInfo: React.FC<{ id: string }> = ({ id }) => {
+  const { data: artist } = useSubsonic<SubsonicArtist>(
+    `${GET_ARTIST}?id=${id}`
+  );
+  useTitle(artist?.name || "Unkown artist");
   const { data: artistInfo } = useSubsonic<SubsonicArtistInfoResponse>(
-    `${GET_ARTIST_INFO}?id=${artist.id}`
+    `${GET_ARTIST_INFO}?id=${artist?.id}`
   );
   return (
     <>
-      <section className="py-4 pt-8 flex flex-row items-end">
-        <Image
-          className="w-32 md:w-48 lg:w-64 aspect-square rounded-lg"
-          src={artistInfo?.mediumImageUrl}
-        />
-        <h1 className="mx-8 text-2xl md:text-3xl xl:text-4xl font-extrabold">
-          {artist.name}
-        </h1>
+      <section className={SECITON_CLASSES}>
+        <Image className={IMAGE_CLASSES} src={artistInfo?.mediumImageUrl} />
+        <h1 className={HEADING_CLASSES}>{artist?.name}</h1>
       </section>
       <article
-        className="w-full prose prose-sm xl:prose-base max-w-none text-justify font-serif"
+        className={ARTICLE_CLASSES}
         dangerouslySetInnerHTML={{
           __html: artistInfo?.biography as string,
         }}
@@ -30,26 +35,28 @@ const RawArtistInfo: React.FC<{ artist: SubsonicArtist }> = ({ artist }) => {
   );
 };
 
-export const ArtistInfoSkeleton: React.FC<{ artist: SubsonicArtist }> = ({
-  artist,
-}) => {
+export const ArtistInfoSkeleton: React.FC = () => {
   return (
     <>
-      <section className="py-4 pt-8 flex flex-row items-end">
-        <ImageSkeleton />
-        <h1 className="mx-8 text-2xl md:text-3xl xl:text-4xl font-extrabold">
-          {artist.name}
+      <section className={SECITON_CLASSES}>
+        <ImageSkeleton className={IMAGE_CLASSES} />
+        <h1 className={HEADING_CLASSES}>
+          <div className="w-48 h-6 lg:w-64 xl:w-96 xl:h-8 rounded-lg bg-neutral-200 dark:bg-neutral-700" />
         </h1>
       </section>
-      <article className="w-full max-w-none text-justify font-serif bg-neutral-200 dark:bg-neutral-700" />
+      <article
+        className={`w-full h-24 rounded-lg bg-neutral-200 dark:bg-neutral-700 ${ARTICLE_CLASSES}`}
+      />
     </>
   );
 };
 
-const ArtistInfo: React.FC<{ artist: SubsonicArtist }> = ({ artist }) => (
-  <React.Suspense fallback={<ArtistInfoSkeleton artist={artist} />}>
-    <RawArtistInfo artist={artist} />
-  </React.Suspense>
-);
+const ArtistInfo: React.FC<{ id: string }> = ({ id }) => {
+  return (
+    <React.Suspense fallback={<ArtistInfoSkeleton />}>
+      <RawArtistInfo id={id} />
+    </React.Suspense>
+  );
+};
 
 export default ArtistInfo;
