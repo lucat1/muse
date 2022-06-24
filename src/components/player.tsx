@@ -1,22 +1,32 @@
 import * as React from "react";
 import * as Slider from "@radix-ui/react-slider";
 import formatDuration from "format-duration";
-import { gen } from "../fetcher";
+import { PauseIcon as Pause, PlayIcon as Play } from "@heroicons/react/outline";
+import { getURL, fetcher } from "../fetcher";
 import type { SubsonicSong } from "../types";
-import { useConnection } from "../const";
+import { useConnection, SCROBBLE } from "../const";
 
 import { StandardWidth } from "./standard";
 
+enum PlayerState {
+  None,
+  Paused,
+  Playing,
+}
+
 interface Player {
   song: SubsonicSong | undefined;
-  state: "none" | "paused" | "playing";
+  state: PlayerState;
 }
 interface PlayerAction {
   type: "play" | "pause" | "toggle";
   payload?: SubsonicSong;
 }
 
-const Context = React.createContext<[Player, React.Dispatch<PlayerAction>]>([]);
+const Context = React.createContext<[Player, React.Dispatch<PlayerAction>]>([
+  { song: undefined, state: PlayerState.None },
+  void 0 as any,
+]);
 
 const reducer: React.Reducer<Player, PlayerAction> = (
   state,
@@ -25,18 +35,18 @@ const reducer: React.Reducer<Player, PlayerAction> = (
   switch (type) {
     case "play":
       if (payload != null) state.song = payload;
-      return { ...state, state: "playing" };
+      return { ...state, state: PlayerState.Playing };
     case "pause":
-      return { ...state, state: "paused" };
+      return { ...state, state: PlayerState.Paused };
     case "toggle":
       return {
         ...state,
         state:
-          state.state == "none"
-            ? "none"
-            : state.state == "playing"
-            ? "paused"
-            : "playing",
+          state.state == PlayerState.None
+            ? PlayerState.None
+            : state.state == PlayerState.Paused
+            ? PlayerState.Playing
+            : PlayerState.Paused,
       };
     default:
       return state;
@@ -48,7 +58,7 @@ export const PlayerContext: React.FC<React.PropsWithChildren<{}>> = ({
 }) => {
   const r = React.useReducer<React.Reducer<Player, PlayerAction>>(reducer, {
     song: undefined,
-    state: "none",
+    state: PlayerState.None,
   });
   // TODO: save player state in the local storage
   // const { id } = useParams();
@@ -59,65 +69,85 @@ export const PlayerContext: React.FC<React.PropsWithChildren<{}>> = ({
 export const usePlayer = () => React.useContext(Context);
 
 const Player: React.FunctionComponent = () => {
-  const audio = React.useMemo(() => new Audio(), []);
+  const [player, dispatch] = usePlayer();
+  const [connection] = useConnection();
+  const audio = React.useRef<HTMLAudioElement>();
   const [canPlay, setCanPlay] = React.useState(false);
   const [time, setTime] = React.useState(0);
   const [seek, setSeek] = React.useState(-1);
   React.useEffect(() => {
+    if (!audio.current) return;
     const handleCanPlay = () => setCanPlay(true);
-    const handleTimeUpdate = () => setTime(audio.currentTime);
+    const handleTimeUpdate = () => setTime(audio.current?.currentTime || 0);
 
-    audio.addEventListener("canplay", handleCanPlay);
-    audio.addEventListener("timeupdate", handleTimeUpdate);
+    audio.current.addEventListener("canplay", handleCanPlay);
+    audio.current.addEventListener("timeupdate", handleTimeUpdate);
     return () => {
-      audio.removeEventListener("canplay", handleCanPlay);
-      audio.removeEventListener("timeupdate", handleTimeUpdate);
+      audio.current?.removeEventListener("canplay", handleCanPlay);
+      audio.current?.removeEventListener("timeupdate", handleTimeUpdate);
     };
   }, [audio]);
-  const [player, dispatch] = usePlayer();
+  React.useEffect(() => {
+    if (audio.current) audio.current.currentTime = 0;
+    if (player.song)
+      fetcher(`${SCROBBLE}?id=${player.song.id}`, connection, {
+        method: "POST",
+      });
+  }, [audio.current?.src]);
+  React.useEffect(() => {
+    if (player.song == undefined || audio.current == undefined) return;
+
+    if (player.state == PlayerState.Playing && canPlay) audio.current.play();
+    if (player.state == PlayerState.Paused) audio.current.pause();
+  }, [audio, player.song?.id, player.state, canPlay]);
   const timeScale = React.useMemo(
     () => 100 / (player.song?.duration || 1),
     [player.song?.duration]
   );
-  const [connection] = useConnection();
-  React.useEffect(() => {
-    if (!player.song) return;
-
-    audio.src = gen(`stream?id=${player.song.id}`, connection);
-    audio.currentTime = 0;
-  }, [connection, player.song?.id]);
-  React.useEffect(() => {
-    if (player.state == "playing") audio.play();
-    if (player.state == "paused") audio.pause();
-  }, [player.song?.id, player.state]);
 
   return (
     <section className="absolute left-0 right-0 bottom-8 flex">
+      <audio
+        ref={audio}
+        src={
+          player.song?.id
+            ? getURL(`stream?id=${player.song.id}`, connection)
+            : ""
+        }
+      />
       <StandardWidth className="m-auto">
-        <div className="p-4 shadow-xl rounded-lg bg-neutral-200 border-neutral-300 dark:bg-neutral-800 dark:border-neutral-700">
-          <button onClick={() => dispatch({ type: "toggle" })}>
-            {player.state}
-          </button>
-          : {player.song?.title}
-          {formatDuration(time * 1000)}/
-          {formatDuration(
-            (player.song?.duration || audio.duration || 0) * 1000
-          )}
-          <Slider.Root
-            className="relative flex items-center"
-            disabled={player.state == "none" || !canPlay}
-            value={[(seek != -1 ? seek : time) * timeScale]}
-            onValueChange={(value) => setSeek(value[0] / timeScale)}
-            onPointerUp={() => {
-              audio.currentTime = seek;
-              setSeek(-1);
-            }}
-          >
-            <Slider.Track className="bg-zinc-100 dark:bg-white-500 relative grow rounded-full h-2">
-              <Slider.Range className="bg-zinc-200 dark:bg-white-400 absolute h-full rounded-full" />
-            </Slider.Track>
-            <Slider.Thumb className="bg-zinc-300 dark:bg-white-300 block rounded-full w-4 h-4" />
-          </Slider.Root>
+        <div className="px-4 shadow-xl rounded-lg bg-neutral-200 border-neutral-300 dark:bg-neutral-800 dark:border-neutral-700">
+          <div className="flex flex-row justify-center pt-2">
+            <button
+              className="w-12 aspect-square rounded-full hover:bg-neutral-300 dark:hover:bg-neutral-700"
+              onClick={() => dispatch({ type: "toggle" })}
+            >
+              {player.state == PlayerState.Playing ? <Pause /> : <Play />}
+            </button>
+          </div>
+          <div className="flex flex-row py-2">
+            <span className="pr-4">{formatDuration(time * 1000)}</span>
+            <Slider.Root
+              className="relative w-full flex items-center"
+              disabled={player.state == PlayerState.None || !canPlay}
+              value={[(seek != -1 ? seek : time) * timeScale]}
+              onValueChange={(value) => setSeek(value[0] / timeScale)}
+              onPointerUp={() => {
+                audio.current!.currentTime = seek;
+                setSeek(-1);
+              }}
+            >
+              <Slider.Track className="bg-zinc-300 dark:bg-white-500 relative grow rounded-full h-2">
+                <Slider.Range className="bg-zinc-400 dark:bg-white-400 absolute h-full rounded-full" />
+              </Slider.Track>
+              <Slider.Thumb className="bg-zinc-300 dark:bg-white-300 block rounded-full w-4 h-4" />
+            </Slider.Root>
+            <span className="pl-4">
+              {formatDuration(
+                (player.song?.duration || audio.current?.duration || 0) * 1000
+              )}
+            </span>
+          </div>
         </div>
       </StandardWidth>
     </section>

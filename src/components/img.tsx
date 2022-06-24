@@ -64,13 +64,15 @@ const Image: React.FC<
   >
 > = ({ className, alt, ...props }) => {
   const [ref, inView] = useInView();
-  if (!inView)
-    return <ImageSkeleton ref={ref} className={className} alt={alt} />;
   return (
     <React.Suspense
       fallback={<ImageSkeleton ref={ref} className={className} alt={alt} />}
     >
-      <RawImage ref={ref} className={className} alt={alt} {...props} />
+      {inView ? (
+        <RawImage ref={ref} className={className} alt={alt} {...props} />
+      ) : (
+        <ImageSkeleton ref={ref} className={className} alt={alt} />
+      )}
     </React.Suspense>
   );
 };

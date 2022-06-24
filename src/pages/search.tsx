@@ -35,6 +35,7 @@ const Results: React.FC<{ query: string | null }> = ({ query }) => {
   return (
     <>
       {sections.map((section, i) => {
+        if (section[3].length == 0) return null;
         const [Element, key] = [section[1], section[2]];
         return (
           <section key={i}>

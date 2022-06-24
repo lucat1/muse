@@ -55,11 +55,11 @@ const Song: React.FC<{ fields: Field[]; props: SongProps }> = ({
   props,
 }) => {
   return (
-    <>
+    <div className="contents">
       {fields.map(({ value: Value, name }) => (
         <Value key={name} {...props} />
       ))}
-    </>
+    </div>
   );
 };
 

@@ -13,8 +13,8 @@ import {
   SearchIcon as SearchOutline,
 } from "@heroicons/react/outline";
 
-import { useConnection } from "../const";
-import { useURL } from "../fetcher";
+import { GET_COVER_ART, useConnection } from "../const";
+import { getURL } from "../fetcher";
 
 import { usePlayer } from "../components/player";
 import Image from "../components/img";
@@ -108,40 +108,45 @@ const Navbar: React.FC = () => {
           </Link>
         ))}
       </section>
-      <section className="flex flex-1 flex-row justify-center">
-        <main className="flex flex-col m-4 mb-8 truncate self-end">
-          <Link
-            className="flex justify-center"
-            to={`/${connection.id}/album/${player.song?.albumId}`}
-          >
-            <Image
-              className="w-32 md:w-48 3xl:w-64"
-              src={useURL(`getCoverArt?id=${player.song?.coverArt}`)}
-            />
-          </Link>
-          <div className="flex flex-0 flex-col">
-            <h2 className="text-lg md:text-xl xl:text-2xl pt-2">
+      {player.song && (
+        <section className="flex flex-1 flex-row justify-center">
+          <main className="flex flex-col m-4 mb-8 w-full truncate self-end">
+            <Link
+              className="flex justify-center"
+              to={`/${connection.id}/album/${player.song.albumId}`}
+            >
+              <Image
+                className="w-full"
+                src={getURL(
+                  `${GET_COVER_ART}?id=${player.song.coverArt}`,
+                  connection
+                )}
+              />
+            </Link>
+            <div className="flex flex-0 flex-col">
+              <h2 className="text-lg md:text-xl xl:text-2xl pt-2">
+                <Link
+                  to={`/${connection.id}/album/${player.song.albumId}?song=${player.song.id}`}
+                >
+                  {player.song.title}
+                </Link>
+              </h2>
               <Link
-                to={`/${connection.id}/album/${player.song?.albumId}?song=${player.song?.id}`}
+                className="pt-1 text-md"
+                to={`/${connection.id}/album/${player.song.albumId}`}
               >
-                {player.song?.title}
+                {player.song.album}
               </Link>
-            </h2>
-            <Link
-              className="pt-1 text-md"
-              to={`/${connection.id}/album/${player.song?.albumId}`}
-            >
-              {player.song?.album}
-            </Link>
-            <Link
-              className="pt-1 text-xs"
-              to={`/${connection.id}/artist/${player.song?.artistId}`}
-            >
-              {player.song?.artist}
-            </Link>
-          </div>
-        </main>
-      </section>
+              <Link
+                className="pt-1 text-xs"
+                to={`/${connection.id}/artist/${player.song.artistId}`}
+              >
+                {player.song.artist}
+              </Link>
+            </div>
+          </main>
+        </section>
+      )}
     </nav>
   );
 };

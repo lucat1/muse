@@ -4,6 +4,7 @@ import { useParams } from "react-router";
 export const LOCAL_STORAGE_KEY = "muse";
 export const SUBSONIC_PROTOCOL_VERSION = "1.16.1";
 
+export const GET_COVER_ART = "getCoverArt";
 export const GET_ARTISTS = "getArtists";
 export const GET_ARTIST = "getArtist";
 export const GET_ARTIST_INFO = "getArtistInfo2";
@@ -11,6 +12,7 @@ export const GET_ALBUM = "getAlbum";
 // export const GET_ALBUM_INFO = "getAlbumInfo2";
 export const GET_TOP_SONGS = "getTopSongs";
 export const SEARCH = "search3";
+export const SCROBBLE = "scrobble";
 export interface Connection {
   id: number;
   host: string;

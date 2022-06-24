@@ -1,5 +1,5 @@
 import * as React from "react";
-import type { SubsonicArtistInfoResponse, SubsonicArtist } from "../types";
+import type { SubsonicArtistInfoResponse } from "../types";
 import useSubsonic from "../fetcher";
 import { GET_ARTIST_INFO } from "../const";
 

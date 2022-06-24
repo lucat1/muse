@@ -13,7 +13,7 @@ interface SubsonicBasicResponse {
   };
 }
 
-export const gen = (path: string, conn: Connection) => {
+export const getURL = (path: string, conn: Connection) => {
   const pass = md5(conn.password + conn.salt);
   const u = new URL(path, conn.host);
   const p = new URLSearchParams(u.search);
@@ -31,18 +31,22 @@ const ignoredKeys = ["status", "type", "version"];
 const otherKey = <T extends SubsonicBasicResponse>(d: T) =>
   Object.keys(d).reduce((k, f) => (!f && !ignoredKeys.includes(k) ? k : f), "");
 
-export const fetcher = (path: string, conn: Connection) => {
-  return fetch(gen(path, conn))
+export const fetcher = (
+  path: string,
+  conn: Connection,
+  opts: RequestInit | undefined = undefined
+) => {
+  return fetch(getURL(path, conn), opts)
     .then((r) => r.json())
     .then(
       (data: SubsonicBasicResponse) =>
         new Promise<T>((res, rej) =>
           data["subsonic-response"].status == "ok"
             ? res(
-                data["subsonic-response"][
-                  otherKey(data["subsonic-response"])
-                ] as T
-              )
+              data["subsonic-response"][
+              otherKey(data["subsonic-response"])
+              ] as T
+            )
             : rej((data["subsonic-response"] as ErrorSubsonicResponse).error)
         )
     );
@@ -58,9 +62,10 @@ const useAuthenticatedSWR = <T extends Object = {}>(
 export const useURL = (path: string) => {
   const [connection] = useConnection();
   return React.useMemo(() => {
-    return gen(path, connection);
+    return getURL(path, connection);
   }, [connection, path]);
 };
-export const useUnmemoizedURL = (path: string) => gen(path, useConnection()[0]);
+export const useUnmemoizedURL = (path: string) =>
+  getURL(path, useConnection()[0]);
 
 export default useAuthenticatedSWR;
