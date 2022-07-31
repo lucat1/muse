@@ -43,10 +43,10 @@ export const fetcher = (
         new Promise<T>((res, rej) =>
           data["subsonic-response"].status == "ok"
             ? res(
-              data["subsonic-response"][
-              otherKey(data["subsonic-response"])
-              ] as T
-            )
+                data["subsonic-response"][
+                  otherKey(data["subsonic-response"])
+                ] as T
+              )
             : rej((data["subsonic-response"] as ErrorSubsonicResponse).error)
         )
     );

@@ -1,5 +1,7 @@
 import * as React from "react";
 import { useInView } from "react-intersection-observer";
+import { ErrorBoundary } from "react-error-boundary";
+import { Img } from "react-suspense-img";
 import { createResource, Resource } from "../util";
 
 const CLASSES = "aspect-square rounded-lg drop-shadow-md";
@@ -11,6 +13,7 @@ const fetchImage = (source: string): Resource<string> => {
 
   resource = createResource<string>(async () => {
     const img = new window.Image();
+    console.log("img src", source);
     img.src = source;
     await img.decode();
     return source;
@@ -26,7 +29,7 @@ const RawImage = React.forwardRef<
     HTMLImageElement
   >
 >(({ className, src, alt, ...props }, ref) => {
-  fetchImage(src!).read();
+  src = fetchImage(src!).read();
   return (
     <img
       {...props}
@@ -44,18 +47,16 @@ export const ImageSkeleton = React.forwardRef<
     className?: string;
     alt?: string;
   }
->(({ className, alt }, ref) => {
-  return (
-    <div
-      ref={ref}
-      role="img"
-      aria-label={alt}
-      className={`${CLASSES} ${
-        className || ""
-      } bg-neutral-200 dark:bg-neutral-700`}
-    />
-  );
-});
+>(({ className, alt }, ref) => (
+  <div
+    ref={ref}
+    role="img"
+    aria-label={alt}
+    className={`${CLASSES} ${
+      className || ""
+    } bg-neutral-200 dark:bg-neutral-700`}
+  />
+));
 
 const Image: React.FC<
   React.DetailedHTMLProps<
@@ -64,16 +65,17 @@ const Image: React.FC<
   >
 > = ({ className, alt, ...props }) => {
   const [ref, inView] = useInView();
+  const fallback = <ImageSkeleton ref={ref} className={className} alt={alt} />;
   return (
-    <React.Suspense
-      fallback={<ImageSkeleton ref={ref} className={className} alt={alt} />}
-    >
-      {inView ? (
-        <RawImage ref={ref} className={className} alt={alt} {...props} />
-      ) : (
-        <ImageSkeleton ref={ref} className={className} alt={alt} />
-      )}
-    </React.Suspense>
+    <ErrorBoundary fallback={fallback}>
+      <React.Suspense fallback={fallback}>
+        {inView ? (
+          <RawImage ref={ref} className={className} alt={alt} {...props} />
+        ) : (
+          fallback
+        )}
+      </React.Suspense>
+    </ErrorBoundary>
   );
 };
 

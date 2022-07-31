@@ -13,12 +13,35 @@ export const GET_ALBUM = "getAlbum";
 export const GET_TOP_SONGS = "getTopSongs";
 export const SEARCH = "search3";
 export const SCROBBLE = "scrobble";
+
+export type OptionType = "boolean" | "multi";
+export interface Option<T> {
+  type: OptionType;
+  values: T[];
+  default: T;
+}
+
+export interface BooleanOption extends Option<boolean> {
+  type: "boolean";
+  values: [true, false];
+  default: false;
+}
+
+interface Settings {
+  scrobble: BooleanOption;
+}
+
+const defaultSettings: Settings = {
+  scrobble: {},
+};
+
 export interface Connection {
   id: number;
   host: string;
   username: string;
   password: string;
   salt: string;
+  settings: Settings;
 }
 type ConnectionsContextValue = [
   Connection[],
@@ -40,8 +63,13 @@ export const useConnection = (i: number | null = null) => {
   if (i == null) i = parseInt(useParams().server!);
 
   const [ctx, setCtx] = useContext(ConnectionsContext);
+  const { settings, ...ele } = ctx[i];
   return [
-    { ...ctx[i], id: i },
+    // {
+    //   ...ele, id: i, settings: {
+    //     ...
+    // },
+    { ...ele, id: i },
     (connection: Connection) =>
       setCtx(ctx.map((conn, j) => (j == i ? connection : conn))),
   ] as ConnectionContextValue;

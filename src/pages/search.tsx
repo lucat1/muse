@@ -10,6 +10,7 @@ import Standard from "../components/standard";
 import Album from "../components/album";
 import Song from "../components/song";
 import Artist from "../components/artist";
+import ScrollView from "../components/scroll-view";
 
 interface FormData {
   search: string;
@@ -42,11 +43,11 @@ const Results: React.FC<{ query: string | null }> = ({ query }) => {
             <h2 className="text-lg md:text-xl xl:text-2xl font-semibold py-4">
               {section[0]}
             </h2>
-            <div className="flex flex-row overflow-x-auto">
+            <ScrollView className="flex flex-row overflow-x-auto">
               {section[3].map((data, i) => (
                 <Element key={i} {...{ [key]: data }} />
               ))}
-            </div>
+            </ScrollView>
           </section>
         );
       })}

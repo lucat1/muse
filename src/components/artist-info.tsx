@@ -22,7 +22,15 @@ const RawArtistInfo: React.FC<{ id: string }> = ({ id }) => {
   return (
     <>
       <section className={SECITON_CLASSES}>
-        <Image className={IMAGE_CLASSES} src={artistInfo?.mediumImageUrl} />
+        <Image
+          className={IMAGE_CLASSES}
+          src={
+            artistInfo?.largeImageUrl ||
+            artistInfo?.mediumImageUrl ||
+            artist?.artistImageUrl ||
+            artistInfo?.smallImageUrl
+          }
+        />
         <h1 className={HEADING_CLASSES}>{artist?.name}</h1>
       </section>
       <article
