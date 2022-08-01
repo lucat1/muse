@@ -9,8 +9,7 @@ import {
 } from "@heroicons/react/solid";
 import {
   HomeIcon as HomeOutline,
-  MusicNoteIcon as MusicOutline,
-  SearchIcon as SearchOutline,
+  MusicNoteIcon as MusicOutline, SearchIcon as SearchOutline,
 } from "@heroicons/react/outline";
 
 import { GET_COVER_ART, useConnection } from "../const";
@@ -24,7 +23,7 @@ export const NavbarContent: React.FC<
 > = React.forwardRef(({ children }, ref) => (
   <main
     ref={ref}
-    className="fixed left-48 md:left-64 xl:left-72 top-0 bottom-0 right-0 flex flex-col"
+    className="fixed left-48 md:left-64 xl:left-72 top-0 bottom-24 right-0 flex flex-col"
   >
     {children}
   </main>
@@ -124,7 +123,7 @@ const Navbar: React.FC = () => {
               />
             </Link>
             <div className="flex flex-0 flex-col">
-              <h2 className="text-lg md:text-xl xl:text-2xl pt-2">
+              <h2 className="text-lg md:text-xl xl:text-2xl pt-2 truncate">
                 <Link
                   to={`/${connection.id}/album/${player.song.albumId}?song=${player.song.id}`}
                 >

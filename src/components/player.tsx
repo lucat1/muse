@@ -106,7 +106,7 @@ const Player: React.FunctionComponent = () => {
   );
 
   return (
-    <section className="absolute left-0 right-0 bottom-8 flex">
+    <section className="fixed left-48 md:left-64 xl:left-72 right-0 bottom-0 h-24 flex border-t dark:border-neutral-700">
       <audio
         ref={audio}
         src={
@@ -116,7 +116,6 @@ const Player: React.FunctionComponent = () => {
         }
       />
       <StandardWidth className="m-auto">
-        <div className="px-4 shadow-xl rounded-lg bg-neutral-200 border-neutral-300 dark:bg-neutral-800 dark:border-neutral-700">
           <div className="flex flex-row justify-center pt-2">
             <button
               className="w-12 aspect-square rounded-full hover:bg-neutral-300 dark:hover:bg-neutral-700"
@@ -148,7 +147,6 @@ const Player: React.FunctionComponent = () => {
               )}
             </span>
           </div>
-        </div>
       </StandardWidth>
     </section>
   );

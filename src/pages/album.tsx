@@ -30,11 +30,11 @@ const Album = () => {
           src={albumArt}
         />
         <div className="flex flex-col mx-8">
-          <h1 className="text-2xl md:text-3xl xl:text-4xl font-extrabold">
+          <h1 className="my-2 text-2xl md:text-3xl xl:text-4xl font-extrabold">
             {album?.name}
           </h1>
-          <h3 className="text-lg md:text-xl xl:text-2xl">
-            <Link to={`../artist/${album?.artistId}`}>{album?.artist}</Link>
+          <h3 className="my-1 text-lg md:text-xl xl:text-2xl">
+            <Link className="text-red-500" to={`../artist/${album?.artistId}`}>{album?.artist}</Link>
           </h3>
           <span className="text-sm md:text-md">
             {album?.year} {"\uFF65"}{" "}

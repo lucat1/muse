@@ -34,8 +34,8 @@ const Provider: React.FunctionComponent = () => {
             <Route path="*" element={<NotFound />} />
           </Routes>
         </React.Suspense>
-        <Player />
       </NavbarContent>
+      <Player />
     </PlayerContext>
   );
 };
