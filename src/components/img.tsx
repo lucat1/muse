@@ -1,10 +1,9 @@
 import * as React from "react";
-import { useInView } from "react-intersection-observer";
+import { useIntersectionObserver } from 'react-intersection-observer-hook';
 import { ErrorBoundary } from "react-error-boundary";
-import { Img } from "react-suspense-img";
 import { createResource, Resource } from "../util";
 
-const CLASSES = "aspect-square rounded-lg drop-shadow-md";
+const CLASSES = "aspect-square rounded-lg drop-shadow-md select-none pointer-events-none";
 const cache = new Map<string, Resource<string>>();
 
 const fetchImage = (source: string): Resource<string> => {
@@ -13,7 +12,6 @@ const fetchImage = (source: string): Resource<string> => {
 
   resource = createResource<string>(async () => {
     const img = new window.Image();
-    console.log("img src", source);
     img.src = source;
     await img.decode();
     return source;
@@ -64,7 +62,8 @@ const Image: React.FC<
     HTMLImageElement
   >
 > = ({ className, alt, ...props }) => {
-  const [ref, inView] = useInView();
+  const [ref, { entry }] = useIntersectionObserver();
+  const inView = entry && entry.isIntersecting;
   const fallback = <ImageSkeleton ref={ref} className={className} alt={alt} />;
   return (
     <ErrorBoundary fallback={fallback}>

@@ -34,7 +34,7 @@ const Album = () => {
             {album?.name}
           </h1>
           <h3 className="my-1 text-lg md:text-xl xl:text-2xl">
-            <Link className="text-red-500" to={`../artist/${album?.artistId}`}>{album?.artist}</Link>
+            <Link className="text-red-500 dark:text-red-400" to={`../artist/${album?.artistId}`}>{album?.artist}</Link>
           </h3>
           <span className="text-sm md:text-md">
             {album?.year} {"\uFF65"}{" "}

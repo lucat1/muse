@@ -4,12 +4,15 @@ import {
   SunIcon as Sun,
   MoonIcon as Moon,
   HomeIcon as HomeFull,
-  MusicNoteIcon as MusicFull,
   SearchIcon as SearchFull,
+  UsersIcon as UsersFull,
+  CollectionIcon as CollectionFull
 } from "@heroicons/react/solid";
 import {
   HomeIcon as HomeOutline,
-  MusicNoteIcon as MusicOutline, SearchIcon as SearchOutline,
+  UsersIcon as UsersOutline,
+  SearchIcon as SearchOutline,
+  CollectionIcon as CollectionOutline
 } from "@heroicons/react/outline";
 
 import { GET_COVER_ART, useConnection } from "../const";
@@ -34,7 +37,8 @@ const Navbar: React.FC = () => {
   const [player, _] = usePlayer();
   const { pathname } = useLocation();
   const section = React.useMemo(() => {
-    if (/(artist|artists|album|albums)/.test(pathname)) return "music";
+    if (/(artist|artists)/.test(pathname)) return "artists";
+    if (/(album|albums)/.test(pathname)) return "albums";
     if (/search/.test(pathname)) return "search";
     else return "home";
   }, [pathname]);
@@ -62,10 +66,16 @@ const Navbar: React.FC = () => {
         icon: section == "search" ? SearchFull : SearchOutline,
       },
       {
-        selected: section == "music",
+        selected: section == "artists",
         link: `/${connection.id}/artists`,
-        name: "Music",
-        icon: section == "music" ? MusicFull : MusicOutline,
+        name: "Artists",
+        icon: section == "artists" ? UsersFull : UsersOutline,
+      },
+      {
+        selected: section == "albums",
+        link: `/${connection.id}/albums`,
+        name: "Albums",
+        icon: section == "albums" ? CollectionFull : CollectionOutline,
       },
     ],
     [section]
@@ -123,7 +133,7 @@ const Navbar: React.FC = () => {
               />
             </Link>
             <div className="flex flex-0 flex-col">
-              <h2 className="text-lg md:text-xl xl:text-2xl pt-2 truncate">
+              <h2 className="text-2xl lg:text-3xl pt-2 truncate">
                 <Link
                   to={`/${connection.id}/album/${player.song.albumId}?song=${player.song.id}`}
                 >
@@ -131,13 +141,13 @@ const Navbar: React.FC = () => {
                 </Link>
               </h2>
               <Link
-                className="pt-1 text-md"
+                className="pt-2 text-lg"
                 to={`/${connection.id}/album/${player.song.albumId}`}
               >
                 {player.song.album}
               </Link>
               <Link
-                className="pt-1 text-xs"
+                className="pt-1 text-md text-red-500 dark:text-red-400"
                 to={`/${connection.id}/artist/${player.song.artistId}`}
               >
                 {player.song.artist}

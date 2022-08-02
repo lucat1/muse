@@ -88,7 +88,7 @@ const Search: React.FC = () => {
         <input
           id="search"
           type="text"
-          className="dark:bg-neutral-700 dark:placeholder:text-slate-100 w-full max-w-sm lg:max-w-md 2xl:max-w-xl rounded-full h-12 px-6 text-lg drop-shadow-lg outline-2"
+          className="dark:bg-neutral-700 dark:placeholder:text-slate-100 w-full max-w-sm lg:max-w-md 2xl:max-w-xl rounded-full h-12 px-6 text-lg drop-shadow-lg outline-none focus:ring focus:ring-red-500 dark:focus:ring-red-400"
           placeholder="Search through your music..."
           {...register("search", { required: true })}
         />

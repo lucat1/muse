@@ -5,6 +5,7 @@ import { useConnections } from "../const";
 import Search from "./search";
 import Artists from "./artists";
 import Artist from "./artist";
+import Albums from "./albums";
 import Album from "./album";
 import NotFound from "./not-found";
 import Player, { PlayerContext } from "../components/player";
@@ -16,26 +17,27 @@ const Provider: React.FunctionComponent = () => {
   const { server } = useParams();
   const [connections] = useConnections();
   let i;
-  if (server == undefined || (i = parseInt(server)) === NaN || !connections[i])
+  if (server == undefined || (i = parseInt(server)) == NaN || !connections[i])
     return <NotFound />;
 
   return (
     <PlayerContext>
-      <ScrollToTop ele={ref.current?.firstChild} />
-      <Navbar />
-      <NavbarContent ref={ref}>
-        <React.Suspense fallback={<h1>loading in provider</h1>}>
-          <Routes>
-            <Route index element={<h1>index</h1>} />
-            <Route path="search" element={<Search />} />
-            <Route path="artists" element={<Artists />} />
-            <Route path="artist/:id" element={<Artist />} />
-            <Route path="album/:id" element={<Album />} />
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </React.Suspense>
-      </NavbarContent>
-      <Player />
+        <Navbar />
+        <NavbarContent ref={ref}>
+          <React.Suspense fallback={<h1>loading in provider</h1>}>
+            <Routes>
+              <Route index element={<h1>index</h1>} />
+              <Route path="search" element={<Search />} />
+              <Route path="artists" element={<Artists />} />
+              <Route path="artist/:id" element={<Artist />} />
+              <Route path="albums" element={<Albums />} />
+              <Route path="album/:id" element={<Album />} />
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </React.Suspense>
+        </NavbarContent>
+        <Player />
+        <ScrollToTop ele={ref.current?.firstChild} />
     </PlayerContext>
   );
 };

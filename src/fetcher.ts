@@ -1,5 +1,6 @@
 import * as React from "react";
 import useSWR from "swr";
+import useSWRInfinite from "swr/infinite";
 import md5 from "blueimp-md5";
 import { useConnection, SUBSONIC_PROTOCOL_VERSION, Connection } from "./const";
 
@@ -52,11 +53,31 @@ export const fetcher = (
     );
 };
 
-const useAuthenticatedSWR = <T extends Object = {}>(
+const useSubsonic = <T extends Object = {}>(
   path: string,
   opts = { suspense: true }
 ) => {
   return useSWR<T>([path, useConnection()[0]], fetcher, opts);
+};
+
+const isArr = ([_, val]: [string, any]) => Array.isArray(val)
+const findArray = <T extends Object = {}>(data: T): any[] | null => {
+  const entries = Object.entries(data)
+  return entries.some(isArr) ? entries.filter(isArr)[0][1] : null
+}
+export const hasNextPage = <T extends Object = {}>(data: T | null) => {
+  let arr = null
+  if(data)
+    arr = findArray(data)
+  return (data == null || arr?.length > 0)
+}
+
+export const useSubsonicInfinite = <T extends Object = {}>(
+  gen: (index: number) => string,
+  opts = { suspense: true }
+) => {
+  const conn = useConnection()[0]
+  return useSWRInfinite<T>((index, prev) => hasNextPage(prev) ? [gen(index), conn] : null, fetcher, opts);
 };
 
 export const useURL = (path: string) => {
@@ -68,4 +89,4 @@ export const useURL = (path: string) => {
 export const useUnmemoizedURL = (path: string) =>
   getURL(path, useConnection()[0]);
 
-export default useAuthenticatedSWR;
+export default useSubsonic;

@@ -1,6 +1,5 @@
 import * as React from "react";
 import { createRoot } from "react-dom/client";
-import { useLocation } from "react-router-dom";
 import { Routes, Route } from "react-router-dom";
 
 import App from "./app";
@@ -12,7 +11,6 @@ import Provider from "./pages/provider";
 
 createRoot(document.getElementById("root")!).render(
   <App>
-    <ScrollToTop ele={window} />
     <Routes>
       <Route index element={<Welcome />} />
       <Route path="connect" element={<Connect />} />
@@ -20,5 +18,6 @@ createRoot(document.getElementById("root")!).render(
       {/*<Route index element={<Home />} /> <Route path="albums" element={<Teams />} />*/}
       <Route path="*" element={<NotFound />} />
     </Routes>
+    <ScrollToTop ele={document.body} />
   </App>
 );
