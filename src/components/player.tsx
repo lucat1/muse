@@ -116,37 +116,37 @@ const Player: React.FunctionComponent = () => {
         }
       />
       <StandardWidth className="m-auto">
-          <div className="flex flex-row justify-center pt-2">
-            <button
-              className="w-12 aspect-square rounded-full hover:bg-neutral-300 dark:hover:bg-neutral-700"
-              onClick={() => dispatch({ type: "toggle" })}
-            >
-              {player.state == PlayerState.Playing ? <Pause /> : <Play />}
-            </button>
-          </div>
-          <div className="flex flex-row py-2">
-            <span className="pr-4">{formatDuration(time * 1000)}</span>
-            <Slider.Root
-              className="relative w-full flex items-center"
-              disabled={player.state == PlayerState.None || !canPlay}
-              value={[(seek != -1 ? seek : time) * timeScale]}
-              onValueChange={(value) => setSeek(value[0] / timeScale)}
-              onPointerUp={() => {
-                audio.current!.currentTime = seek;
-                setSeek(-1);
-              }}
-            >
-              <Slider.Track className="bg-zinc-300 dark:bg-white-500 relative grow rounded-full h-2">
-                <Slider.Range className="bg-zinc-400 dark:bg-white-400 absolute h-full rounded-full" />
-              </Slider.Track>
-              <Slider.Thumb className="bg-zinc-300 dark:bg-white-300 block rounded-full w-4 h-4" />
-            </Slider.Root>
-            <span className="pl-4">
-              {formatDuration(
-                (player.song?.duration || audio.current?.duration || 0) * 1000
-              )}
-            </span>
-          </div>
+        <div className="flex flex-row justify-center pt-2">
+          <button
+            className="w-12 aspect-square rounded-full hover:bg-neutral-300 dark:hover:bg-neutral-700"
+            onClick={() => dispatch({ type: "toggle" })}
+          >
+            {player.state == PlayerState.Playing ? <Pause /> : <Play />}
+          </button>
+        </div>
+        <div className="flex flex-row py-2">
+          <span className="pr-4">{formatDuration(time * 1000)}</span>
+          <Slider.Root
+            className="relative w-full flex items-center"
+            disabled={player.state == PlayerState.None || !canPlay}
+            value={[(seek != -1 ? seek : time) * timeScale]}
+            onValueChange={(value) => setSeek(value[0] / timeScale)}
+            onPointerUp={() => {
+              audio.current!.currentTime = seek;
+              setSeek(-1);
+            }}
+          >
+            <Slider.Track className="bg-zinc-300 dark:bg-white-500 relative grow rounded-full h-2">
+              <Slider.Range className="bg-zinc-400 dark:bg-white-400 absolute h-full rounded-full" />
+            </Slider.Track>
+            <Slider.Thumb className="bg-zinc-300 dark:bg-white-300 block rounded-full w-4 h-4" />
+          </Slider.Root>
+          <span className="pl-4">
+            {formatDuration(
+              (player.song?.duration || audio.current?.duration || 0) * 1000
+            )}
+          </span>
+        </div>
       </StandardWidth>
     </section>
   );

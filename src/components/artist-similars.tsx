@@ -13,9 +13,11 @@ const ArtistSimilars: React.FC<{ id: string }> = ({ id }) => {
   if (!artistInfo?.similarArtist?.length) return null;
   return (
     <ArtistSection header="Similar Artists">
-      {artistInfo.similarArtist.map((artist) => (
-        <Artist key={artist.id} artist={artist} />
-      ))}
+      <div className="flex flex-row flex-wrap">
+        {artistInfo.similarArtist.map((artist) => (
+          <Artist key={artist.id} artist={artist} />
+        ))}
+      </div>
     </ArtistSection>
   );
 };

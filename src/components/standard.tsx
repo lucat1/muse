@@ -14,9 +14,7 @@ export const StandardWidth: React.FC<
 
 const Standard: React.FC<React.PropsWithChildren<{}>> = ({ children }) => (
   <main className="flex flex-col items-center overflow-y-auto">
-    <StandardWidth>
-      {children}
-    </StandardWidth>
+    <StandardWidth>{children}</StandardWidth>
   </main>
 );
 

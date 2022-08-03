@@ -19,13 +19,7 @@ const RawArtistTopSongs: React.FC<{ id: string }> = ({ id }) => {
   if (!topSongs?.song?.length) return null;
   return (
     <ArtistSection header="Top songs">
-      <Tracks
-          songs={topSongs.song}
-          art={-1}
-          heart={-1}
-          title={8}
-          length={1}
-      />
+      <Tracks songs={topSongs.song} art={-1} heart={-1} title={8} length={-1} />
     </ArtistSection>
   );
 };

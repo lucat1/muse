@@ -6,13 +6,13 @@ import {
   HomeIcon as HomeFull,
   SearchIcon as SearchFull,
   UsersIcon as UsersFull,
-  CollectionIcon as CollectionFull
+  CollectionIcon as CollectionFull,
 } from "@heroicons/react/solid";
 import {
   HomeIcon as HomeOutline,
   UsersIcon as UsersOutline,
   SearchIcon as SearchOutline,
-  CollectionIcon as CollectionOutline
+  CollectionIcon as CollectionOutline,
 } from "@heroicons/react/outline";
 
 import { GET_COVER_ART, useConnection } from "../const";

@@ -17,36 +17,15 @@ const RawArtistReleases: React.FC<{
   const { data: artist } = useSubsonic<SubsonicArtistResponse>(
     `${GET_ARTIST}?id=${id}`
   );
-  const albums = React.useMemo(
-    () => artist!.album.filter(albumCondition),
-    [artist?.album]
-  );
-  const eps = React.useMemo(
-    () => artist!.album.filter(epCondition),
-    [artist?.album]
-  );
-  const singles = React.useMemo(
-    () => artist!.album.filter(singleCondition),
-    [artist?.album]
-  );
 
-  const sections: [string, SubsonicAlbum[]][] = [
-    ["Albums", albums],
-    ["EPs", eps],
-    ["Singles", singles],
-  ];
   return (
-    <>
-      {sections.map((section) =>
-        section[1].length ? (
-          <ArtistSection key={section[0]} header={section[0]}>
-            {section[1].map((album) => (
-              <Album key={album.id} album={album} />
-            ))}
-          </ArtistSection>
-        ) : null
-      )}
-    </>
+    <ArtistSection header={"Releases"}>
+      <div className="flex flex-row flex-wrap">
+        {artist?.album.map((album) => (
+          <Album key={album.id} album={album} />
+        ))}
+      </div>
+    </ArtistSection>
   );
 };
 

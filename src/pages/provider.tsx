@@ -22,22 +22,22 @@ const Provider: React.FunctionComponent = () => {
 
   return (
     <PlayerContext>
-        <Navbar />
-        <NavbarContent ref={ref}>
-          <React.Suspense fallback={<h1>loading in provider</h1>}>
-            <Routes>
-              <Route index element={<h1>index</h1>} />
-              <Route path="search" element={<Search />} />
-              <Route path="artists" element={<Artists />} />
-              <Route path="artist/:id" element={<Artist />} />
-              <Route path="albums" element={<Albums />} />
-              <Route path="album/:id" element={<Album />} />
-              <Route path="*" element={<NotFound />} />
-            </Routes>
-          </React.Suspense>
-        </NavbarContent>
-        <Player />
-        <ScrollToTop ele={ref.current?.firstChild} />
+      <Navbar />
+      <NavbarContent ref={ref}>
+        <React.Suspense fallback={<h1>loading in provider</h1>}>
+          <Routes>
+            <Route index element={<h1>index</h1>} />
+            <Route path="search" element={<Search />} />
+            <Route path="artists" element={<Artists />} />
+            <Route path="artist/:id" element={<Artist />} />
+            <Route path="albums" element={<Albums />} />
+            <Route path="album/:id" element={<Album />} />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </React.Suspense>
+      </NavbarContent>
+      <Player />
+      <ScrollToTop ele={ref.current?.firstChild} />
     </PlayerContext>
   );
 };

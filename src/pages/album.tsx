@@ -33,7 +33,12 @@ const Album = () => {
             {album?.name}
           </h1>
           <h3 className="my-1 text-lg md:text-xl xl:text-2xl">
-            <Link className="text-red-500 dark:text-red-400" to={`../artist/${album?.artistId}`}>{album?.artist}</Link>
+            <Link
+              className="text-red-500 dark:text-red-400"
+              to={`../artist/${album?.artistId}`}
+            >
+              {album?.artist}
+            </Link>
           </h3>
           <span className="text-sm md:text-md">
             {album?.year} {"\uFF65"}{" "}
@@ -44,10 +49,10 @@ const Album = () => {
       <Tracks
         songs={album?.song || []}
         heart={-1}
-          title={8}
-          artist={4}
-          length={1}
-          format={2}
+        title={9}
+        artist={3}
+        length={-1}
+        format={-1}
       />
     </Standard>
   );

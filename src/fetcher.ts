@@ -60,24 +60,27 @@ const useSubsonic = <T extends Object = {}>(
   return useSWR<T>([path, useConnection()[0]], fetcher, opts);
 };
 
-const isArr = ([_, val]: [string, any]) => Array.isArray(val)
+const isArr = ([_, val]: [string, any]) => Array.isArray(val);
 const findArray = <T extends Object = {}>(data: T): any[] | null => {
-  const entries = Object.entries(data)
-  return entries.some(isArr) ? entries.filter(isArr)[0][1] : null
-}
+  const entries = Object.entries(data);
+  return entries.some(isArr) ? entries.filter(isArr)[0][1] : null;
+};
 export const hasNextPage = <T extends Object = {}>(data: T | null) => {
-  let arr = null
-  if(data)
-    arr = findArray(data)
-  return (data == null || arr?.length > 0)
-}
+  let arr = null;
+  if (data) arr = findArray(data);
+  return data == null || arr?.length > 0;
+};
 
 export const useSubsonicInfinite = <T extends Object = {}>(
   gen: (index: number) => string,
   opts = { suspense: true }
 ) => {
-  const conn = useConnection()[0]
-  return useSWRInfinite<T>((index, prev) => hasNextPage(prev) ? [gen(index), conn] : null, fetcher, opts);
+  const conn = useConnection()[0];
+  return useSWRInfinite<T>(
+    (index, prev) => (hasNextPage(prev) ? [gen(index), conn] : null),
+    fetcher,
+    opts
+  );
 };
 
 export const useURL = (path: string) => {

@@ -1,9 +1,10 @@
 import * as React from "react";
-import { useIntersectionObserver } from 'react-intersection-observer-hook';
+import { useIntersectionObserver } from "react-intersection-observer-hook";
 import { ErrorBoundary } from "react-error-boundary";
 import { createResource, Resource } from "../util";
 
-const CLASSES = "aspect-square rounded-lg drop-shadow-md select-none pointer-events-none";
+const CLASSES =
+  "aspect-square rounded-lg drop-shadow-md select-none pointer-events-none";
 const cache = new Map<string, Resource<string>>();
 
 const fetchImage = (source: string): Resource<string> => {
