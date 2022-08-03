@@ -6,9 +6,8 @@ import type {
 import useSubsonic from "../fetcher";
 import { GET_ARTIST, GET_TOP_SONGS } from "../const";
 
-import ArtistSection from "../components/artist-section";
-import { defaultFields } from "../components/song-list-item";
-import SongList from "../components/song-list";
+import ArtistSection from "./artist-section";
+import Tracks from "./tracks";
 
 const RawArtistTopSongs: React.FC<{ id: string }> = ({ id }) => {
   const { data: artist } = useSubsonic<SubsonicArtistResponse>(
@@ -20,7 +19,13 @@ const RawArtistTopSongs: React.FC<{ id: string }> = ({ id }) => {
   if (!topSongs?.song?.length) return null;
   return (
     <ArtistSection header="Top songs">
-      <SongList fields={defaultFields} songs={topSongs.song} />
+      <Tracks
+          songs={topSongs.song}
+          art={-1}
+          heart={-1}
+          title={8}
+          length={1}
+      />
     </ArtistSection>
   );
 };

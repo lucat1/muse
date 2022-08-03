@@ -42,7 +42,7 @@ export interface SubsonicSongBase {
 }
 export interface SubsonicSong extends SubsonicSongBase {
   albumId: string;
-  artistId: string;
+  artistId?: string;
   bitRate: number;
   contentType: string;
   coverArt: string;
@@ -101,5 +101,5 @@ export interface SubsonicTopSongsResponse {
 export interface SubsonicSearchResponse {
   artist?: SubsonicArtistBase[];
   album?: SubsonicAlbumBase[];
-  song?: SubsonicSongBase[];
+  song?: SubsonicSong[];
 }

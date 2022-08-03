@@ -8,7 +8,7 @@ import type { SubsonicSearchResponse } from "../types";
 
 import Standard from "../components/standard";
 import Album from "../components/album";
-import Song from "../components/song";
+import Tracks from "../components/tracks";
 import Artist from "../components/artist";
 import ScrollView from "../components/scroll-view";
 
@@ -31,10 +31,23 @@ const Results: React.FC<{ query: string | null }> = ({ query }) => {
   ][] = [
     ["Artists", Artist, "artist", search?.artist || []],
     ["Albums", Album, "album", search?.album || []],
-    ["Songs", Song, "song", search?.song || []],
   ];
+  const songs = (search?.song || []).sort((a,b) => (a.starred && !b.starred) ? -1 : (!a.starred && b.starred) ? 1 : 0)
   return (
     <>
+          <section>
+            <h2 className="text-lg md:text-xl xl:text-2xl font-semibold py-4">
+              Songs
+            </h2>
+            <Tracks
+              songs={songs}
+              art={-1}
+              heart={-1}
+              title={8}
+              artist={6}
+              length={1}
+            />
+          </section>
       {sections.map((section, i) => {
         if (section[3].length == 0) return null;
         const [Element, key] = [section[1], section[2]];

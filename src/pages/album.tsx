@@ -6,8 +6,7 @@ import useSubsonic, { useURL } from "../fetcher";
 import { useTitle, GET_ALBUM } from "../const";
 
 import Standard from "../components/standard";
-import { defaultFields } from "../components/song-list-item";
-import SongList from "../components/song-list";
+import Tracks from "../components/tracks";
 import Image from "../components/img";
 
 const Album = () => {
@@ -42,7 +41,14 @@ const Album = () => {
           </span>
         </div>
       </section>
-      <SongList fields={defaultFields} songs={album?.song || []} />
+      <Tracks
+        songs={album?.song || []}
+        heart={-1}
+          title={8}
+          artist={4}
+          length={1}
+          format={2}
+      />
     </Standard>
   );
 };

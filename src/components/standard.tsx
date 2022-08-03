@@ -12,12 +12,9 @@ export const StandardWidth: React.FC<
   </div>
 );
 
-const Standard: React.FC<React.PropsWithChildren<{ nopad?: boolean }>> = ({
-  children,
-  nopad,
-}) => (
+const Standard: React.FC<React.PropsWithChildren<{}>> = ({ children }) => (
   <main className="flex flex-col items-center overflow-y-auto">
-    <StandardWidth className={nopad == undefined ? "mb-32" : ""}>
+    <StandardWidth>
       {children}
     </StandardWidth>
   </main>
