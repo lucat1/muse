@@ -42,7 +42,7 @@ const Track: React.FC<TrackProps & { song: SubsonicSong }> = ({ song, ...fields 
     return(
     <Root>
       <Trigger asChild={true}>
-    <div className="p-3 my-1 rounded-lg focus:bg-neutral-700 hover:bg-neutral-700">
+    <div className="p-3 my-1 rounded-lg focus:bg-neutral-200 hover:bg-neutral-200 dark:focus:bg-neutral-800 dark:hover:bg-neutral-800">
     <div
       className="h-10 w-full grid gap-x-4"
       style={{
