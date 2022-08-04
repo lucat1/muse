@@ -12,7 +12,9 @@ const App: React.FunctionComponent<React.PropsWithChildren<{}>> = ({
         value={useLocalStorage<Connection[]>(LOCAL_STORAGE_KEY, [])}
       >
         <React.Suspense fallback={<h1>loading</h1>}>
-          <BrowserRouter>{children}</BrowserRouter>
+          <BrowserRouter basename={import.meta.env.BASE_URL}>
+            {children}
+          </BrowserRouter>
         </React.Suspense>
       </ConnectionsContext.Provider>
     </React.StrictMode>

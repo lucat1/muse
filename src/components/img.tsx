@@ -70,7 +70,12 @@ const Image: React.FC<
     <ErrorBoundary fallback={fallback}>
       <React.Suspense fallback={fallback}>
         {inView ? (
-          <RawImage ref={ref as any} className={className} alt={alt} {...props} />
+          <RawImage
+            ref={ref as any}
+            className={className}
+            alt={alt}
+            {...props}
+          />
         ) : (
           fallback
         )}

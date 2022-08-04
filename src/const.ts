@@ -47,10 +47,7 @@ export interface Connection {
   salt: string;
   // settings: Settings;
 }
-type ConnectionsContextValue = [
-  Connection[],
-  Setter<Connection[]>
-];
+type ConnectionsContextValue = [Connection[], Setter<Connection[]>];
 type ConnectionContextValue = [
   Connection,
   React.Dispatch<React.SetStateAction<Connection>>

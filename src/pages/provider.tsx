@@ -36,7 +36,9 @@ const Provider: React.FunctionComponent = () => {
         </React.Suspense>
       </NavbarContent>
       <Player />
-      <ScrollToTop ele={ref.current?.firstChild as HTMLElement | undefined | null} />
+      <ScrollToTop
+        ele={ref.current?.firstChild as HTMLElement | undefined | null}
+      />
     </PlayerContext>
   );
 };

@@ -77,14 +77,14 @@ export interface SubsonicArtistInfo {
 export interface SubsonicWrapperResponse<T> {
   "subsonic-response": {
     status: "ok" | "failed";
-  } & T
+  } & T;
 }
 
 export interface SubsonicBaseResponse<T> {
   type: string;
   version: string;
-  [key: string]: T | string
-};
+  [key: string]: T | string;
+}
 
 export interface SubsonicErrorResponse {
   code: number;

@@ -4,7 +4,11 @@ import useSWRInfinite from "swr/infinite";
 import md5 from "blueimp-md5";
 
 import { useConnection, SUBSONIC_PROTOCOL_VERSION, Connection } from "./const";
-import type { SubsonicWrapperResponse, SubsonicBaseResponse, SubsonicErrorResponse } from './types'
+import type {
+  SubsonicWrapperResponse,
+  SubsonicBaseResponse,
+  SubsonicErrorResponse,
+} from "./types";
 
 const CLIENT_NAME = "muse";
 
@@ -34,17 +38,23 @@ export const fetcher = <T>(
   return fetch(getURL(path, conn), opts)
     .then((r) => r.json())
     .then(
-      (wrapped: SubsonicWrapperResponse<SubsonicBaseResponse<T> | SubsonicErrorResponse>) =>
+      (
+        wrapped: SubsonicWrapperResponse<
+          SubsonicBaseResponse<T> | SubsonicErrorResponse
+        >
+      ) =>
         new Promise<T>((res, rej) => {
-          if(wrapped["subsonic-response"].status == "ok") {
-            const data = wrapped["subsonic-response"] as SubsonicBaseResponse<T>
-            res( data[ otherKey(data) ] as T)
+          if (wrapped["subsonic-response"].status == "ok") {
+            const data = wrapped[
+              "subsonic-response"
+            ] as SubsonicBaseResponse<T>;
+            res(data[otherKey(data)] as T);
           } else {
-            const data = wrapped["subsonic-response"] as SubsonicErrorResponse
-            rej(`Error ${data.code}: ${data.message}`)
+            const data = wrapped["subsonic-response"] as SubsonicErrorResponse;
+            rej(`Error ${data.code}: ${data.message}`);
           }
-        }
-    ));
+        })
+    );
 };
 
 const useSubsonic = <T extends Object = {}>(

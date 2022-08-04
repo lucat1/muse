@@ -37,20 +37,20 @@ const Results: React.FC<{ query: string | undefined }> = ({ query }) => {
   );
   return (
     <>
-    {songs.length > 0 && (
-      <section>
-        <h2 className="text-lg md:text-xl xl:text-2xl font-semibold py-4">
-          Songs
-        </h2>
-        <Tracks
-          songs={songs}
-          art={-1}
-          heart={-1}
-          title={8}
-          artist={6}
-          length={-1}
-        />
-      </section>
+      {songs.length > 0 && (
+        <section>
+          <h2 className="text-lg md:text-xl xl:text-2xl font-semibold py-4">
+            Songs
+          </h2>
+          <Tracks
+            songs={songs}
+            art={-1}
+            heart={-1}
+            title={8}
+            artist={6}
+            length={-1}
+          />
+        </section>
       )}
       {sections.map((section, i) => {
         if (section[3].length == 0) return null;
@@ -81,12 +81,13 @@ const Search: React.FC = () => {
       query: qs.get(QUERY_KEY) || undefined,
     },
   });
-  const [query, setQuery] = React.useState<string | undefined>(qs.get(QUERY_KEY) || undefined);
+  const [query, setQuery] = React.useState<string | undefined>(
+    qs.get(QUERY_KEY) || undefined
+  );
 
   const onSubmit = React.useCallback(
     ({ query }: FormData) => {
-      if(!query)
-        return;
+      if (!query) return;
 
       setQuery(query);
       qs.set(QUERY_KEY, query);
@@ -94,11 +95,13 @@ const Search: React.FC = () => {
     },
     [setQuery]
   );
-  const debouncedOnSubmit = React.useCallback(debounce(onSubmit, 400), [onSubmit])
-  const watchQuery = watch('query')
+  const debouncedOnSubmit = React.useCallback(debounce(onSubmit, 400), [
+    onSubmit,
+  ]);
+  const watchQuery = watch("query");
   React.useEffect(() => {
-    debouncedOnSubmit({ query: watchQuery })
-    return () => debouncedOnSubmit.clear()
+    debouncedOnSubmit({ query: watchQuery });
+    return () => debouncedOnSubmit.clear();
   }, [debouncedOnSubmit, watchQuery]);
 
   return (

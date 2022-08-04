@@ -1,6 +1,10 @@
 /** @type {import("snowpack").SnowpackUserConfig } */
-const dev = process.env.NODE_ENV == 'development'
+const dev = process.env.NODE_ENV == "development";
+const baseUrl = dev ? "/" : "/muse/";
 module.exports = {
+  env: {
+    BASE_URL: baseUrl,
+  },
   routes: [
     {
       match: "routes",
@@ -23,10 +27,9 @@ module.exports = {
   },
   buildOptions: {
     sourcemap: dev,
-    baseUrl: dev ? '/' : 'https://lucat1.github.io/muse/',
+    baseUrl: baseUrl,
   },
-    optimize: {
+  optimize: {
     minify: true,
-    target: 'es2018',
   },
 };

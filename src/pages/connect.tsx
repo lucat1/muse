@@ -11,7 +11,7 @@ const salt = (len: number) => {
   return result;
 };
 
-type FormFields = Connection & { saltLength: number}
+type FormFields = Connection & { saltLength: number };
 const Welcome = () => {
   const [connections, setConnections] = useConnections();
   const {
@@ -19,13 +19,7 @@ const Welcome = () => {
     handleSubmit,
     formState: { errors },
   } = useForm<FormFields>();
-  const onSubmit = ({
-    id,
-    host,
-    username,
-    password,
-    saltLength,
-  }: FormFields) =>
+  const onSubmit = ({ id, host, username, password, saltLength }: FormFields) =>
     setConnections([
       ...connections,
       {
