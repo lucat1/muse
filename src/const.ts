@@ -1,5 +1,8 @@
 import { createContext, useContext } from "react";
 import { useParams } from "react-router";
+// If only the module world export its types
+// import type { Setter } from 'use-local-storage'
+declare type Setter<T> = React.Dispatch<React.SetStateAction<T | undefined>>;
 
 export const LOCAL_STORAGE_KEY = "muse";
 export const SUBSONIC_PROTOCOL_VERSION = "1.16.1";
@@ -32,9 +35,9 @@ interface Settings {
   scrobble: BooleanOption;
 }
 
-const defaultSettings: Settings = {
-  scrobble: {},
-};
+// const defaultSettings: Settings = {
+//   scrobble: {},
+// };
 
 export interface Connection {
   id: number;
@@ -42,11 +45,11 @@ export interface Connection {
   username: string;
   password: string;
   salt: string;
-  settings: Settings;
+  // settings: Settings;
 }
 type ConnectionsContextValue = [
   Connection[],
-  React.Dispatch<React.SetStateAction<Connection[]>>
+  Setter<Connection[]>
 ];
 type ConnectionContextValue = [
   Connection,
@@ -64,7 +67,8 @@ export const useConnection = (i: number | null = null) => {
   if (i == null) i = parseInt(useParams().server!);
 
   const [ctx, setCtx] = useContext(ConnectionsContext);
-  const { settings, ...ele } = ctx[i];
+  const ele = ctx[i];
+  // const { settings, ...ele } = ctx[i];
   return [
     // {
     //   ...ele, id: i, settings: {

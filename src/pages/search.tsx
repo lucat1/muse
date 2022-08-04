@@ -13,11 +13,11 @@ import Artist from "../components/artist";
 import ScrollView from "../components/scroll-view";
 
 interface FormData {
-  search: string;
+  query?: string;
 }
 
-const Results: React.FC<{ query: string | null }> = ({ query }) => {
-  if (query == null) {
+const Results: React.FC<{ query: string | undefined }> = ({ query }) => {
+  if (!query) {
     return null;
   }
   const { data: search } = useAuthenticatedSWR<SubsonicSearchResponse>(
@@ -37,6 +37,7 @@ const Results: React.FC<{ query: string | null }> = ({ query }) => {
   );
   return (
     <>
+    {songs.length > 0 && (
       <section>
         <h2 className="text-lg md:text-xl xl:text-2xl font-semibold py-4">
           Songs
@@ -50,6 +51,7 @@ const Results: React.FC<{ query: string | null }> = ({ query }) => {
           length={-1}
         />
       </section>
+      )}
       {sections.map((section, i) => {
         if (section[3].length == 0) return null;
         const [Element, key] = [section[1], section[2]];
@@ -76,23 +78,28 @@ const Search: React.FC = () => {
   const [qs, setQs] = useSearchParams();
   const { register, handleSubmit, watch } = useForm<FormData>({
     defaultValues: {
-      search: qs.get(QUERY_KEY) || undefined,
+      query: qs.get(QUERY_KEY) || undefined,
     },
   });
-  const [query, setQuery] = React.useState<string | null>(qs.get(QUERY_KEY));
+  const [query, setQuery] = React.useState<string | undefined>(qs.get(QUERY_KEY) || undefined);
 
   const onSubmit = React.useCallback(
-    ({ search }: FormData) => {
-      setQuery(search);
-      qs.set(QUERY_KEY, search);
+    ({ query }: FormData) => {
+      if(!query)
+        return;
+
+      setQuery(query);
+      qs.set(QUERY_KEY, query);
       setQs(qs);
     },
     [setQuery]
   );
+  const debouncedOnSubmit = React.useCallback(debounce(onSubmit, 400), [onSubmit])
+  const watchQuery = watch('query')
   React.useEffect(() => {
-    const subscription = watch(debounce(handleSubmit(onSubmit), 400));
-    return () => subscription.unsubscribe();
-  }, [handleSubmit, watch]);
+    debouncedOnSubmit({ query: watchQuery })
+    return () => debouncedOnSubmit.clear()
+  }, [debouncedOnSubmit, watchQuery]);
 
   return (
     <Standard>
@@ -101,11 +108,11 @@ const Search: React.FC = () => {
         onSubmit={handleSubmit(onSubmit)}
       >
         <input
-          id="search"
+          id="query"
           type="text"
           className="dark:bg-neutral-700 dark:placeholder:text-slate-100 w-full max-w-sm lg:max-w-md 2xl:max-w-xl rounded-full h-12 px-6 text-lg drop-shadow-lg outline-none focus:ring focus:ring-red-500 dark:focus:ring-red-400"
           placeholder="Search through your music..."
-          {...register("search", { required: true })}
+          {...register("query", { required: true })}
         />
         <label htmlFor="search" className="hidden">
           Search for your music

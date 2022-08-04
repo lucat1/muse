@@ -2,17 +2,11 @@ import * as React from "react";
 import useSWR from "swr";
 import useSWRInfinite from "swr/infinite";
 import md5 from "blueimp-md5";
+
 import { useConnection, SUBSONIC_PROTOCOL_VERSION, Connection } from "./const";
+import type { SubsonicWrapperResponse, SubsonicBaseResponse, SubsonicErrorResponse } from './types'
 
 const CLIENT_NAME = "muse";
-
-interface SubsonicBasicResponse {
-  "subsonic-response": {
-    status: "ok" | "failed";
-    type: string;
-    version: string;
-  };
-}
 
 export const getURL = (path: string, conn: Connection) => {
   const pass = md5(conn.password + conn.salt);
@@ -29,10 +23,10 @@ export const getURL = (path: string, conn: Connection) => {
 };
 
 const ignoredKeys = ["status", "type", "version"];
-const otherKey = <T extends SubsonicBasicResponse>(d: T) =>
+const otherKey = <T>(d: SubsonicBaseResponse<T>) =>
   Object.keys(d).reduce((k, f) => (!f && !ignoredKeys.includes(k) ? k : f), "");
 
-export const fetcher = (
+export const fetcher = <T>(
   path: string,
   conn: Connection,
   opts: RequestInit | undefined = undefined
@@ -40,17 +34,17 @@ export const fetcher = (
   return fetch(getURL(path, conn), opts)
     .then((r) => r.json())
     .then(
-      (data: SubsonicBasicResponse) =>
-        new Promise<T>((res, rej) =>
-          data["subsonic-response"].status == "ok"
-            ? res(
-                data["subsonic-response"][
-                  otherKey(data["subsonic-response"])
-                ] as T
-              )
-            : rej((data["subsonic-response"] as ErrorSubsonicResponse).error)
-        )
-    );
+      (wrapped: SubsonicWrapperResponse<SubsonicBaseResponse<T> | SubsonicErrorResponse>) =>
+        new Promise<T>((res, rej) => {
+          if(wrapped["subsonic-response"].status == "ok") {
+            const data = wrapped["subsonic-response"] as SubsonicBaseResponse<T>
+            res( data[ otherKey(data) ] as T)
+          } else {
+            const data = wrapped["subsonic-response"] as SubsonicErrorResponse
+            rej(`Error ${data.code}: ${data.message}`)
+          }
+        }
+    ));
 };
 
 const useSubsonic = <T extends Object = {}>(
@@ -68,7 +62,7 @@ const findArray = <T extends Object = {}>(data: T): any[] | null => {
 export const hasNextPage = <T extends Object = {}>(data: T | null) => {
   let arr = null;
   if (data) arr = findArray(data);
-  return data == null || arr?.length > 0;
+  return data == null || (arr?.length || 0) > 0;
 };
 
 export const useSubsonicInfinite = <T extends Object = {}>(

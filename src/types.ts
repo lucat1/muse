@@ -74,7 +74,19 @@ export interface SubsonicArtistInfo {
   similarArtist: SubsonicArtistBase[] | undefined;
 }
 
-export interface SubsonicError {
+export interface SubsonicWrapperResponse<T> {
+  "subsonic-response": {
+    status: "ok" | "failed";
+  } & T
+}
+
+export interface SubsonicBaseResponse<T> {
+  type: string;
+  version: string;
+  [key: string]: T | string
+};
+
+export interface SubsonicErrorResponse {
   code: number;
   message: string;
 }

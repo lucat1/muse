@@ -11,20 +11,21 @@ const salt = (len: number) => {
   return result;
 };
 
+type FormFields = Connection & { saltLength: number}
 const Welcome = () => {
   const [connections, setConnections] = useConnections();
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<Connection>();
+  } = useForm<FormFields>();
   const onSubmit = ({
     id,
     host,
     username,
     password,
     saltLength,
-  }: Connection & { saltLength: number }) =>
+  }: FormFields) =>
     setConnections([
       ...connections,
       {
@@ -33,7 +34,7 @@ const Welcome = () => {
         username,
         password,
         salt: salt(saltLength),
-        player: { state: "none", song: undefined },
+        // player: { state: "none", song: undefined },
       },
     ]);
   console.log("errors", errors);
@@ -52,7 +53,7 @@ const Welcome = () => {
               /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/i,
           })}
         />
-        {errors.host && <label for="host">invalid host</label>}
+        {errors.host && <label htmlFor="host">invalid host</label>}
         <input
           type="text"
           id="username"
@@ -60,7 +61,7 @@ const Welcome = () => {
           {...register("username", { required: true })}
         />
         {errors.username && (
-          <label for="username">a password is required</label>
+          <label htmlFor="username">a password is required</label>
         )}
         <input
           type="password"
@@ -68,7 +69,7 @@ const Welcome = () => {
           {...register("password", { required: true })}
         />
         {errors.username && (
-          <label for="password">a password is required</label>
+          <label htmlFor="password">a password is required</label>
         )}
         <input
           type="number"

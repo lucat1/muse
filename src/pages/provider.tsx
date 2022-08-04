@@ -13,11 +13,10 @@ import Navbar, { NavbarContent } from "../components/nav";
 import ScrollToTop from "../components/scroll-to-top";
 
 const Provider: React.FunctionComponent = () => {
-  const ref = React.useRef<HTMLElement>();
+  const ref = React.useRef<HTMLElement>(null);
   const { server } = useParams();
   const [connections] = useConnections();
-  let i;
-  if (server == undefined || (i = parseInt(server)) == NaN || !connections[i])
+  if (server == undefined || !connections[parseInt(server)])
     return <NotFound />;
 
   return (
@@ -37,7 +36,7 @@ const Provider: React.FunctionComponent = () => {
         </React.Suspense>
       </NavbarContent>
       <Player />
-      <ScrollToTop ele={ref.current?.firstChild} />
+      <ScrollToTop ele={ref.current?.firstChild as HTMLElement | undefined | null} />
     </PlayerContext>
   );
 };

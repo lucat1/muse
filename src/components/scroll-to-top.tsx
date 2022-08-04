@@ -2,7 +2,7 @@ import * as React from "react";
 import { useLocation } from "react-router-dom";
 
 const ScrollToTop: React.FC<{
-  ele?: HTMLElement;
+  ele?: HTMLElement | null;
 }> = ({ ele }) => {
   const location = useLocation();
   React.useLayoutEffect(() => {

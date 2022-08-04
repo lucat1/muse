@@ -10,7 +10,7 @@ interface Position {
 const ScrollView: React.FC<
   React.PropsWithChildren<React.HTMLProps<HTMLDivElement>>
 > = ({ children, ...props }) => {
-  const ref = React.useRef<HTMLDivElement>();
+  const ref = React.useRef<HTMLDivElement>(null);
   const [start, setStart] = React.useState<Position | null>(null);
   const handleMouseDown = React.useCallback(
     (e: React.MouseEvent<HTMLDivElement>) => {
@@ -24,13 +24,13 @@ const ScrollView: React.FC<
     },
     [setStart]
   );
-  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+  const handleMouseMove = (e: MouseEvent) => {
     e.preventDefault();
     ref.current!.scrollLeft = start!.left - e.clientX + start!.x;
     ref.current!.scrollTop = start!.top - e.clientY + start!.y;
   };
   const handleMouseUp = React.useCallback(
-    (e: React.MouseEvent<HTMLDivElement>) => {
+    (e: MouseEvent) => {
       e.preventDefault();
       setStart(null);
     },

@@ -21,9 +21,7 @@ import { getURL } from "../fetcher";
 import { usePlayer } from "../components/player";
 import Image from "../components/img";
 
-export const NavbarContent: React.FC<
-  React.PropsWithChildren<React.PropsWithRef<{}>>
-> = React.forwardRef(({ children }, ref) => (
+export const NavbarContent = React.forwardRef<HTMLElement, React.PropsWithChildren<{}>>(({ children }, ref) => (
   <main
     ref={ref}
     className="fixed left-48 md:left-64 xl:left-72 top-0 bottom-24 right-0 flex flex-col"

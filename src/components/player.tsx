@@ -71,7 +71,7 @@ export const usePlayer = () => React.useContext(Context);
 const Player: React.FunctionComponent = () => {
   const [player, dispatch] = usePlayer();
   const [connection] = useConnection();
-  const audio = React.useRef<HTMLAudioElement>();
+  const audio = React.useRef<HTMLAudioElement>(null);
   const [canPlay, setCanPlay] = React.useState(false);
   const [time, setTime] = React.useState(0);
   const [seek, setSeek] = React.useState(-1);

@@ -1,4 +1,5 @@
 /** @type {import("snowpack").SnowpackUserConfig } */
+const dev = process.env.NODE_ENV == 'development'
 module.exports = {
   routes: [
     {
@@ -16,14 +17,16 @@ module.exports = {
     "@snowpack/plugin-typescript",
     "@snowpack/plugin-postcss",
   ],
-  packageOptions: {
-    /* ... */
-  },
   devOptions: {
     port: 3000,
     tailwindConfig: "./tailwind.config.js",
   },
   buildOptions: {
-    sourcemap: true,
+    sourcemap: dev,
+    baseUrl: dev ? '/' : 'https://lucat1.github.io/muse/',
+  },
+    optimize: {
+    minify: true,
+    target: 'es2018',
   },
 };
