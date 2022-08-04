@@ -85,7 +85,7 @@ const Track: React.FC<TrackProps & { song: SubsonicSong }> = ({
       <Trigger asChild={true}>
         <div className="p-3 my-1 rounded-lg focus:bg-neutral-200 hover:bg-neutral-200 dark:focus:bg-neutral-800 dark:hover:bg-neutral-800">
           <div
-            className="h-10 w-full grid gap-x-6"
+            className="h-10 w-full grid px-2 lg:px-4 gap-x-6"
             style={{
               gridTemplateColumns: Object.values(Fields)
                 .map((f) => fields[f] || 0)

@@ -12,6 +12,7 @@ import Album from "../components/album";
 import Tracks from "../components/tracks";
 import Artist from "../components/artist";
 import ScrollView from "../components/scroll-view";
+import ArtistSection from "../components/artist-section";
 import Separator from "../components/separator";
 import Button from "../components/button";
 
@@ -45,16 +46,10 @@ const Results: React.FC<{ query: string | undefined }> = ({ query }) => {
   return (
     <>
       {songs.length > 0 && (
-        <section>
-          <div className="flex flex-row items-center">
-            <h2 className="text-lg md:text-xl xl:text-2xl font-semibold py-4">
-              Songs
-            </h2>
-            <Separator />
-            <Button onClick={(_) => setMore(!more)}>
-              {more ? "Less" : "More"}
-            </Button>
-          </div>
+        <ArtistSection
+          header="Songs"
+          extra={<Button onClick={(_) => setMore(!more)}>More</Button>}
+        >
           <Tracks
             songs={songs}
             art={-1}
@@ -63,22 +58,19 @@ const Results: React.FC<{ query: string | undefined }> = ({ query }) => {
             artist={6}
             length={-1}
           />
-        </section>
+        </ArtistSection>
       )}
       {sections.map((section, i) => {
         if (section[3].length == 0) return null;
         const [Element, key] = [section[1], section[2]];
         return (
-          <section key={i}>
-            <h2 className="text-lg md:text-xl xl:text-2xl font-semibold py-4">
-              {section[0]}
-            </h2>
+          <ArtistSection header={section[0]}>
             <ScrollView className="flex flex-row overflow-x-auto">
               {section[3].map((data, i) => (
                 <Element key={i} {...{ [key]: data }} />
               ))}
             </ScrollView>
-          </section>
+          </ArtistSection>
         );
       })}
     </>
