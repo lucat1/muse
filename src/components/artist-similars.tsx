@@ -4,6 +4,8 @@ import useSubsonic from "../fetcher";
 import { GET_ARTIST_INFO } from "../const";
 
 import ArtistSection from "../components/artist-section";
+import ScrollView from "./scroll-view";
+import Button from "./button";
 import Artist from "../components/artist";
 
 const ArtistSimilars: React.FC<{ id: string }> = ({ id }) => {
@@ -11,13 +13,32 @@ const ArtistSimilars: React.FC<{ id: string }> = ({ id }) => {
     `${GET_ARTIST_INFO}?id=${id}`
   );
   if (!artistInfo?.similarArtist?.length) return null;
+
+  const [expanded, setExpanded] = React.useState(false);
+  const artists = React.useMemo(
+    () =>
+      artistInfo.similarArtist?.map((artist) => (
+        <Artist key={artist.id} artist={artist} />
+      )),
+    [artistInfo.similarArtist]
+  );
+
   return (
-    <ArtistSection header="Similar Artists">
-      <div className="flex flex-row flex-wrap">
-        {artistInfo.similarArtist.map((artist) => (
-          <Artist key={artist.id} artist={artist} />
-        ))}
-      </div>
+    <ArtistSection
+      header="Similar Artists"
+      extra={
+        <Button onClick={(_) => setExpanded(!expanded)}>
+          {expanded ? "Collapse" : "Expand"}
+        </Button>
+      }
+    >
+      {expanded ? (
+        <div className="flex flex-row flex-wrap">{artists}</div>
+      ) : (
+        <ScrollView className="flex flex-row overflow-x-auto">
+          {artists}
+        </ScrollView>
+      )}
     </ArtistSection>
   );
 };

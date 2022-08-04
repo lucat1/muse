@@ -1,14 +1,11 @@
 import * as React from "react";
-import type {
-  SubsonicArtistResponse,
-  SubsonicAlbum,
-  SubsonicArtist,
-} from "../types";
+import type { SubsonicArtistResponse } from "../types";
 import useSubsonic from "../fetcher";
 import { GET_ARTIST } from "../const";
-import { albumCondition, epCondition, singleCondition } from "../util";
 
 import ArtistSection from "../components/artist-section";
+import ScrollView from "./scroll-view";
+import Button from "./button";
 import Album from "../components/album";
 
 const RawArtistReleases: React.FC<{
@@ -17,14 +14,28 @@ const RawArtistReleases: React.FC<{
   const { data: artist } = useSubsonic<SubsonicArtistResponse>(
     `${GET_ARTIST}?id=${id}`
   );
+  const [expanded, setExpanded] = React.useState(false);
+  const albums = React.useMemo(
+    () => artist?.album.map((album) => <Album key={album.id} album={album} />),
+    [artist?.album]
+  );
 
   return (
-    <ArtistSection header={"Releases"}>
-      <div className="flex flex-row flex-wrap">
-        {artist?.album.map((album) => (
-          <Album key={album.id} album={album} />
-        ))}
-      </div>
+    <ArtistSection
+      header={"Releases"}
+      extra={
+        <Button onClick={(_) => setExpanded(!expanded)}>
+          {expanded ? "Collapse" : "Expand"}
+        </Button>
+      }
+    >
+      {expanded ? (
+        <div className="flex flex-row flex-wrap">{albums}</div>
+      ) : (
+        <ScrollView className="flex flex-row overflow-x-auto">
+          {albums}
+        </ScrollView>
+      )}
     </ArtistSection>
   );
 };

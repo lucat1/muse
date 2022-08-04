@@ -7,7 +7,7 @@ import { useURL } from "../fetcher";
 import Image from "./img";
 
 const Artist: React.FC<{ artist: SubsonicArtistBase }> = ({ artist }) => (
-  <div className="w-32 lg:w-64 mx-8 my-4">
+  <div className="w-32 lg:w-64 mx-8 my-4 flex-shrink-0">
     <Link to={`../artist/${artist.id}`}>
       <Image
         src={
