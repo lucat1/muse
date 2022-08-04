@@ -14,7 +14,7 @@ const ArtistSection: React.FC<
         <Separator decorative={true} orientation="horizontal" />
         {extra}
       </div>
-      <main className="flex">{children}</main>
+      {children}
     </section>
   );
 };

@@ -7,6 +7,7 @@ import { useTitle, GET_ALBUM } from "../const";
 
 import Standard from "../components/standard";
 import Tracks from "../components/tracks";
+import Button from "../components/button";
 import Image from "../components/img";
 
 const Album = () => {
@@ -20,27 +21,33 @@ const Album = () => {
   const albumArt = useURL(`getCoverArt?id=${album?.coverArt}`);
   return (
     <Standard>
-      <section className="py-4 pt-8 flex flex-row items-end">
+      <section className="py-4 pt-8 flex flex-row">
         <Image
           className="w-32 md:w-48 lg:w-64 hover:drop-shadow-lg"
           src={albumArt}
         />
-        <div className="flex flex-col mx-8">
-          <h1 className="my-2 text-2xl md:text-3xl xl:text-4xl font-extrabold">
-            {album?.name}
-          </h1>
-          <h3 className="my-1 text-lg md:text-xl xl:text-2xl">
-            <Link
-              className="text-red-500 dark:text-red-400"
-              to={`../artist/${album?.artistId}`}
-            >
-              {album?.artist}
-            </Link>
-          </h3>
-          <span className="text-sm md:text-md">
-            {album?.year} {"\uFF65"}{" "}
-            {formatDuration((album?.duration || 0) * 1000)}
-          </span>
+        <div className="flex flex-col px-8 py-4 justify-between">
+          <div>
+            <h1 className="mb-3 text-2xl md:text-3xl xl:text-4xl font-extrabold">
+              {album?.name}
+            </h1>
+            <h3 className="mb-2 text-lg md:text-xl xl:text-2xl">
+              <Link
+                className="text-red-500 dark:text-red-400"
+                to={`../artist/${album?.artistId}`}
+              >
+                {album?.artist}
+              </Link>
+            </h3>
+            <span className="text-sm md:text-md">
+              {album?.year} {"\uFF65"}{" "}
+              {formatDuration((album?.duration || 0) * 1000)}
+            </span>
+          </div>
+          <div className="flex flex-row items-center">
+            <Button className="mr-2">Play</Button>
+            {"\uFF65"} <Button className="ml-2">Shuffle</Button>
+          </div>
         </div>
       </section>
       <Tracks
