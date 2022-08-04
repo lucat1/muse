@@ -18,9 +18,6 @@ const Album = () => {
     `${album?.name || "Unkown Album"} - ${album?.artist || "Unkown Artist"}`
   );
   const albumArt = useURL(`getCoverArt?id=${album?.coverArt}`);
-  // const { data: albumInfo } = useSubsonic<SubsonicAlbumInfoResponse>(
-  //   `${GET_ALBUM_INFO}?id=${id}`
-  // );
   return (
     <Standard>
       <section className="py-4 pt-8 flex flex-row items-end">
@@ -48,8 +45,9 @@ const Album = () => {
       </section>
       <Tracks
         songs={album?.song || []}
-        heart={-1}
+        number={-1}
         title={9}
+        heart={-1}
         artist={3}
         length={-1}
         format={-1}

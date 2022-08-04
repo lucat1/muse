@@ -2,8 +2,9 @@ import * as React from "react";
 import { useForm } from "react-hook-form";
 import { useSearchParams } from "react-router-dom";
 import debounce from "debounce";
+
 import useAuthenticatedSWR from "../fetcher";
-import { useTitle, SEARCH } from "../const";
+import { useTitle, SEARCH, RING } from "../const";
 import type { SubsonicSearchResponse } from "../types";
 
 import Standard from "../components/standard";
@@ -11,6 +12,8 @@ import Album from "../components/album";
 import Tracks from "../components/tracks";
 import Artist from "../components/artist";
 import ScrollView from "../components/scroll-view";
+import Separator from "../components/separator";
+import Button from "../components/button";
 
 interface FormData {
   query?: string;
@@ -32,16 +35,26 @@ const Results: React.FC<{ query: string | undefined }> = ({ query }) => {
     ["Artists", Artist, "artist", search?.artist || []],
     ["Albums", Album, "album", search?.album || []],
   ];
-  const songs = (search?.song || []).sort((a, b) =>
-    a.starred && !b.starred ? -1 : !a.starred && b.starred ? 1 : 0
-  );
+
+  const [more, setMore] = React.useState(false);
+  const songs = (search?.song || [])
+    .sort((a, b) =>
+      a.starred && !b.starred ? -1 : !a.starred && b.starred ? 1 : 0
+    )
+    .filter((_, i) => i < (more ? 10 : 5));
   return (
     <>
       {songs.length > 0 && (
         <section>
-          <h2 className="text-lg md:text-xl xl:text-2xl font-semibold py-4">
-            Songs
-          </h2>
+          <div className="flex flex-row items-center">
+            <h2 className="text-lg md:text-xl xl:text-2xl font-semibold py-4">
+              Songs
+            </h2>
+            <Separator />
+            <Button onClick={(_) => setMore(!more)}>
+              {more ? "Less" : "More"}
+            </Button>
+          </div>
           <Tracks
             songs={songs}
             art={-1}
@@ -113,7 +126,7 @@ const Search: React.FC = () => {
         <input
           id="query"
           type="text"
-          className="dark:bg-neutral-700 dark:placeholder:text-slate-100 w-full max-w-sm lg:max-w-md 2xl:max-w-xl rounded-full h-12 px-6 text-lg drop-shadow-lg outline-none focus:ring focus:ring-red-500 dark:focus:ring-red-400"
+          className={`dark:bg-neutral-700 dark:placeholder:text-slate-100 w-full max-w-sm lg:max-w-md 2xl:max-w-xl rounded-full h-12 px-6 text-lg drop-shadow-lg ${RING}`}
           placeholder="Search through your music..."
           {...register("query", { required: true })}
         />

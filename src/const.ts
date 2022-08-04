@@ -13,10 +13,14 @@ export const GET_ARTIST = "getArtist";
 export const GET_ARTIST_INFO = "getArtistInfo2";
 export const GET_ALBUMS = "getAlbumList2";
 export const GET_ALBUM = "getAlbum";
-// export const GET_ALBUM_INFO = "getAlbumInfo2";
 export const GET_TOP_SONGS = "getTopSongs";
+export const STAR = "star";
+export const UNSTAR = "unstar";
 export const SEARCH = "search3";
 export const SCROBBLE = "scrobble";
+
+export const RING =
+  "outline-none focus:ring focus:ring-red-500 dark:focus:ring-red-400";
 
 export type OptionType = "boolean" | "multi";
 export interface Option<T> {
