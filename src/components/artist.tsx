@@ -5,6 +5,7 @@ import { GET_COVER_ART } from "../const";
 import { useURL } from "../fetcher";
 
 import Image from "./img";
+import Dot from "./dot";
 
 const Artist: React.FC<{ artist: SubsonicArtistBase }> = ({ artist }) => (
   <div className="w-32 lg:w-64 mx-8 my-4 flex-shrink-0">
@@ -19,8 +20,9 @@ const Artist: React.FC<{ artist: SubsonicArtistBase }> = ({ artist }) => (
     <div className="mt-2 truncate">
       <Link className="text-sm" to={`../artist/${artist.id}`}>
         {artist.name}
-      </Link>{" "}
-      {"\uFF65"} <span className="text-xs">{artist.albumCount}</span>
+      </Link>
+      <Dot />
+      <span className="text-xs">{artist.albumCount}</span>
     </div>
   </div>
 );

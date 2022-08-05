@@ -9,6 +9,7 @@ import Standard from "../components/standard";
 import Tracks from "../components/tracks";
 import Button from "../components/button";
 import Image from "../components/img";
+import Dot from "../components/dot";
 
 const Album = () => {
   const { id } = useParams();
@@ -39,14 +40,16 @@ const Album = () => {
                 {album?.artist}
               </Link>
             </h3>
-            <span className="text-sm md:text-md">
-              {album?.year} {"\uFF65"}{" "}
+            <span className="flex flex-row items-center text-sm md:text-md">
+              {album?.year}
+              <Dot />
               {formatDuration((album?.duration || 0) * 1000)}
             </span>
           </div>
           <div className="flex flex-row items-center">
             <Button className="mr-2">Play</Button>
-            {"\uFF65"} <Button className="ml-2">Shuffle</Button>
+            <Dot />
+            <Button className="ml-2">Shuffle</Button>
           </div>
         </div>
       </section>

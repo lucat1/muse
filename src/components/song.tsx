@@ -7,6 +7,7 @@ import { GET_COVER_ART, useConnection } from "../const";
 
 import { usePlayer } from "./player";
 import Image from "./img";
+import Dot from "./dot";
 
 const Song: React.FC<{ song: SubsonicSong }> = ({ song }) => {
   const [conn] = useConnection();
@@ -32,8 +33,9 @@ const Song: React.FC<{ song: SubsonicSong }> = ({ song }) => {
         <a onClick={play}>{song.title}</a>
         <br />
         <span className="text-xs">
-          <Link to={`/${conn.id}/album/${song.albumId}`}>{song.album}</Link>{" "}
-          {"\uFF65"} {formatDuration(song.duration * 1000)}
+          <Link to={`/${conn.id}/album/${song.albumId}`}>{song.album}</Link>
+          <Dot />
+          {formatDuration(song.duration * 1000)}
         </span>
       </div>
     </div>

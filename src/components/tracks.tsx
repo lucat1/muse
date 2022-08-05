@@ -1,16 +1,25 @@
 import * as React from "react";
 
-import Track, { TrackProps } from "./track";
+import Track, { Fields, TrackProps } from "./track";
 import type { SubsonicSong } from "../types";
 
 const SongList: React.FC<{ songs: SubsonicSong[] } & TrackProps> = ({
   songs,
-  ...props
+  ...fields
 }) => {
   return (
-    <main className="w-full">
+    <main
+      className="w-full grid gap-y-2"
+      style={{
+        gridTemplateColumns: `auto ${Object.values(Fields)
+          .map((f) => fields[f] || 0)
+          .filter((f) => f != 0)
+          .map((f) => (f < 0 ? "auto" : `${f}fr`))
+          .join(" ")} auto`,
+      }}
+    >
       {songs.map((song) => (
-        <Track key={song.id} song={song} {...props} />
+        <Track key={song.id} song={song} {...fields} />
       ))}
     </main>
   );

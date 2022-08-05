@@ -5,6 +5,7 @@ import { useURL } from "../fetcher";
 import type { SubsonicAlbumBase } from "../types";
 
 import Image from "./img";
+import Dot from "./dot";
 
 const Album: React.FC<{ album: SubsonicAlbumBase }> = ({ album }) => (
   <div className="w-32 lg:w-64 mx-8 my-4 flex-shrink-0">
@@ -19,8 +20,10 @@ const Album: React.FC<{ album: SubsonicAlbumBase }> = ({ album }) => (
         {album.name}
       </Link>
       <br />
-      <span className="text-xs">
-        {album.year} {"\uFF65"} {formatDuration(album.duration * 1000)}
+      <span className="flex flex-row items-center text-xs">
+        {album.year}
+        <Dot />
+        {formatDuration(album.duration * 1000)}
       </span>
     </div>
   </div>

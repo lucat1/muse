@@ -15,6 +15,7 @@ const ScrollView: React.FC<
   const handleMouseDown = React.useCallback(
     (e: React.MouseEvent<HTMLDivElement>) => {
       e.preventDefault();
+      e.stopPropagation();
       setStart({
         left: ref.current!.scrollLeft,
         top: ref.current!.scrollTop,
@@ -26,12 +27,14 @@ const ScrollView: React.FC<
   );
   const handleMouseMove = (e: MouseEvent) => {
     e.preventDefault();
+    e.stopPropagation();
     ref.current!.scrollLeft = start!.left - e.clientX + start!.x;
     ref.current!.scrollTop = start!.top - e.clientY + start!.y;
   };
   const handleMouseUp = React.useCallback(
     (e: MouseEvent) => {
       e.preventDefault();
+      e.stopPropagation();
       setStart(null);
     },
     [setStart]

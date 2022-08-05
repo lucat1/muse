@@ -52,6 +52,9 @@ const Center: React.FC<
   );
 };
 
+const BASE_BG =
+  "group-focus:bg-neutral-200 group-hover:bg-neutral-200 dark:group-focus:bg-neutral-800 dark:group-hover:bg-neutral-800";
+const BASE = `min-h-[3.5rem] min-h-fit p-2 lg:px-4 ${BASE_BG}`;
 const Track: React.FC<TrackProps & { song: SubsonicSong }> = ({
   song,
   ...fields
@@ -83,67 +86,74 @@ const Track: React.FC<TrackProps & { song: SubsonicSong }> = ({
   return (
     <Root>
       <Trigger asChild={true}>
-        <div className="p-3 my-1 rounded-lg focus:bg-neutral-200 hover:bg-neutral-200 dark:focus:bg-neutral-800 dark:hover:bg-neutral-800">
-          <div
-            className="h-10 w-full grid px-2 lg:px-4 gap-x-6"
-            style={{
-              gridTemplateColumns: Object.values(Fields)
-                .map((f) => fields[f] || 0)
-                .filter((f) => f != 0)
-                .map((f) => (f < 0 ? "auto" : `${f}fr`))
-                .join(" "),
-            }}
-          >
-            {/* Fields.ART */}
-            {show(fields[Fields.ART]) && (
-              <Link to={`/${connection.id}/album/${song.albumId}`}>
-                <Image
-                  className="w-10"
-                  src={useURL(`getCoverArt?id=${song.coverArt}`)}
-                />
+        <div className="contents group">
+          <div className={`${BASE_BG} rounded-l-lg w-2`} />
+          {/* Fields.ART */}
+          {show(fields[Fields.ART]) && (
+            <Link
+              className={BASE}
+              to={`/${connection.id}/album/${song.albumId}`}
+            >
+              <Image
+                className="w-10"
+                src={useURL(`getCoverArt?id=${song.coverArt}`)}
+              />
+            </Link>
+          )}
+          {/* Fields.NUMBER */}
+          {show(fields[Fields.NUMBER]) && (
+            <Center className={BASE}>{song.track}</Center>
+          )}
+          {/* Fields.TITLE */}
+          {show(fields[Fields.TITLE]) && (
+            <Center
+              as="button"
+              className={`${BASE} cursor-pointer`}
+              onClick={play}
+            >
+              <span className="font-semibold">{song.title}</span>
+            </Center>
+          )}
+          {/* Fields.HEART */}
+          {show(fields[Fields.HEART]) && (
+            <Center
+              as="button"
+              className={BASE}
+              disabled={starring}
+              onClick={like}
+            >
+              <Heart
+                className={`w-7 h-7 ${
+                  song.starred ? "text-red-500 dark:text-red-400" : ""
+                }`}
+              />
+            </Center>
+          )}
+          {/* Fields.ARTIST */}
+          {show(fields[Fields.ARTIST]) && (
+            <Center className={`${BASE} text-red-500 dark:text-red-400`}>
+              <Link
+                to={
+                  song.artistId
+                    ? `/${connection.id}/artist/${song.artistId}`
+                    : ""
+                }
+              >
+                {song.artist}
               </Link>
-            )}
-            {/* Fields.NUMBER */}
-            {show(fields[Fields.NUMBER]) && (
-              <Center className="px-2">{song.track}</Center>
-            )}
-            {/* Fields.TITLE */}
-            {show(fields[Fields.TITLE]) && (
-              <Center className="cursor-pointer" onClick={play}>
-                <span className="font-semibold">{song.title}</span>
-              </Center>
-            )}
-            {/* Fields.HEART */}
-            {show(fields[Fields.HEART]) && (
-              <Center as="button" disabled={starring} onClick={like}>
-                <Heart
-                  className={`w-7 h-7 ${
-                    song.starred ? "text-red-500 dark:text-red-400" : ""
-                  }`}
-                />
-              </Center>
-            )}
-            {/* Fields.ARTIST */}
-            {show(fields[Fields.ARTIST]) && (
-              <Center className="text-red-500 dark:text-red-400">
-                <Link
-                  to={
-                    song.artistId
-                      ? `/${connection.id}/artist/${song.artistId}`
-                      : ""
-                  }
-                >
-                  {song.artist}
-                </Link>
-              </Center>
-            )}
-            {/* Fields.LENGTH */}
-            {show(fields[Fields.LENGTH]) && (
-              <Center>{formatDuration(song.duration * 1000)}</Center>
-            )}
-            {/* Fields.FORMAT */}
-            {show(fields[Fields.FORMAT]) && <Center>{song.suffix}</Center>}
-          </div>
+            </Center>
+          )}
+          {/* Fields.LENGTH */}
+          {show(fields[Fields.LENGTH]) && (
+            <Center className={BASE}>
+              {formatDuration(song.duration * 1000)}
+            </Center>
+          )}
+          {/* Fields.FORMAT */}
+          {show(fields[Fields.FORMAT]) && (
+            <Center className={BASE}>{song.suffix}</Center>
+          )}
+          <div className={`${BASE_BG} rounded-r-lg w-2`} />
         </div>
       </Trigger>
       <Portal>
