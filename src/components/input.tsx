@@ -2,12 +2,13 @@ import * as React from "react";
 
 import { RING } from "../const";
 
-const Input: React.ForwardRefExoticComponent<
+const Input = React.forwardRef<
+  HTMLInputElement,
   React.DetailedHTMLProps<
     React.InputHTMLAttributes<HTMLInputElement>,
     HTMLInputElement
   >
-> = React.forwardRef(({ id, placeholder, className, ...props }, ref) => {
+>(({ id, placeholder, className, ...props }, ref) => {
   return (
     <>
       <input
