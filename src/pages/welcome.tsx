@@ -58,7 +58,7 @@ const Welcome = () => {
         <Link to="/connect">
           <ConnWrap auto={false}>
             <div className="flex items-center justify-center w-32 h-32 text-4xl rounded-xl bg-neutral-300 dark:bg-neutral-700">
-              #i+1
+              #{connections.length}
             </div>
             <div className="my-4 break-words">New connection</div>
           </ConnWrap>
