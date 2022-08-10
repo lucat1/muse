@@ -1,12 +1,11 @@
 import * as React from "react";
-import { useLocation, Link } from "react-router-dom";
+import { useLocation, useNavigate, Link } from "react-router-dom";
 import {
-  SunIcon as Sun,
-  MoonIcon as Moon,
   HomeIcon as HomeFull,
   SearchIcon as SearchFull,
   UsersIcon as UsersFull,
   CollectionIcon as CollectionFull,
+  LogoutIcon,
 } from "@heroicons/react/solid";
 import {
   HomeIcon as HomeOutline,
@@ -15,12 +14,15 @@ import {
   CollectionIcon as CollectionOutline,
 } from "@heroicons/react/outline";
 
-import { GET_COVER_ART, RING, useConnection } from "../const";
+import { GET_COVER_ART, RING, useConnection, useConnections } from "../const";
 import { getURL } from "../fetcher";
 
 import { usePlayer } from "./player";
 import Image from "./img";
 import Playlists from "./playlists";
+import ThemeButton from "./theme-button";
+import Logo from "./logo";
+import IconButton from "./icon-button";
 
 export const NavbarContent = React.forwardRef<
   HTMLElement,
@@ -35,8 +37,10 @@ export const NavbarContent = React.forwardRef<
 ));
 
 const Navbar: React.FC = () => {
+  const [connections, setConnections] = useConnections();
   const [connection] = useConnection();
   const [player, _] = usePlayer();
+  const navigate = useNavigate();
   const { pathname } = useLocation();
   const section = React.useMemo(() => {
     if (/artists?/.test(pathname)) return "artists";
@@ -45,14 +49,6 @@ const Navbar: React.FC = () => {
     else if (/search/.test(pathname)) return "search";
     else return "home";
   }, [pathname]);
-  const [isDark, setDark] = React.useState(
-    document.documentElement.classList.contains("dark")
-  );
-  const toggleDarkMode = () => {
-    localStorage.setItem("theme", isDark ? "light" : "dark");
-    setDark(!isDark);
-    (window as any).updateTheme();
-  };
 
   const paths = React.useMemo(
     () => [
@@ -87,18 +83,19 @@ const Navbar: React.FC = () => {
   return (
     <nav className="fixed w-48 md:w-64 xl:w-72 h-screen flex flex-col border-r dark:border-neutral-700">
       <section className="flex flex-row justify-between items-center p-4 border-b dark:border-neutral-700">
-        <Link to={`/${connection.id}/`} className={RING}>
-          <h1 className="text-3xl font-bold font-logo">Muse</h1>
-        </Link>
-        <button
-          role="switch"
-          aria-label="Toggle dark mode"
-          aria-checked={isDark}
-          className={`w-8 h-8 p-1 rounded-full focus:bg-neutral-200 hover:bg-neutral-200 dark:focus:bg-neutral-800 dark:hover:bg-neutral-800 ${RING}`}
-          onClick={toggleDarkMode}
-        >
-          {isDark ? <Moon /> : <Sun />}
-        </button>
+        <Logo to={`/${connection.id}/`} />
+        <div>
+          <ThemeButton className="mr-3" />
+          <IconButton
+            aria-label="Logout"
+            onClick={(_) => {
+              setConnections(connections.map((c) => ({ ...c, auto: false })));
+              navigate("/");
+            }}
+          >
+            <LogoutIcon />
+          </IconButton>
+        </div>
       </section>
       <section className="flex flex-col py-6 p-4 border-b dark:border-neutral-700">
         {paths.map((path, i) => (

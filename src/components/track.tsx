@@ -27,6 +27,7 @@ import {
   ITEM_ICON_CLASS,
 } from "./contex-menu";
 import type { SubsonicSong } from "../types";
+import IconButton from "./icon-button";
 
 export enum Fields {
   NUMBER = "number",
@@ -116,17 +117,19 @@ const Track: React.FC<TrackProps & { song: SubsonicSong }> = ({
           )}
           {/* Fields.HEART */}
           {show(fields[Fields.HEART]) && (
-            <Center
-              as="button"
-              className={BASE}
-              disabled={starring}
-              onClick={like}
-            >
-              <Heart
+            <Center className={BASE}>
+              <IconButton
+                role="switch"
+                aria-label={`${song.starred ? "Unlike" : "Like"} this song`}
+                aria-checked={song.starred ? true : false}
+                disabled={starring}
                 className={`w-7 h-7 ${
                   song.starred ? "text-red-500 dark:text-red-400" : ""
                 }`}
-              />
+                onClick={like}
+              >
+                <Heart />
+              </IconButton>
             </Center>
           )}
           {/* Fields.ARTIST */}

@@ -53,7 +53,10 @@ export interface Connection {
   password: string;
   salt: string;
   // settings: Settings;
+
+  auto: boolean;
 }
+
 type ConnectionsContextValue = [Connection[], Setter<Connection[]>];
 type ConnectionContextValue = [
   Connection,
