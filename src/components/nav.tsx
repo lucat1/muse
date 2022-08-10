@@ -4,22 +4,18 @@ import {
   SunIcon as Sun,
   MoonIcon as Moon,
   HomeIcon as HomeFull,
-  MusicNoteIcon as MusicFull,
   SearchIcon as SearchFull,
   UsersIcon as UsersFull,
   CollectionIcon as CollectionFull,
 } from "@heroicons/react/solid";
 import {
   HomeIcon as HomeOutline,
-  MusicNoteIcon as MusicOutline,
   SearchIcon as SearchOutline,
   UsersIcon as UsersOutline,
   CollectionIcon as CollectionOutline,
-  ChevronDownIcon as ChevronDown,
-  ChevronUpIcon as ChevronUp,
 } from "@heroicons/react/outline";
 
-import { GET_COVER_ART, useConnection } from "../const";
+import { GET_COVER_ART, RING, useConnection } from "../const";
 import { getURL } from "../fetcher";
 
 import { usePlayer } from "./player";
@@ -91,14 +87,14 @@ const Navbar: React.FC = () => {
   return (
     <nav className="fixed w-48 md:w-64 xl:w-72 h-screen flex flex-col border-r dark:border-neutral-700">
       <section className="flex flex-row justify-between items-center p-4 border-b dark:border-neutral-700">
-        <Link to={`/${connection.id}/`}>
+        <Link to={`/${connection.id}/`} className={RING}>
           <h1 className="text-3xl font-bold font-logo">Muse</h1>
         </Link>
         <button
           role="switch"
           aria-label="Toggle dark mode"
           aria-checked={isDark}
-          className="w-8 h-8 p-1 rounded-full focus:bg-neutral-200 hover:bg-neutral-200 dark:focus:bg-neutral-800 dark:hover:bg-neutral-800"
+          className={`w-8 h-8 p-1 rounded-full focus:bg-neutral-200 hover:bg-neutral-200 dark:focus:bg-neutral-800 dark:hover:bg-neutral-800 ${RING}`}
           onClick={toggleDarkMode}
         >
           {isDark ? <Moon /> : <Sun />}
@@ -108,14 +104,16 @@ const Navbar: React.FC = () => {
         {paths.map((path, i) => (
           <Link
             key={i}
-            className={`flex felx-row items-center rounded-full my-2 p-3 px-4 bg-neutral-200 dark:bg-neutral-800 ${path.selected ? "text-red-500 dark:text-red-400" : ""
-              }`}
+            className={`flex felx-row items-center rounded-full my-2 p-3 px-4 bg-neutral-200 dark:bg-neutral-800 ${
+              path.selected ? "text-red-500 dark:text-red-400" : ""
+            } ${RING}`}
             to={path.link}
           >
             <path.icon className="w-6 h-6" />
             <span
-              className={`ml-3 ${path.selected ? "font-extrabold" : "font-semibold"
-                }`}
+              className={`ml-3 ${
+                path.selected ? "font-extrabold" : "font-semibold"
+              }`}
             >
               {path.name}
             </span>
@@ -123,9 +121,12 @@ const Navbar: React.FC = () => {
         ))}
       </section>
       <section className="flex flex-1 overflow-auto flex-col py-2 p-4">
-        <h3 className="text-xl font-bold my-3">
-          <Link to={`/${connection.id}/playlists`}>Playlists</Link>
-        </h3>
+        <Link
+          className={`text-xl font-bold my-3 ${RING}`}
+          to={`/${connection.id}/playlists`}
+        >
+          Playlists
+        </Link>
         <Playlists />
       </section>
       {player.song && (
