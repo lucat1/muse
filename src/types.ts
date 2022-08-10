@@ -83,8 +83,11 @@ export interface SubsonicWrapperResponse<T> {
 export interface SubsonicBaseResponse<T> {
   type: string;
   version: string;
+  serverVersion: string;
   [key: string]: T | string;
 }
+
+export interface SubsonicPingResponse {}
 
 export interface SubsonicErrorResponse {
   code: number;
@@ -135,4 +138,4 @@ export interface SubsonicPlaylistsResponse {
   playlist: SubsonicPlaylistBase[];
 }
 
-export type SubsonicPlaylistResponse = SubsonicPlaylist
+export type SubsonicPlaylistResponse = SubsonicPlaylist;

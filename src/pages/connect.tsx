@@ -1,6 +1,17 @@
 import * as React from "react";
 import { useForm } from "react-hook-form";
-import { useConnections, Connection } from "../const";
+
+import Input from "../components/input";
+import Button from "../components/button";
+import { useConnections, useTitle, Connection, PING } from "../const";
+import { getURL } from "../fetcher";
+import type {
+  SubsonicWrapperResponse,
+  SubsonicBaseResponse,
+  SubsonicPingResponse,
+  SubsonicErrorResponse,
+} from "src/types";
+import { useNavigate } from "react-router";
 
 const salt = (len: number) => {
   let result = "";
@@ -11,70 +22,106 @@ const salt = (len: number) => {
   return result;
 };
 
-type FormFields = Connection & { saltLength: number };
+const Label: React.FC<
+  React.DetailedHTMLProps<
+    React.LabelHTMLAttributes<HTMLLabelElement>,
+    HTMLLabelElement
+  >
+> = ({ className, ...props }) => (
+  <label
+    className={`text-red-500 dark:text-red-400 ${className || ""}`}
+    {...props}
+  />
+);
+
+const SALT_LENGTH = 32;
 const Welcome = () => {
+  useTitle("New connection");
+  const navigate = useNavigate();
   const [connections, setConnections] = useConnections();
+  const [loading, setLoading] = React.useState(false);
   const {
     register,
     handleSubmit,
+    setError,
+    clearErrors,
     formState: { errors },
-  } = useForm<FormFields>();
-  const onSubmit = ({ id, host, username, password, saltLength }: FormFields) =>
-    setConnections([
-      ...connections,
-      {
-        id,
-        host,
-        username,
-        password,
-        salt: salt(saltLength),
-        // player: { state: "none", song: undefined },
-      },
-    ]);
-  console.log("errors", errors);
+  } = useForm<Connection & { account: any }>();
+  const onSubmit = React.useCallback(
+    async (conn: Connection) => {
+      setLoading(true);
+      clearErrors("account");
+      const connection = { ...conn, salt: salt(SALT_LENGTH) };
+      try {
+        const res = await fetch(getURL(PING, connection));
+        const json: SubsonicWrapperResponse<
+          SubsonicBaseResponse<SubsonicPingResponse | SubsonicErrorResponse>
+        > = await res.json();
+        if (res.status == 200 && json["subsonic-response"].status == "ok") {
+          setConnections([...connections, conn]);
+          navigate(`/${connections.length}/`);
+        } else {
+          const err = json["subsonic-response"].error as SubsonicErrorResponse;
+          setError("account", {
+            type: "custom",
+            message: `${err.message} (code: ${err.code})`,
+          });
+        }
+      } catch (err) {
+        setError("host", { type: "custom", message: "Host unreachable" });
+      }
+      setLoading(false);
+    },
+    [connections, setConnections]
+  );
 
   return (
-    <>
-      <h1>connect</h1>
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <input
+    <main className="flex items-center justify-center w-screen h-screen">
+      <form className="flex flex-col" onSubmit={handleSubmit(onSubmit)}>
+        <div className="flex justify-center">
+          <h1 className="text-2xl font-bold my-4">New connection</h1>
+        </div>
+        <Input
           type="url"
           id="host"
           placeholder="Subsonic host URL"
+          className="my-3"
+          disabled={loading}
           {...register("host", {
             required: true,
             pattern:
               /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/i,
           })}
         />
-        {errors.host && <label htmlFor="host">invalid host</label>}
-        <input
+        {errors.host && <Label htmlFor="host">Invalid host</Label>}
+        <Input
           type="text"
           id="username"
           placeholder="Username"
+          className="my-3"
+          disabled={loading}
           {...register("username", { required: true })}
         />
         {errors.username && (
-          <label htmlFor="username">a password is required</label>
+          <Label htmlFor="username">A password is required</Label>
         )}
-        <input
+        <Input
           type="password"
           placeholder="Password"
+          className="my-3"
+          disabled={loading}
           {...register("password", { required: true })}
         />
         {errors.username && (
-          <label htmlFor="password">a password is required</label>
+          <Label htmlFor="password">A password is required</Label>
         )}
-        <input
-          type="number"
-          defaultValue={32}
-          placeholder="saltLength"
-          {...register("saltLength", { max: 64, min: 6 })}
-        />
 
-        <input type="submit" />
+        {errors.account && <Label>{errors.account.message}</Label>}
+        <Button type="submit" className="my-3" disabled={loading}>
+          Submit
+        </Button>
       </form>
-    </>
+    </main>
   );
 };
 

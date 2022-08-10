@@ -4,16 +4,16 @@ import { useSearchParams } from "react-router-dom";
 import debounce from "debounce";
 
 import useAuthenticatedSWR from "../fetcher";
-import { useTitle, SEARCH, RING } from "../const";
+import { useTitle, SEARCH } from "../const";
 import type { SubsonicSearchResponse } from "../types";
 
 import Standard from "../components/standard";
+import Input from "../components/input";
 import Album from "../components/album";
 import Tracks from "../components/tracks";
 import Artist from "../components/artist";
 import ScrollView from "../components/scroll-view";
 import ArtistSection from "../components/artist-section";
-import Separator from "../components/separator";
 import Button from "../components/button";
 
 interface FormData {
@@ -115,16 +115,12 @@ const Search: React.FC = () => {
         className="flex flex-col p-8 items-center justify-center"
         onSubmit={handleSubmit(onSubmit)}
       >
-        <input
+        <Input
           id="query"
           type="text"
-          className={`dark:bg-neutral-700 dark:placeholder:text-slate-100 w-full max-w-sm lg:max-w-md 2xl:max-w-xl rounded-full h-12 px-6 text-lg drop-shadow-lg ${RING}`}
-          placeholder="Search through your music..."
+          placeholder="Search through your library"
           {...register("query", { required: true })}
         />
-        <label htmlFor="search" className="hidden">
-          Search for your music
-        </label>
       </form>
       <React.Suspense fallback={<h1>loading</h1>}>
         <Results query={query} />

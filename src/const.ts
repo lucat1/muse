@@ -19,6 +19,7 @@ export const GET_TOP_SONGS = "getTopSongs";
 export const STAR = "star";
 export const UNSTAR = "unstar";
 export const SEARCH = "search3";
+export const PING = "ping";
 export const SCROBBLE = "scrobble";
 
 export const RING =
