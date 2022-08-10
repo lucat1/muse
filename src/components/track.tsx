@@ -29,8 +29,8 @@ import {
 import type { SubsonicSong } from "../types";
 
 export enum Fields {
-  ART = "art",
   NUMBER = "number",
+  ART = "art",
   TITLE = "title",
   HEART = "heart",
   ARTIST = "artist",
@@ -88,6 +88,10 @@ const Track: React.FC<TrackProps & { song: SubsonicSong }> = ({
       <Trigger asChild={true}>
         <div className="contents group">
           <div className={`${BASE_BG} rounded-l-lg w-2`} />
+          {/* Fields.NUMBER */}
+          {show(fields[Fields.NUMBER]) && (
+            <Center className={`${BASE} justify-end`}>{song.track}</Center>
+          )}
           {/* Fields.ART */}
           {show(fields[Fields.ART]) && (
             <Link
@@ -99,10 +103,6 @@ const Track: React.FC<TrackProps & { song: SubsonicSong }> = ({
                 src={useURL(`getCoverArt?id=${song.coverArt}`)}
               />
             </Link>
-          )}
-          {/* Fields.NUMBER */}
-          {show(fields[Fields.NUMBER]) && (
-            <Center className={BASE}>{song.track}</Center>
           )}
           {/* Fields.TITLE */}
           {show(fields[Fields.TITLE]) && (

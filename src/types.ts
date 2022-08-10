@@ -115,3 +115,24 @@ export interface SubsonicSearchResponse {
   album?: SubsonicAlbumBase[];
   song?: SubsonicSong[];
 }
+
+export interface SubsonicPlaylistBase {
+  id: string;
+  name: string;
+  songCount: number;
+  duration: number;
+  public: boolean;
+  owner: string;
+  created: Date;
+  changed: Date;
+}
+
+export interface SubsonicPlaylist extends SubsonicPlaylistBase {
+  entry: SubsonicSong[];
+}
+
+export interface SubsonicPlaylistsResponse {
+  playlist: SubsonicPlaylistBase[];
+}
+
+export type SubsonicPlaylistResponse = SubsonicPlaylist

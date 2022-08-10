@@ -7,6 +7,8 @@ declare type Setter<T> = React.Dispatch<React.SetStateAction<T | undefined>>;
 export const LOCAL_STORAGE_KEY = "muse";
 export const SUBSONIC_PROTOCOL_VERSION = "1.16.1";
 
+export const GET_PLAYLISTS = "getPlaylists";
+export const GET_PLAYLIST = "getPlaylist";
 export const GET_COVER_ART = "getCoverArt";
 export const GET_ARTISTS = "getArtists";
 export const GET_ARTIST = "getArtist";

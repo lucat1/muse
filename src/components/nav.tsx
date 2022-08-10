@@ -4,22 +4,27 @@ import {
   SunIcon as Sun,
   MoonIcon as Moon,
   HomeIcon as HomeFull,
+  MusicNoteIcon as MusicFull,
   SearchIcon as SearchFull,
   UsersIcon as UsersFull,
   CollectionIcon as CollectionFull,
 } from "@heroicons/react/solid";
 import {
   HomeIcon as HomeOutline,
-  UsersIcon as UsersOutline,
+  MusicNoteIcon as MusicOutline,
   SearchIcon as SearchOutline,
+  UsersIcon as UsersOutline,
   CollectionIcon as CollectionOutline,
+  ChevronDownIcon as ChevronDown,
+  ChevronUpIcon as ChevronUp,
 } from "@heroicons/react/outline";
 
 import { GET_COVER_ART, useConnection } from "../const";
 import { getURL } from "../fetcher";
 
-import { usePlayer } from "../components/player";
-import Image from "../components/img";
+import { usePlayer } from "./player";
+import Image from "./img";
+import Playlists from "./playlists";
 
 export const NavbarContent = React.forwardRef<
   HTMLElement,
@@ -38,9 +43,10 @@ const Navbar: React.FC = () => {
   const [player, _] = usePlayer();
   const { pathname } = useLocation();
   const section = React.useMemo(() => {
-    if (/(artist|artists)/.test(pathname)) return "artists";
-    if (/(album|albums)/.test(pathname)) return "albums";
-    if (/search/.test(pathname)) return "search";
+    if (/artists?/.test(pathname)) return "artists";
+    else if (/albums?/.test(pathname)) return "albums";
+    else if (/playlists?/.test(pathname)) return "playlists";
+    else if (/search/.test(pathname)) return "search";
     else return "home";
   }, [pathname]);
   const [isDark, setDark] = React.useState(
@@ -98,25 +104,29 @@ const Navbar: React.FC = () => {
           {isDark ? <Moon /> : <Sun />}
         </button>
       </section>
-      <section className="flex flex-col py-6 p-4">
+      <section className="flex flex-col py-6 p-4 border-b dark:border-neutral-700">
         {paths.map((path, i) => (
           <Link
             key={i}
-            className={`flex felx-row items-center rounded-full my-2 p-3 px-4 bg-neutral-200 dark:bg-neutral-800 ${
-              path.selected ? "text-red-500 dark:text-red-400" : ""
-            }`}
+            className={`flex felx-row items-center rounded-full my-2 p-3 px-4 bg-neutral-200 dark:bg-neutral-800 ${path.selected ? "text-red-500 dark:text-red-400" : ""
+              }`}
             to={path.link}
           >
             <path.icon className="w-6 h-6" />
             <span
-              className={`ml-3 ${
-                path.selected ? "font-extrabold" : "font-semibold"
-              }`}
+              className={`ml-3 ${path.selected ? "font-extrabold" : "font-semibold"
+                }`}
             >
               {path.name}
             </span>
           </Link>
         ))}
+      </section>
+      <section className="flex flex-1 overflow-auto flex-col py-2 p-4">
+        <h3 className="text-xl font-bold my-3">
+          <Link to={`/${connection.id}/playlists`}>Playlists</Link>
+        </h3>
+        <Playlists />
       </section>
       {player.song && (
         <section className="flex flex-1 flex-row justify-center">

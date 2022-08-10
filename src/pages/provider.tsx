@@ -7,6 +7,8 @@ import Artists from "./artists";
 import Artist from "./artist";
 import Albums from "./albums";
 import Album from "./album";
+import Playlists from "./playlists";
+import Playlist from "./playlist";
 import NotFound from "./not-found";
 import Player, { PlayerContext } from "../components/player";
 import Navbar, { NavbarContent } from "../components/nav";
@@ -31,6 +33,8 @@ const Provider: React.FunctionComponent = () => {
             <Route path="artist/:id" element={<Artist />} />
             <Route path="albums" element={<Albums />} />
             <Route path="album/:id" element={<Album />} />
+            <Route path="playlists" element={<Playlists />} />
+            <Route path="playlist/:id" element={<Playlist />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </React.Suspense>
