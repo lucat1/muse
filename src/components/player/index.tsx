@@ -2,71 +2,12 @@ import * as React from "react";
 import * as Slider from "@radix-ui/react-slider";
 import formatDuration from "format-duration";
 import { PauseIcon as Pause, PlayIcon as Play } from "@heroicons/react/outline";
-import { getURL, fetcher } from "../fetcher";
-import type { SubsonicSong } from "../types";
-import { useConnection, SCROBBLE } from "../const";
 
-import { StandardWidth } from "./standard";
-
-enum PlayerState {
-  None,
-  Paused,
-  Playing,
-}
-
-interface Player {
-  song: SubsonicSong | undefined;
-  state: PlayerState;
-}
-interface PlayerAction {
-  type: "play" | "pause" | "toggle";
-  payload?: SubsonicSong;
-}
-
-const Context = React.createContext<[Player, React.Dispatch<PlayerAction>]>([
-  { song: undefined, state: PlayerState.None },
-  void 0 as any,
-]);
-
-const reducer: React.Reducer<Player, PlayerAction> = (
-  state,
-  { type, payload }
-) => {
-  switch (type) {
-    case "play":
-      if (payload != null) state.song = payload;
-      return { ...state, state: PlayerState.Playing };
-    case "pause":
-      return { ...state, state: PlayerState.Paused };
-    case "toggle":
-      return {
-        ...state,
-        state:
-          state.state == PlayerState.None
-            ? PlayerState.None
-            : state.state == PlayerState.Paused
-            ? PlayerState.Playing
-            : PlayerState.Paused,
-      };
-    default:
-      return state;
-  }
-};
-
-export const PlayerContext: React.FC<React.PropsWithChildren<{}>> = ({
-  children,
-}) => {
-  const r = React.useReducer<React.Reducer<Player, PlayerAction>>(reducer, {
-    song: undefined,
-    state: PlayerState.None,
-  });
-  // TODO: save player state in the local storage
-  // const { id } = useParams();
-  // const [state, setState] = useLocalStorage(`player.${id}`, {});
-  return <Context.Provider value={r}>{children}</Context.Provider>;
-};
-
-export const usePlayer = () => React.useContext(Context);
+import Audio from "./audio";
+import { usePlayer } from "./player-context";
+import { StandardWidth } from "../standard";
+import { getURL, fetcher } from "../../fetcher";
+import { useConnection, SCROBBLE } from "../../const";
 
 const Player: React.FunctionComponent = () => {
   const [player, dispatch] = usePlayer();
@@ -153,3 +94,6 @@ const Player: React.FunctionComponent = () => {
 };
 
 export default Player;
+
+export { PlayerContext, usePlayer } from "./player-context";
+export { QueueContext, useQueue } from "./queue-context";
