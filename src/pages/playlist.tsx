@@ -16,7 +16,6 @@ const Playlist = () => {
   const { data } = useSubsonic<SubsonicPlaylistResponse>(
     `${GET_PLAYLIST}?id=${id}`
   );
-  console.log(data);
 
   return (
     <Standard>
@@ -48,6 +47,7 @@ const Playlist = () => {
         number={-1}
         title={9}
         heart={-1}
+        album={3}
         artist={3}
         length={-1}
         format={-1}

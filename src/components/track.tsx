@@ -34,11 +34,15 @@ export enum Fields {
   ART = "art",
   TITLE = "title",
   HEART = "heart",
+  ALBUM = "album",
   ARTIST = "artist",
   LENGTH = "length",
   FORMAT = "format",
 }
 export type TrackProps = { [key in Fields]?: number };
+export interface TrackActions {
+  play(): void;
+}
 
 const show = (val: number | undefined) => val && val != 0;
 const Center: React.FC<
@@ -56,18 +60,18 @@ const Center: React.FC<
 const BASE_BG =
   "group-focus:bg-neutral-200 group-hover:bg-neutral-200 dark:group-focus:bg-neutral-800 dark:group-hover:bg-neutral-800";
 const BASE = `min-h-[3.5rem] min-h-fit p-2 lg:px-4 ${BASE_BG}`;
-const Track: React.FC<TrackProps & { song: SubsonicSong }> = ({
+const Track: React.FC<TrackProps & { song: SubsonicSong } & TrackActions> = ({
   song,
+  play,
   ...fields
 }) => {
   const [connection] = useConnection();
-  const [_, dispatch] = usePlayer();
   const Heart = song.starred ? HeartSolid : HeartOutline;
 
-  const play = React.useCallback(
-    () => dispatch({ type: "play", payload: song }),
-    [dispatch, song]
-  );
+  const handlePlay = React.useCallback((e: Event) => {
+    e.preventDefault();
+    play();
+  }, []);
   const [starring, isStarring] = React.useState(false);
   const like = React.useCallback(async () => {
     isStarring(true);
@@ -110,7 +114,7 @@ const Track: React.FC<TrackProps & { song: SubsonicSong }> = ({
             <Center
               as="button"
               className={`${BASE} cursor-pointer`}
-              onClick={play}
+              onClick={handlePlay as any}
             >
               <span className="font-semibold">{song.title}</span>
             </Center>
@@ -130,6 +134,18 @@ const Track: React.FC<TrackProps & { song: SubsonicSong }> = ({
               >
                 <Heart />
               </IconButton>
+            </Center>
+          )}
+          {/* Fields.ALBUM */}
+          {show(fields[Fields.ALBUM]) && (
+            <Center className={`${BASE} text-red-500 dark:text-red-400`}>
+              <Link
+                to={
+                  song.albumId ? `/${connection.id}/album/${song.albumId}` : ""
+                }
+              >
+                {song.album}
+              </Link>
             </Center>
           )}
           {/* Fields.ARTIST */}
@@ -162,7 +178,7 @@ const Track: React.FC<TrackProps & { song: SubsonicSong }> = ({
       <Portal>
         <Content>
           <Group>
-            <Item onSelect={play}>
+            <Item onSelect={handlePlay}>
               <ItemIcon>
                 <ChevronRight className={ITEM_ICON_CLASS} />
               </ItemIcon>

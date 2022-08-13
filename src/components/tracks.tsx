@@ -2,11 +2,24 @@ import * as React from "react";
 
 import Track, { Fields, TrackProps } from "./track";
 import type { SubsonicSong } from "../types";
+import { usePlayer, useQueue } from "./player";
 
 const SongList: React.FC<{ songs: SubsonicSong[] } & TrackProps> = ({
   songs,
   ...fields
 }) => {
+  const { load, play } = usePlayer();
+  const { append, clear } = useQueue();
+  const generatePlayTrack = React.useCallback(
+    (i: number) => () => {
+      clear();
+      append(songs.slice(i + 1).concat(songs.slice(0, i)));
+      load(songs[i]);
+      play();
+    },
+    [load, play, songs]
+  );
+
   return (
     <main
       className="w-full grid gap-y-2"
@@ -18,8 +31,8 @@ const SongList: React.FC<{ songs: SubsonicSong[] } & TrackProps> = ({
           .join(" ")} auto`,
       }}
     >
-      {songs.map((song) => (
-        <Track key={song.id} song={song} {...fields} />
+      {songs.map((song, i) => (
+        <Track key={i} song={song} play={generatePlayTrack(i)} {...fields} />
       ))}
     </main>
   );

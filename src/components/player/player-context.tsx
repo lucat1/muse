@@ -65,7 +65,7 @@ export const PlayerContext: React.FC<React.PropsWithChildren<{}>> = ({
 
 export const usePlayer = () => {
   const [{ song, status }, dispatch] = React.useContext(Context);
-  const [load, unload, play, stop] = React.useMemo(
+  const [load, unload, play, pause] = React.useMemo(
     () => [
       (song: SubsonicSong) =>
         dispatch({ type: PlayerActionType.LOAD, payload: song }),
@@ -75,5 +75,5 @@ export const usePlayer = () => {
     ],
     [dispatch]
   );
-  return { song, status, load, unload, play, stop };
+  return { song, status, load, unload, play, pause };
 };

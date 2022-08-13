@@ -4,76 +4,55 @@ import formatDuration from "format-duration";
 import { PauseIcon as Pause, PlayIcon as Play } from "@heroicons/react/outline";
 
 import Audio from "./audio";
-import { usePlayer } from "./player-context";
+import { PlayerStatus, usePlayer } from "./player-context";
+import { useQueue } from "./queue-context";
 import { StandardWidth } from "../standard";
-import { getURL, fetcher } from "../../fetcher";
-import { useConnection, SCROBBLE } from "../../const";
 
 const Player: React.FunctionComponent = () => {
-  const [player, dispatch] = usePlayer();
-  const [connection] = useConnection();
-  const audio = React.useRef<HTMLAudioElement>(null);
-  const [canPlay, setCanPlay] = React.useState(false);
-  const [time, setTime] = React.useState(0);
+  const { song, status, load, play, pause } = usePlayer();
+  const { queue, next } = useQueue();
   const [seek, setSeek] = React.useState(-1);
-  React.useEffect(() => {
-    if (!audio.current) return;
-    const handleCanPlay = () => setCanPlay(true);
-    const handleTimeUpdate = () => setTime(audio.current?.currentTime || 0);
+  const [time, setTime] = React.useState(0);
+  const [seekTime, setSeekTime] = React.useState<number | undefined>(undefined);
 
-    audio.current.addEventListener("canplay", handleCanPlay);
-    audio.current.addEventListener("timeupdate", handleTimeUpdate);
-    return () => {
-      audio.current?.removeEventListener("canplay", handleCanPlay);
-      audio.current?.removeEventListener("timeupdate", handleTimeUpdate);
-    };
-  }, [audio]);
-  React.useEffect(() => {
-    if (audio.current) audio.current.currentTime = 0;
-    if (player.song)
-      fetcher(`${SCROBBLE}?id=${player.song.id}`, connection, {
-        method: "POST",
-      });
-  }, [audio.current?.src]);
-  React.useEffect(() => {
-    if (player.song == undefined || audio.current == undefined) return;
-
-    if (player.state == PlayerState.Playing && canPlay) audio.current.play();
-    if (player.state == PlayerState.Paused) audio.current.pause();
-  }, [audio, player.song?.id, player.state, canPlay]);
   const timeScale = React.useMemo(
-    () => 100 / (player.song?.duration || 1),
-    [player.song?.duration]
+    () => 100 / (song?.duration || 1),
+    [song?.duration]
   );
+  const handleEnd = React.useCallback(() => {
+    const song = queue[0];
+    next();
+    load(song);
+    play();
+  }, [queue, next, load, play]);
+  React.useEffect(() => setSeekTime(undefined), [song]);
 
   return (
     <section className="fixed left-48 md:left-64 xl:left-72 right-0 bottom-0 h-24 flex border-t dark:border-neutral-700">
-      <audio
-        ref={audio}
-        src={
-          player.song?.id
-            ? getURL(`stream?id=${player.song.id}`, connection)
-            : ""
-        }
+      <Audio
+        onTime={(time) => setTime(time)}
+        seek={seekTime}
+        onEnd={handleEnd}
       />
       <StandardWidth className="m-auto">
         <div className="flex flex-row justify-center pt-2">
           <button
+            disabled={status == PlayerStatus.UNLOADED /* || !canPlay*/}
             className="w-12 aspect-square rounded-full hover:bg-neutral-300 dark:hover:bg-neutral-700"
-            onClick={() => dispatch({ type: "toggle" })}
+            onClick={status == PlayerStatus.PAUSED ? play : pause}
           >
-            {player.state == PlayerState.Playing ? <Pause /> : <Play />}
+            {status == PlayerStatus.PLAYING ? <Pause /> : <Play />}
           </button>
         </div>
         <div className="flex flex-row py-2">
           <span className="pr-4">{formatDuration(time * 1000)}</span>
           <Slider.Root
             className="relative w-full flex items-center"
-            disabled={player.state == PlayerState.None || !canPlay}
+            disabled={status == PlayerStatus.UNLOADED /* || !canPlay*/}
             value={[(seek != -1 ? seek : time) * timeScale]}
             onValueChange={(value) => setSeek(value[0] / timeScale)}
             onPointerUp={() => {
-              audio.current!.currentTime = seek;
+              setSeekTime(seek);
               setSeek(-1);
             }}
           >
@@ -83,9 +62,7 @@ const Player: React.FunctionComponent = () => {
             <Slider.Thumb className="bg-zinc-300 dark:bg-white-300 block rounded-full w-4 h-4" />
           </Slider.Root>
           <span className="pl-4">
-            {formatDuration(
-              (player.song?.duration || audio.current?.duration || 0) * 1000
-            )}
+            {formatDuration((song?.duration || 0) * 1000)}
           </span>
         </div>
       </StandardWidth>

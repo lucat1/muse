@@ -11,16 +11,16 @@ import Dot from "./dot";
 
 const Song: React.FC<{ song: SubsonicSong }> = ({ song }) => {
   const [conn] = useConnection();
-  const [_, dispatch] = usePlayer();
-  const play = React.useCallback(
+  const { play, load } = usePlayer();
+  const handlePlay = React.useCallback(
     (e: any) => {
       e.preventDefault();
-      dispatch({ type: "play", payload: song });
+      load(song);
+      play();
     },
     [song]
   );
 
-  console.log(song);
   return (
     <div className="w-32 lg:w-64 mx-8 my-4 flex-shrink-0">
       <a onClick={play}>
@@ -30,7 +30,7 @@ const Song: React.FC<{ song: SubsonicSong }> = ({ song }) => {
         />
       </a>
       <div className="mt-2 truncate">
-        <a onClick={play}>{song.title}</a>
+        <a onClick={handlePlay}>{song.title}</a>
         <br />
         <span className="text-xs">
           <Link to={`/${conn.id}/album/${song.albumId}`}>{song.album}</Link>

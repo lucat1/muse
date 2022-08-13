@@ -10,7 +10,7 @@ import Album from "./album";
 import Playlists from "./playlists";
 import Playlist from "./playlist";
 import NotFound from "./not-found";
-import Player, { PlayerContext } from "../components/player";
+import Player, { PlayerContext, QueueContext } from "../components/player";
 import Navbar, { NavbarContent } from "../components/nav";
 import ScrollToTop from "../components/scroll-to-top";
 
@@ -23,26 +23,28 @@ const Provider: React.FunctionComponent = () => {
 
   return (
     <PlayerContext>
-      <Navbar />
-      <NavbarContent ref={ref}>
-        <React.Suspense fallback={<h1>loading in provider</h1>}>
-          <Routes>
-            <Route index element={<h1>index</h1>} />
-            <Route path="search" element={<Search />} />
-            <Route path="artists" element={<Artists />} />
-            <Route path="artist/:id" element={<Artist />} />
-            <Route path="albums" element={<Albums />} />
-            <Route path="album/:id" element={<Album />} />
-            <Route path="playlists" element={<Playlists />} />
-            <Route path="playlist/:id" element={<Playlist />} />
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </React.Suspense>
-      </NavbarContent>
-      <Player />
-      <ScrollToTop
-        ele={ref.current?.firstChild as HTMLElement | undefined | null}
-      />
+      <QueueContext>
+        <Navbar />
+        <NavbarContent ref={ref}>
+          <React.Suspense fallback={<h1>loading in provider</h1>}>
+            <Routes>
+              <Route index element={<h1>index</h1>} />
+              <Route path="search" element={<Search />} />
+              <Route path="artists" element={<Artists />} />
+              <Route path="artist/:id" element={<Artist />} />
+              <Route path="albums" element={<Albums />} />
+              <Route path="album/:id" element={<Album />} />
+              <Route path="playlists" element={<Playlists />} />
+              <Route path="playlist/:id" element={<Playlist />} />
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </React.Suspense>
+        </NavbarContent>
+        <Player />
+        <ScrollToTop
+          ele={ref.current?.firstChild as HTMLElement | undefined | null}
+        />
+      </QueueContext>
     </PlayerContext>
   );
 };

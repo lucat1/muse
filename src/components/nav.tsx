@@ -39,7 +39,7 @@ export const NavbarContent = React.forwardRef<
 const Navbar: React.FC = () => {
   const [connections, setConnections] = useConnections();
   const [connection] = useConnection();
-  const [player, _] = usePlayer();
+  const { song } = usePlayer();
   const navigate = useNavigate();
   const { pathname } = useLocation();
   const section = React.useMemo(() => {
@@ -126,40 +126,37 @@ const Navbar: React.FC = () => {
         </Link>
         <Playlists />
       </section>
-      {player.song && (
+      {song && (
         <section className="flex flex-1 flex-row justify-center">
           <main className="flex flex-col m-4 mb-8 w-full truncate self-end">
             <Link
               className="flex justify-center"
-              to={`/${connection.id}/album/${player.song.albumId}`}
+              to={`/${connection.id}/album/${song.albumId}`}
             >
               <Image
                 className="w-full"
-                src={getURL(
-                  `${GET_COVER_ART}?id=${player.song.coverArt}`,
-                  connection
-                )}
+                src={getURL(`${GET_COVER_ART}?id=${song.coverArt}`, connection)}
               />
             </Link>
             <div className="flex flex-0 flex-col">
               <h2 className="text-2xl lg:text-3xl pt-2 truncate">
                 <Link
-                  to={`/${connection.id}/album/${player.song.albumId}?song=${player.song.id}`}
+                  to={`/${connection.id}/album/${song.albumId}?song=${song.id}`}
                 >
-                  {player.song.title}
+                  {song.title}
                 </Link>
               </h2>
               <Link
                 className="pt-2 text-lg"
-                to={`/${connection.id}/album/${player.song.albumId}`}
+                to={`/${connection.id}/album/${song.albumId}`}
               >
-                {player.song.album}
+                {song.album}
               </Link>
               <Link
                 className="pt-1 text-md text-red-500 dark:text-red-400"
-                to={`/${connection.id}/artist/${player.song.artistId}`}
+                to={`/${connection.id}/artist/${song.artistId}`}
               >
-                {player.song.artist}
+                {song.artist}
               </Link>
             </div>
           </main>
