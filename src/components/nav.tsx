@@ -16,10 +16,10 @@ import {
 } from "@heroicons/react/outline";
 
 import { connectionsAtom, connectionAtom } from "../stores/connection";
+import { usePlayer } from "../stores/player";
 import { GET_COVER_ART, RING } from "../const";
 import { getURL } from "../fetcher";
 
-import { usePlayer } from "./player";
 import Image from "./img";
 import Playlists from "./playlists";
 import ThemeButton from "./theme-button";

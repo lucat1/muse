@@ -2,22 +2,29 @@ import * as React from "react";
 
 import Track, { Fields, TrackProps } from "./track";
 import type { SubsonicSong } from "../types";
-import { usePlayer, useQueue } from "./player";
+import { usePlayer } from "../stores/player";
+import { useQueue, useStack } from "../stores/queue";
 
 const SongList: React.FC<{ songs: SubsonicSong[] } & TrackProps> = ({
   songs,
   ...fields
 }) => {
-  const { load, play } = usePlayer();
-  const { append, clear } = useQueue();
+  const { song, load } = usePlayer();
+  const { append, clear: clearQueue } = useQueue();
+  const { push, clear: clearStack } = useStack();
   const generatePlayTrack = React.useCallback(
     (i: number) => () => {
-      clear();
-      append(songs.slice(i + 1).concat(songs.slice(0, i)));
+      console.log("play", songs[i]);
+      if (songs[i] == song) return;
+      console.log("playing", songs[i]);
+
+      clearStack();
+      clearQueue();
+      push(songs.slice(0, i).reverse());
+      append(songs.slice(i + 1));
       load(songs[i]);
-      play();
     },
-    [load, play, songs]
+    [songs, song, load, append, clearQueue, clearStack, push]
   );
 
   return (

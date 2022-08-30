@@ -6,9 +6,9 @@ import formatDuration from "format-duration";
 import { getURL } from "../fetcher";
 import type { SubsonicSong } from "../types";
 import { connectionAtom } from "../stores/connection";
+import { usePlayer } from "../stores/player";
 import { GET_COVER_ART } from "../const";
 
-import { usePlayer } from "./player";
 import Image from "./img";
 import Dot from "./dot";
 

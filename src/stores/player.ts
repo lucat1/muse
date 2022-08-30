@@ -1,18 +1,21 @@
 import * as React from "react";
+import { useAtom } from "jotai";
+import { atomWithReducer } from "jotai/utils";
 
-import type { SubsonicSong } from "../../types";
+import type { SubsonicSong } from "../types";
 
 export enum PlayerStatus {
   UNLOADED,
+  LOADING,
   PAUSED,
   PLAYING,
 }
 
 export enum PlayerActionType {
   LOAD,
-  UNLOAD,
   PLAY,
   PAUSE,
+  UNLOAD,
 }
 
 export interface PlayerState {
@@ -25,18 +28,15 @@ export interface PlayerAction {
   payload?: SubsonicSong;
 }
 
-const DEFAULT_STATE: PlayerState = {
+export const DEFAULT_STATE: PlayerState = {
   song: undefined,
   status: PlayerStatus.UNLOADED,
 };
 
-const reducer: React.Reducer<PlayerState, PlayerAction> = (
-  state,
-  { type, payload }
-) => {
+const reducer = (state: PlayerState, { type, payload }: PlayerAction) => {
   switch (type) {
     case PlayerActionType.LOAD:
-      return payload ? { song: payload, status: PlayerStatus.PAUSED } : state;
+      return payload ? { song: payload, status: PlayerStatus.LOADING } : state;
     case PlayerActionType.UNLOAD:
       return DEFAULT_STATE;
     case PlayerActionType.PLAY:
@@ -46,32 +46,17 @@ const reducer: React.Reducer<PlayerState, PlayerAction> = (
   }
 };
 
-const Context = React.createContext<
-  [PlayerState, React.Dispatch<PlayerAction>]
->([DEFAULT_STATE, (_) => { }]);
-
-export const PlayerContext: React.FC<React.PropsWithChildren<{}>> = ({
-  children,
-}) => {
-  const r = React.useReducer<React.Reducer<PlayerState, PlayerAction>>(
-    reducer,
-    DEFAULT_STATE
-  );
-  // TODO: save player state in the local storage:
-  // save in another localStorage key and load only at first load when the
-  // localStorage context is created.
-  return <Context.Provider value={r}>{children}</Context.Provider>;
-};
+export const playerAtom = atomWithReducer(DEFAULT_STATE, reducer);
 
 export const usePlayer = () => {
-  const [{ song, status }, dispatch] = React.useContext(Context);
-  const [load, unload, play, pause] = React.useMemo(
+  const [{ song, status }, dispatch] = useAtom(playerAtom);
+  const [load, play, pause, unload] = React.useMemo(
     () => [
       (song: SubsonicSong) =>
         dispatch({ type: PlayerActionType.LOAD, payload: song }),
-      () => dispatch({ type: PlayerActionType.UNLOAD }),
       () => dispatch({ type: PlayerActionType.PLAY }),
       () => dispatch({ type: PlayerActionType.PAUSE }),
+      () => dispatch({ type: PlayerActionType.UNLOAD }),
     ],
     [dispatch]
   );

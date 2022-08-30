@@ -1,17 +1,34 @@
 import * as React from "react";
 
 import Standard from "../components/standard";
-import Song from "../components/song";
-import { useQueue } from "../components/player";
+import Tracks from "../components/tracks";
+import { usePlayer } from "../stores/player";
+import { useStack, useQueue } from "../stores/queue";
 
 const Queue: React.FC = () => {
+  const { stack } = useStack();
+  const { song } = usePlayer();
   const { queue } = useQueue();
+  const tracks = React.useMemo(
+    () => [...[...stack].reverse(), ...(song ? [song] : []), ...queue],
+    [stack, song, queue]
+  );
+  console.log(stack, tracks);
+
   return (
     <Standard>
       <h1>queue</h1>
-      {queue.map((song, i) => (
-        <Song key={i} song={song} />
-      ))}
+      <Tracks
+        songs={tracks}
+        art={-1}
+        number={-1}
+        title={9}
+        heart={-1}
+        album={3}
+        artist={3}
+        length={-1}
+        format={-1}
+      />
     </Standard>
   );
 };

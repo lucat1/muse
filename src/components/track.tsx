@@ -71,6 +71,7 @@ const Track: React.FC<TrackProps & { song: SubsonicSong } & TrackActions> = ({
 
   const handlePlay = React.useCallback((e: Event) => {
     e.preventDefault();
+    e.stopPropagation();
     play();
   }, []);
   const [starring, isStarring] = React.useState(false);

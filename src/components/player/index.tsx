@@ -7,14 +7,15 @@ import { PauseIcon as Pause, PlayIcon as Play } from "@heroicons/react/outline";
 
 import Audio from "./audio";
 import { connectionAtom } from "../../stores/connection";
-import { PlayerStatus, usePlayer } from "./player-context";
-import { useQueue } from "./queue-context";
+import { usePlayer, PlayerStatus } from "../../stores/player";
+import { useQueue, useStack } from "../../stores/queue";
 import { StandardWidth } from "../standard";
 
 const Player: React.FunctionComponent = () => {
   const connection = useAtomValue(connectionAtom);
   const { song, status, load, play, pause } = usePlayer();
   const { queue, next } = useQueue();
+  const { push } = useStack();
   const [seek, setSeek] = React.useState(-1);
   const [time, setTime] = React.useState(0);
   const [seekTime, setSeekTime] = React.useState<number | undefined>(undefined);
@@ -24,19 +25,15 @@ const Player: React.FunctionComponent = () => {
     [song?.duration]
   );
   const handleEnd = React.useCallback(() => {
+    push([song!]);
     load(queue[0]);
     next();
-    play();
-  }, [queue, next, load, play]);
+  }, [queue, next, load]);
   React.useEffect(() => setSeekTime(undefined), [song]);
 
   return (
     <section className="fixed left-48 md:left-64 xl:left-72 right-0 bottom-0 h-24 flex border-t dark:border-neutral-700">
-      <Audio
-        onTime={(time) => setTime(time)}
-        seek={seekTime}
-        onEnd={handleEnd}
-      />
+      <Audio onTime={setTime} seek={seekTime} onEnd={handleEnd} />
       <StandardWidth className="m-auto">
         <div className="flex flex-row justify-center pt-2">
           <button
@@ -75,6 +72,3 @@ const Player: React.FunctionComponent = () => {
 };
 
 export default Player;
-
-export { PlayerContext, usePlayer } from "./player-context";
-export { QueueContext, useQueue } from "./queue-context";
