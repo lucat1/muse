@@ -1,5 +1,6 @@
 import * as React from "react";
 import { Link } from "react-router-dom";
+import { useAtomValue } from "jotai";
 import {
   HeartIcon as HeartOutline,
   ChevronRightIcon as ChevronRight,
@@ -11,9 +12,9 @@ import {
 import { HeartIcon as HeartSolid } from "@heroicons/react/solid";
 import formatDuration from "format-duration";
 
-import { STAR, UNSTAR, useConnection } from "../const";
-import { usePlayer } from "./player";
 import { fetcher, useURL } from "../fetcher";
+import { connectionAtom } from "../stores/connection";
+import { STAR, UNSTAR } from "../const";
 import Image from "./img";
 import {
   Root,
@@ -65,7 +66,7 @@ const Track: React.FC<TrackProps & { song: SubsonicSong } & TrackActions> = ({
   play,
   ...fields
 }) => {
-  const [connection] = useConnection();
+  const connection = useAtomValue(connectionAtom);
   const Heart = song.starred ? HeartSolid : HeartOutline;
 
   const handlePlay = React.useCallback((e: Event) => {
@@ -99,15 +100,14 @@ const Track: React.FC<TrackProps & { song: SubsonicSong } & TrackActions> = ({
           )}
           {/* Fields.ART */}
           {show(fields[Fields.ART]) && (
-            <Link
-              className={BASE}
-              to={`/${connection.id}/album/${song.albumId}`}
-            >
-              <Image
-                className="w-10"
-                src={useURL(`getCoverArt?id=${song.coverArt}`)}
-              />
-            </Link>
+            <Center className={BASE}>
+              <Link to={`/${connection.id}/album/${song.albumId}`}>
+                <Image
+                  className="w-10"
+                  src={useURL(`getCoverArt?id=${song.coverArt}`)}
+                />
+              </Link>
+            </Center>
           )}
           {/* Fields.TITLE */}
           {show(fields[Fields.TITLE]) && (

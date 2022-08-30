@@ -1,8 +1,9 @@
 import * as React from "react";
+import { useAtomValue } from "jotai";
 
-import { useConnection } from "../../const";
 import { PlayerStatus, usePlayer } from "./player-context";
 import { getURL } from "../../fetcher";
+import { connectionAtom } from "../../stores/connection";
 
 export interface AudioProps {
   onTime(time: number): void;
@@ -11,7 +12,7 @@ export interface AudioProps {
 }
 
 const Audio: React.FC<AudioProps> = ({ onTime, seek, onEnd }) => {
-  const [connection] = useConnection();
+  const connection = useAtomValue(connectionAtom);
   const { song, status } = usePlayer();
   const [canPlay, setCanPlay] = React.useState(false);
   const audio = React.useRef<HTMLAudioElement>(null);

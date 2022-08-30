@@ -1,6 +1,8 @@
 import * as React from "react";
+import { useAtom } from "jotai";
 import useSubsonic from "../fetcher";
-import { useTitle, GET_ARTISTS } from "../const";
+import { GET_ARTISTS } from "../const";
+import { titleAtom } from "../stores/title";
 import type { SubsonicArtistsResponse } from "../types";
 
 import Artist from "../components/artist";
@@ -8,7 +10,10 @@ import Standard from "../components/standard";
 
 const Artists = () => {
   const { data } = useSubsonic<SubsonicArtistsResponse>(GET_ARTISTS);
-  useTitle("Artists");
+  const [_, setTitle] = useAtom(titleAtom);
+  React.useEffect(() => {
+    setTitle("Artists");
+  }, []);
 
   return (
     <Standard>

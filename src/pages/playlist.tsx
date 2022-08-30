@@ -1,9 +1,11 @@
 import * as React from "react";
 import { useParams } from "react-router-dom";
 import formatDuration from "format-duration";
+import { useAtom } from "jotai";
 
 import useSubsonic from "../fetcher";
 import { GET_PLAYLIST } from "../const";
+import { titleAtom } from "../stores/title";
 import type { SubsonicPlaylistResponse } from "../types";
 
 import Standard from "../components/standard";
@@ -16,6 +18,10 @@ const Playlist = () => {
   const { data } = useSubsonic<SubsonicPlaylistResponse>(
     `${GET_PLAYLIST}?id=${id}`
   );
+  const [_, setTitle] = useAtom(titleAtom);
+  React.useEffect(() => {
+    setTitle(data?.name || "Unkown playlist");
+  }, [data]);
 
   return (
     <Standard>

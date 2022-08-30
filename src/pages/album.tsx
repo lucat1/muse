@@ -1,9 +1,11 @@
 import * as React from "react";
 import { useParams, Link } from "react-router-dom";
 import formatDuration from "format-duration";
+import { useAtom } from "jotai";
 import type { SubsonicAlbumResponse } from "../types";
 import useSubsonic, { useURL } from "../fetcher";
-import { useTitle, GET_ALBUM } from "../const";
+import { GET_ALBUM } from "../const";
+import { titleAtom } from "../stores/title";
 
 import Standard from "../components/standard";
 import Tracks from "../components/tracks";
@@ -16,10 +18,14 @@ const Album = () => {
   const { data: album } = useSubsonic<SubsonicAlbumResponse>(
     `${GET_ALBUM}?id=${id}`
   );
-  useTitle(
-    `${album?.name || "Unkown Album"} - ${album?.artist || "Unkown Artist"}`
-  );
   const albumArt = useURL(`getCoverArt?id=${album?.coverArt}`);
+  const [_, setTitle] = useAtom(titleAtom);
+  React.useEffect(() => {
+    setTitle(
+      `${album?.name || "Unkown Album"} - ${album?.artist || "Unkown Artist"}`
+    );
+  }, [album]);
+
   return (
     <Standard>
       <section className="py-4 pt-8 flex flex-row">

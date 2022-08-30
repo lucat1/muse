@@ -1,16 +1,19 @@
 import * as React from "react";
 import { Link } from "react-router-dom";
+import { useAtomValue } from "jotai";
 import formatDuration from "format-duration";
+
 import { getURL } from "../fetcher";
 import type { SubsonicSong } from "../types";
-import { GET_COVER_ART, useConnection } from "../const";
+import { connectionAtom } from "../stores/connection";
+import { GET_COVER_ART } from "../const";
 
 import { usePlayer } from "./player";
 import Image from "./img";
 import Dot from "./dot";
 
 const Song: React.FC<{ song: SubsonicSong }> = ({ song }) => {
-  const [conn] = useConnection();
+  const conn = useAtomValue(connectionAtom);
   const { play, load } = usePlayer();
   const handlePlay = React.useCallback(
     (e: any) => {

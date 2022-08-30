@@ -1,14 +1,18 @@
 import * as React from "react";
 import * as Slider from "@radix-ui/react-slider";
+import { Link } from "react-router-dom";
+import { useAtomValue } from "jotai";
 import formatDuration from "format-duration";
 import { PauseIcon as Pause, PlayIcon as Play } from "@heroicons/react/outline";
 
 import Audio from "./audio";
+import { connectionAtom } from "../../stores/connection";
 import { PlayerStatus, usePlayer } from "./player-context";
 import { useQueue } from "./queue-context";
 import { StandardWidth } from "../standard";
 
 const Player: React.FunctionComponent = () => {
+  const connection = useAtomValue(connectionAtom);
   const { song, status, load, play, pause } = usePlayer();
   const { queue, next } = useQueue();
   const [seek, setSeek] = React.useState(-1);
@@ -20,9 +24,8 @@ const Player: React.FunctionComponent = () => {
     [song?.duration]
   );
   const handleEnd = React.useCallback(() => {
-    const song = queue[0];
+    load(queue[0]);
     next();
-    load(song);
     play();
   }, [queue, next, load, play]);
   React.useEffect(() => setSeekTime(undefined), [song]);
@@ -66,6 +69,7 @@ const Player: React.FunctionComponent = () => {
           </span>
         </div>
       </StandardWidth>
+      <Link to={`/${connection.id}/queue`}>queue</Link>
     </section>
   );
 };

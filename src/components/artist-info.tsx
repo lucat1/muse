@@ -1,7 +1,9 @@
 import * as React from "react";
+import { useAtom } from "jotai";
 import type { SubsonicArtistInfoResponse, SubsonicArtist } from "../types";
 import useSubsonic from "../fetcher";
-import { GET_ARTIST, GET_ARTIST_INFO, useTitle } from "../const";
+import { GET_ARTIST, GET_ARTIST_INFO } from "../const";
+import { titleAtom } from "../stores/title";
 
 import Image, { ImageSkeleton } from "../components/img";
 
@@ -15,7 +17,10 @@ const RawArtistInfo: React.FC<{ id: string }> = ({ id }) => {
   const { data: artist } = useSubsonic<SubsonicArtist>(
     `${GET_ARTIST}?id=${id}`
   );
-  useTitle(artist?.name || "Unkown artist");
+  const [_, setTitle] = useAtom(titleAtom);
+  React.useEffect(() => {
+    setTitle(artist?.name || "Unkown artist");
+  }, [artist]);
   const { data: artistInfo } = useSubsonic<SubsonicArtistInfoResponse>(
     `${GET_ARTIST_INFO}?id=${artist?.id}`
   );

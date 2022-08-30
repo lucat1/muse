@@ -1,8 +1,11 @@
 import * as React from "react";
 import { useNavigate } from "react-router";
 import { useForm } from "react-hook-form";
+import { useAtom } from "jotai";
 
-import { useConnections, useTitle, Connection, PING } from "../const";
+import { PING } from "../const";
+import { Connection, connectionsAtom } from "../stores/connection";
+import { titleAtom } from "../stores/title";
 import { getURL } from "../fetcher";
 import Input from "../components/input";
 import Button from "../components/button";
@@ -37,9 +40,12 @@ const Label: React.FC<
 
 const SALT_LENGTH = 32;
 const Welcome = () => {
-  useTitle("New connection");
+  const [_, setTitle] = useAtom(titleAtom);
+  React.useEffect(() => {
+    setTitle("New connection");
+  }, []);
   const navigate = useNavigate();
-  const [connections, setConnections] = useConnections();
+  const [conns, setConns] = useAtom(connectionsAtom);
   const [loading, setLoading] = React.useState(false);
   const {
     register,
@@ -52,18 +58,20 @@ const Welcome = () => {
     async (conn: Connection) => {
       setLoading(true);
       clearErrors("account");
-      const connection = { ...conn, salt: salt(SALT_LENGTH), auto: true };
+      const connection: Connection = { ...conn, salt: salt(SALT_LENGTH) };
       try {
         const res = await fetch(getURL(PING, connection));
         const json: SubsonicWrapperResponse<
           SubsonicBaseResponse<SubsonicPingResponse | SubsonicErrorResponse>
         > = await res.json();
         if (res.status == 200 && json["subsonic-response"].status == "ok") {
-          setConnections([
-            ...connections.map((c) => ({ ...c, auto: false })),
-            connection,
-          ]);
-          navigate(`/${connections.length}/`);
+          const id = conns.list.length;
+          setConns({
+            ...conns,
+            default: conns.default != undefined ? conns.default : id,
+            list: conns.list.concat(connection),
+          });
+          navigate(`/${id}/`);
         } else {
           const err = json["subsonic-response"].error as SubsonicErrorResponse;
           setError("account", {
@@ -76,7 +84,7 @@ const Welcome = () => {
       }
       setLoading(false);
     },
-    [connections, setConnections]
+    [conns, setConns]
   );
 
   return (
@@ -121,7 +129,7 @@ const Welcome = () => {
             <Label htmlFor="password">A password is required</Label>
           )}
 
-          {errors.account && <Label>{errors.account.message}</Label>}
+          {errors.account && <Label>{errors.account.message as string}</Label>}
           <Button type="submit" className="my-3" disabled={loading}>
             Submit
           </Button>

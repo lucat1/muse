@@ -1,7 +1,9 @@
 import * as React from "react";
 import useInfiniteScroll from "react-infinite-scroll-hook";
+import { useAtom } from "jotai";
 import { useSubsonicInfinite, hasNextPage as has } from "../fetcher";
-import { useTitle, GET_ALBUMS } from "../const";
+import { GET_ALBUMS } from "../const";
+import { titleAtom } from "../stores/title";
 import type { SubsonicAlbumsResponse } from "../types";
 
 import Album from "../components/album";
@@ -21,8 +23,7 @@ const Albums = () => {
   const [selected, setSelected] = React.useState(0);
   const { data, size, setSize } = useSubsonicInfinite<SubsonicAlbumsResponse>(
     (index) =>
-      `${GET_ALBUMS}?type=${types[selected]}&size=${PER_PAGE}&offset=${
-        index * PER_PAGE
+      `${GET_ALBUMS}?type=${types[selected]}&size=${PER_PAGE}&offset=${index * PER_PAGE
       }`
   );
   const hasNextPage = has(data?.length ? data[data.length - 1] : null);
@@ -32,7 +33,10 @@ const Albums = () => {
     onLoadMore: () => setSize(size + 1),
     rootMargin: "0px 0px 400px 0px",
   });
-  useTitle("Albums");
+  const [_, setTitle] = useAtom(titleAtom);
+  React.useEffect(() => {
+    setTitle("Albums");
+  }, []);
 
   return (
     <Standard>

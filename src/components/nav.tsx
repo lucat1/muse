@@ -1,5 +1,6 @@
 import * as React from "react";
 import { useLocation, useNavigate, Link } from "react-router-dom";
+import { useAtom, useAtomValue } from "jotai";
 import {
   HomeIcon as HomeFull,
   SearchIcon as SearchFull,
@@ -14,7 +15,8 @@ import {
   CollectionIcon as CollectionOutline,
 } from "@heroicons/react/outline";
 
-import { GET_COVER_ART, RING, useConnection, useConnections } from "../const";
+import { connectionsAtom, connectionAtom } from "../stores/connection";
+import { GET_COVER_ART, RING } from "../const";
 import { getURL } from "../fetcher";
 
 import { usePlayer } from "./player";
@@ -37,8 +39,8 @@ export const NavbarContent = React.forwardRef<
 ));
 
 const Navbar: React.FC = () => {
-  const [connections, setConnections] = useConnections();
-  const [connection] = useConnection();
+  const [_, setConns] = useAtom(connectionsAtom);
+  const connection = useAtomValue(connectionAtom);
   const { song } = usePlayer();
   const navigate = useNavigate();
   const { pathname } = useLocation();
@@ -89,7 +91,10 @@ const Navbar: React.FC = () => {
           <IconButton
             aria-label="Logout"
             onClick={(_) => {
-              setConnections(connections.map((c) => ({ ...c, auto: false })));
+              setConns((c) => {
+                console.log("set");
+                return { ...c, default: undefined };
+              });
               navigate("/");
             }}
           >

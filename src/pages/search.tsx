@@ -2,9 +2,11 @@ import * as React from "react";
 import { useForm } from "react-hook-form";
 import { useSearchParams } from "react-router-dom";
 import debounce from "debounce";
+import { useAtom } from "jotai";
 
 import useAuthenticatedSWR from "../fetcher";
-import { useTitle, SEARCH } from "../const";
+import { SEARCH } from "../const";
+import { titleAtom } from "../stores/title";
 import type { SubsonicSearchResponse } from "../types";
 
 import Standard from "../components/standard";
@@ -33,9 +35,9 @@ const Results: React.FC<{ query: string | undefined }> = ({ query }) => {
     "artist" | "album" | "song",
     any[]
   ][] = [
-    ["Artists", Artist, "artist", search?.artist || []],
-    ["Albums", Album, "album", search?.album || []],
-  ];
+      ["Artists", Artist, "artist", search?.artist || []],
+      ["Albums", Album, "album", search?.album || []],
+    ];
 
   const [more, setMore] = React.useState(false);
   const songs = (search?.song || [])
@@ -64,7 +66,7 @@ const Results: React.FC<{ query: string | undefined }> = ({ query }) => {
         if (section[3].length == 0) return null;
         const [Element, key] = [section[1], section[2]];
         return (
-          <ArtistSection header={section[0]}>
+          <ArtistSection key={i} header={section[0]}>
             <ScrollView className="flex flex-row overflow-x-auto">
               {section[3].map((data, i) => (
                 <Element key={i} {...{ [key]: data }} />
@@ -79,7 +81,10 @@ const Results: React.FC<{ query: string | undefined }> = ({ query }) => {
 
 const QUERY_KEY = "q";
 const Search: React.FC = () => {
-  useTitle("Search");
+  const [_, setTitle] = useAtom(titleAtom);
+  React.useEffect(() => {
+    setTitle("Search");
+  }, []);
   const [qs, setQs] = useSearchParams();
   const { register, handleSubmit, watch } = useForm<FormData>({
     defaultValues: {

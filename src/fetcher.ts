@@ -1,9 +1,11 @@
 import * as React from "react";
+import { useAtomValue } from "jotai";
 import useSWR from "swr";
 import useSWRInfinite from "swr/infinite";
 import md5 from "blueimp-md5";
 
-import { useConnection, SUBSONIC_PROTOCOL_VERSION, Connection } from "./const";
+import { Connection, connectionAtom } from "./stores/connection";
+import { SUBSONIC_PROTOCOL_VERSION } from "./const";
 import type {
   SubsonicWrapperResponse,
   SubsonicBaseResponse,
@@ -61,7 +63,7 @@ const useSubsonic = <T extends Object = {}>(
   path: string,
   opts = { suspense: true }
 ) => {
-  return useSWR<T>([path, useConnection()[0]], fetcher, opts);
+  return useSWR<T>([path, useAtomValue(connectionAtom)], fetcher, opts);
 };
 
 const isArr = ([_, val]: [string, any]) => Array.isArray(val);
@@ -79,7 +81,7 @@ export const useSubsonicInfinite = <T extends Object = {}>(
   gen: (index: number) => string,
   opts = { suspense: true }
 ) => {
-  const conn = useConnection()[0];
+  const conn = useAtomValue(connectionAtom);
   return useSWRInfinite<T>(
     (index, prev) => (hasNextPage(prev) ? [gen(index), conn] : null),
     fetcher,
@@ -88,12 +90,12 @@ export const useSubsonicInfinite = <T extends Object = {}>(
 };
 
 export const useURL = (path: string) => {
-  const [connection] = useConnection();
+  const connection = useAtomValue(connectionAtom);
   return React.useMemo(() => {
     return getURL(path, connection);
   }, [connection, path]);
 };
 export const useUnmemoizedURL = (path: string) =>
-  getURL(path, useConnection()[0]);
+  getURL(path, useAtomValue(connectionAtom));
 
 export default useSubsonic;
