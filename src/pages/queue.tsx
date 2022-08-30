@@ -13,7 +13,6 @@ const Queue: React.FC = () => {
     () => [...[...stack].reverse(), ...(song ? [song] : []), ...queue],
     [stack, song, queue]
   );
-  console.log(stack, tracks);
 
   return (
     <Standard>

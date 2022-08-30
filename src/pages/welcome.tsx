@@ -32,25 +32,21 @@ const Conn: React.FC<{
     e.stopPropagation();
     switch (e.detail) {
       case 1:
-        console.log(1);
         debouncer = debounce(() => {
           setConns((s) => ({ ...s, default: conn.id }));
         }, 200);
         debouncer();
         break;
       case 2:
-        console.log(2);
         if (debouncer) {
           debouncer.clear();
           debouncer = null;
         }
         navigate(`/${conn.id}/`);
         break;
-      default:
-        console.log(3);
-        break;
     }
   };
+
   return (
     <ConnWrap active={conn.id == conns.default} onClick={handleClick}>
       <div className="flex items-center justify-center w-32 h-32 text-4xl rounded-xl bg-neutral-300 dark:bg-neutral-700">

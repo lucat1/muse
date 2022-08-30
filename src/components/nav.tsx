@@ -91,10 +91,7 @@ const Navbar: React.FC = () => {
           <IconButton
             aria-label="Logout"
             onClick={(_) => {
-              setConns((c) => {
-                console.log("set");
-                return { ...c, default: undefined };
-              });
+              setConns((c) => ({ ...c, default: undefined }));
               navigate("/");
             }}
           >
