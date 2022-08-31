@@ -1,5 +1,5 @@
 import * as React from "react";
-import { SunIcon as Sun, MoonIcon as Moon } from "@heroicons/react/solid";
+import { SunIcon as Sun, MoonIcon as Moon } from "@heroicons/react/24/solid";
 
 import IconButton from "./icon-button";
 

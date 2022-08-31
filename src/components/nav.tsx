@@ -3,17 +3,17 @@ import { useLocation, useNavigate, Link } from "react-router-dom";
 import { useAtom, useAtomValue } from "jotai";
 import {
   HomeIcon as HomeFull,
-  SearchIcon as SearchFull,
+  MagnifyingGlassIcon as SearchFull,
   UsersIcon as UsersFull,
-  CollectionIcon as CollectionFull,
-  LogoutIcon,
-} from "@heroicons/react/solid";
+  RectangleStackIcon as CollectionFull,
+  ArrowLeftOnRectangleIcon as LogoutIcon,
+} from "@heroicons/react/24/solid";
 import {
   HomeIcon as HomeOutline,
-  SearchIcon as SearchOutline,
+  MagnifyingGlassIcon as SearchOutline,
   UsersIcon as UsersOutline,
-  CollectionIcon as CollectionOutline,
-} from "@heroicons/react/outline";
+  RectangleStackIcon as CollectionOutline,
+} from "@heroicons/react/24/outline";
 
 import { connectionsAtom, connectionAtom } from "../stores/connection";
 import { usePlayer } from "../stores/player";

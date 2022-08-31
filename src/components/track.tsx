@@ -6,10 +6,10 @@ import {
   ChevronRightIcon as ChevronRight,
   ChevronDoubleRightIcon as ChevronDoubleRight,
   ChevronDoubleLeftIcon as ChevronDoubleLeft,
-  ArrowNarrowDownIcon as ArrowDown,
+  ArrowLongDownIcon as ArrowDown,
   InformationCircleIcon as Info,
-} from "@heroicons/react/outline";
-import { HeartIcon as HeartSolid } from "@heroicons/react/solid";
+} from "@heroicons/react/24/outline";
+import { HeartIcon as HeartSolid } from "@heroicons/react/24/solid";
 import formatDuration from "format-duration";
 
 import { fetcher, useURL } from "../fetcher";
@@ -128,9 +128,8 @@ const Track: React.FC<TrackProps & { song: SubsonicSong } & TrackActions> = ({
                 aria-label={`${song.starred ? "Unlike" : "Like"} this song`}
                 aria-checked={song.starred ? true : false}
                 disabled={starring}
-                className={`w-7 h-7 ${
-                  song.starred ? "text-red-500 dark:text-red-400" : ""
-                }`}
+                className={`w-7 h-7 ${song.starred ? "text-red-500 dark:text-red-400" : ""
+                  }`}
                 onClick={like}
               >
                 <Heart />
