@@ -15,6 +15,7 @@ const SongList: React.FC<{ songs: SubsonicSong[] } & TrackProps> = ({
   const generatePlayTrack = React.useCallback(
     (i: number) => () => {
       if (songs[i] == song) return;
+      console.log(songs);
 
       clearStack();
       clearQueue();

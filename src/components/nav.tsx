@@ -86,7 +86,7 @@ const Navbar: React.FC = () => {
     <nav className="fixed w-48 md:w-64 xl:w-72 h-screen flex flex-col border-r dark:border-neutral-700">
       <section className="flex flex-row justify-between items-center p-4 border-b dark:border-neutral-700">
         <Logo to={`/${connection.id}/`} />
-        <div>
+        <div className="flex">
           <ThemeButton className="mr-3" />
           <IconButton
             aria-label="Logout"

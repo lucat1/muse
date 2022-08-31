@@ -69,11 +69,14 @@ const Track: React.FC<TrackProps & { song: SubsonicSong } & TrackActions> = ({
   const connection = useAtomValue(connectionAtom);
   const Heart = song.starred ? HeartSolid : HeartOutline;
 
-  const handlePlay = React.useCallback((e: Event) => {
-    e.preventDefault();
-    e.stopPropagation();
-    play();
-  }, []);
+  const handlePlay = React.useCallback(
+    (e: Event) => {
+      e.preventDefault();
+      e.stopPropagation();
+      play();
+    },
+    [play]
+  );
   const [starring, isStarring] = React.useState(false);
   const like = React.useCallback(async () => {
     isStarring(true);
@@ -128,8 +131,9 @@ const Track: React.FC<TrackProps & { song: SubsonicSong } & TrackActions> = ({
                 aria-label={`${song.starred ? "Unlike" : "Like"} this song`}
                 aria-checked={song.starred ? true : false}
                 disabled={starring}
-                className={`w-7 h-7 ${song.starred ? "text-red-500 dark:text-red-400" : ""
-                  }`}
+                className={`w-7 h-7 ${
+                  song.starred ? "text-red-500 dark:text-red-400" : ""
+                }`}
                 onClick={like}
               >
                 <Heart />

@@ -16,13 +16,10 @@ export const Content: React.FC<
 > = (props) => (
   <ContextContent
     {...props}
-    style={{
-      ...(props.style || {}),
-      transformOrigin: "var(--radix-context-menu-content-transform-origin)",
-    }}
+    style={props.style}
     className={`w-64 p-2 rounded-lg drop-shadow-xl bg-neutral-200 dark:bg-neutral-700 ${
       props.className || ""
-    } animate-[scale-in_100ms] ease-out`}
+    }`}
   />
 );
 
