@@ -13,6 +13,7 @@ export enum PlayerStatus {
 
 export enum PlayerActionType {
   LOAD,
+  LOADING,
   PLAY,
   PAUSE,
   UNLOAD,
@@ -37,6 +38,8 @@ const reducer = (state: PlayerState, { type, payload }: PlayerAction) => {
   switch (type) {
     case PlayerActionType.LOAD:
       return payload ? { song: payload, status: PlayerStatus.LOADING } : state;
+    case PlayerActionType.LOADING:
+      return { ...state, status: PlayerStatus.LOADING };
     case PlayerActionType.UNLOAD:
       return DEFAULT_STATE;
     case PlayerActionType.PLAY:
@@ -50,15 +53,16 @@ export const playerAtom = atomWithReducer(DEFAULT_STATE, reducer);
 
 export const usePlayer = () => {
   const [{ song, status }, dispatch] = useAtom(playerAtom);
-  const [load, play, pause, unload] = React.useMemo(
+  const [load, loading, play, pause, unload] = React.useMemo(
     () => [
       (song: SubsonicSong) =>
         dispatch({ type: PlayerActionType.LOAD, payload: song }),
+      () => dispatch({ type: PlayerActionType.LOADING }),
       () => dispatch({ type: PlayerActionType.PLAY }),
       () => dispatch({ type: PlayerActionType.PAUSE }),
       () => dispatch({ type: PlayerActionType.UNLOAD }),
     ],
     [dispatch]
   );
-  return { song, status, load, unload, play, pause };
+  return { song, status, load, loading, unload, play, pause };
 };

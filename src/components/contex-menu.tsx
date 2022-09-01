@@ -11,17 +11,19 @@ import {
   ContextMenuItemIndicatorProps,
 } from "@radix-ui/react-context-menu";
 
-export const Content: React.FC<
-  ContextMenuContentProps & React.RefAttributes<HTMLDivElement>
-> = (props) => (
+export const Content = React.forwardRef<
+  HTMLDivElement,
+  ContextMenuContentProps
+>((props, ref) => (
   <ContextContent
     {...props}
+    ref={ref}
     style={props.style}
     className={`w-64 p-2 rounded-lg drop-shadow-xl bg-neutral-200 dark:bg-neutral-700 ${
       props.className || ""
     }`}
   />
-);
+));
 
 export const Item: React.FC<
   ContextMenuItemProps & React.RefAttributes<HTMLDivElement>

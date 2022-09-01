@@ -12,10 +12,9 @@ const SongList: React.FC<{ songs: SubsonicSong[] } & TrackProps> = ({
   const { song, load } = usePlayer();
   const { append, clear: clearQueue } = useQueue();
   const { push, clear: clearStack } = useStack();
-  const generatePlayTrack = React.useCallback(
-    (i: number) => () => {
+  const playTrack = React.useCallback(
+    (i: number) => {
       if (songs[i] == song) return;
-      console.log(songs);
 
       clearStack();
       clearQueue();
@@ -38,7 +37,7 @@ const SongList: React.FC<{ songs: SubsonicSong[] } & TrackProps> = ({
       }}
     >
       {songs.map((song, i) => (
-        <Track key={i} song={song} play={generatePlayTrack(i)} {...fields} />
+        <Track key={i} song={song} play={() => playTrack(i)} {...fields} />
       ))}
     </main>
   );

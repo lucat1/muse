@@ -25,12 +25,15 @@ const ScrollView: React.FC<
     },
     [setStart]
   );
-  const handleMouseMove = (e: MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    ref.current!.scrollLeft = start!.left - e.clientX + start!.x;
-    ref.current!.scrollTop = start!.top - e.clientY + start!.y;
-  };
+  const handleMouseMove = React.useCallback(
+    (e: MouseEvent) => {
+      e.preventDefault();
+      e.stopPropagation();
+      ref.current!.scrollLeft = start!.left - e.clientX + start!.x;
+      ref.current!.scrollTop = start!.top - e.clientY + start!.y;
+    },
+    [ref.current, start]
+  );
   const handleMouseUp = React.useCallback(
     (e: MouseEvent) => {
       e.preventDefault();

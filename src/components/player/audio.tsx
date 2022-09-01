@@ -13,23 +13,29 @@ export interface AudioProps {
 
 const Audio: React.FC<AudioProps> = ({ onTime, seek, onEnd }) => {
   const connection = useAtomValue(connectionAtom);
-  const { song, status, play } = usePlayer();
+  const { song, status, loading, play } = usePlayer();
   const audio = React.useRef<HTMLAudioElement>(null);
   React.useEffect(() => {
     if (!audio.current) return;
     const handleTime = () => onTime(audio.current?.currentTime || 0);
+    const handleSeeking = () => loading();
+    const handleSeeked = () => play();
 
     audio.current.addEventListener("canplay", play);
     audio.current.addEventListener("timeupdate", handleTime);
     audio.current.addEventListener("ended", onEnd);
+    audio.current.addEventListener("seeking", handleSeeking);
+    audio.current.addEventListener("seeked", handleSeeked);
     return () => {
       if (!audio.current) return;
 
       audio.current.removeEventListener("canplay", play);
       audio.current.removeEventListener("timeupdate", handleTime);
       audio.current.removeEventListener("ended", onEnd);
+      audio.current.removeEventListener("seeking", handleSeeking);
+      audio.current.removeEventListener("seeked", handleSeeked);
     };
-  }, [audio.current, play, onTime, onEnd]);
+  }, [audio.current, loading, play, onTime, onEnd]);
 
   React.useEffect(() => {
     if (audio.current) audio.current.currentTime = 0;

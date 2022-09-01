@@ -22,6 +22,33 @@ import { useQueue, useStack } from "../../stores/queue";
 import { StandardWidth } from "../standard";
 import { RING } from "../../const";
 
+const SpinningCircle: React.FC<React.SVGProps<SVGSVGElement>> = ({
+  className,
+  ...props
+}) => (
+  <svg
+    {...props}
+    className={`animate-spin ${className || ""}`}
+    xmlns="http://www.w3.org/2000/svg"
+    fill="none"
+    viewBox="0 0 24 24"
+  >
+    <circle
+      className="opacity-25"
+      cx="12"
+      cy="12"
+      r="10"
+      stroke="currentColor"
+      stroke-width="4"
+    ></circle>
+    <path
+      className="opacity-75"
+      fill="currentColor"
+      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+    ></path>
+  </svg>
+);
+
 const Player: React.FunctionComponent = () => {
   const connection = useAtomValue(connectionAtom);
   const navigate = useNavigate();
@@ -49,7 +76,12 @@ const Player: React.FunctionComponent = () => {
     }
   }, [queue, next, load]);
 
-  const PlayButtonIcon = status == PlayerStatus.PLAYING ? Pause : Play;
+  const PlayButtonIcon =
+    status == PlayerStatus.PLAYING
+      ? Pause
+      : status == PlayerStatus.LOADING
+      ? SpinningCircle
+      : Play;
   return (
     <section className="fixed left-48 md:left-64 xl:left-72 right-0 bottom-0 h-24 flex border-t dark:border-neutral-700">
       <Audio onTime={setTime} seek={seekTime} onEnd={nextTrack} />
@@ -94,8 +126,10 @@ const Player: React.FunctionComponent = () => {
             {formatDuration((seek != -1 ? seek : time) * 1000)}
           </span>
           <Slider.Root
-            className="relative w-full flex items-center group"
-            disabled={status == PlayerStatus.UNLOADED /* || !canPlay*/}
+            className="relative w-full flex items-center"
+            disabled={
+              status == PlayerStatus.UNLOADED || status == PlayerStatus.LOADING
+            }
             value={[seek != -1 ? seek : time]}
             max={song?.duration || 0}
             onValueChange={(value) => setSeek(value[0])}
@@ -104,10 +138,10 @@ const Player: React.FunctionComponent = () => {
               setSeek(-1);
             }}
           >
-            <Slider.Track className="bg-neutral-700 dark:bg-neutral-300 relative grow h-1">
-              <Slider.Range className="bg-red-500 dark:bg-red-400 absolute h-full" />
+            <Slider.Track className="relative grow h-1 rounded-full bg-neutral-700 dark:bg-neutral-300">
+              <Slider.Range className="absolute h-full rounded-full bg-red-500 dark:bg-red-400" />
             </Slider.Track>
-            <Slider.Thumb className="hidden group-hover:block focus:block bg-red-500 dark:bg-red-400 block rounded-full w-1 h-5 focus:w-2" />
+            <Slider.Thumb className="bg-red-500 dark:bg-red-400 block rounded-full w-1 h-5 focus:w-2" />
           </Slider.Root>
           <span className="ml-4">
             {formatDuration((song?.duration || 0) * 1000)}
