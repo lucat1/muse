@@ -126,7 +126,7 @@ const Player: React.FunctionComponent = () => {
             {formatDuration((seek != -1 ? seek : time) * 1000)}
           </span>
           <Slider.Root
-            className="relative w-full flex items-center"
+            className="relative w-full flex items-center group"
             disabled={
               status == PlayerStatus.UNLOADED || status == PlayerStatus.LOADING
             }
@@ -141,7 +141,7 @@ const Player: React.FunctionComponent = () => {
             <Slider.Track className="relative grow h-1 rounded-full bg-neutral-700 dark:bg-neutral-300">
               <Slider.Range className="absolute h-full rounded-full bg-red-500 dark:bg-red-400" />
             </Slider.Track>
-            <Slider.Thumb className="bg-red-500 dark:bg-red-400 block rounded-full w-1 h-5 focus:w-2" />
+            <Slider.Thumb className="hidden group-hover:block bg-red-500 dark:bg-red-400 block rounded-full w-1 h-5 focus:w-2" />
           </Slider.Root>
           <span className="ml-4">
             {formatDuration((song?.duration || 0) * 1000)}
