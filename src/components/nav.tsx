@@ -30,10 +30,7 @@ export const NavbarContent = React.forwardRef<
   HTMLElement,
   React.PropsWithChildren<{}>
 >(({ children }, ref) => (
-  <main
-    ref={ref}
-    className="fixed left-48 md:left-64 xl:left-72 top-0 bottom-24 right-0 flex flex-col"
-  >
+  <main ref={ref} className="flex flex-col">
     {children}
   </main>
 ));
@@ -83,7 +80,7 @@ const Navbar: React.FC = () => {
   );
 
   return (
-    <nav className="fixed w-48 md:w-64 xl:w-72 h-screen flex flex-col border-r dark:border-neutral-700">
+    <nav className="h-screen flex flex-col border-r dark:border-neutral-700">
       <section className="flex flex-row justify-between items-center p-4 border-b dark:border-neutral-700">
         <Logo to={`/${connection.id}/`} />
         <div className="flex">

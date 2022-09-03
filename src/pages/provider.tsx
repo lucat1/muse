@@ -45,27 +45,29 @@ const Provider: React.FunctionComponent = () => {
         [stackAtom, QUEUE_DEFAULT_STATE],
       ]}
     >
-      <Navbar />
-      <NavbarContent ref={ref}>
-        <React.Suspense fallback={<h1>loading in provider</h1>}>
-          <Routes>
-            <Route index element={<h1>index</h1>} />
-            <Route path="queue" element={<Queue />} />
-            <Route path="search" element={<Search />} />
-            <Route path="artists" element={<Artists />} />
-            <Route path="artist/:id" element={<Artist />} />
-            <Route path="albums" element={<Albums />} />
-            <Route path="album/:id" element={<Album />} />
-            <Route path="playlists" element={<Playlists />} />
-            <Route path="playlist/:id" element={<Playlist />} />
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </React.Suspense>
-      </NavbarContent>
-      <Player />
-      <ScrollToTop
-        ele={ref.current?.firstChild as HTMLElement | undefined | null}
-      />
+      <main className="w-screen h-screen grid grid-cols-[minmax(12rem,_16rem)_autofit]">
+        <Navbar />
+        <NavbarContent ref={ref}>
+          <React.Suspense fallback={<h1>loading in provider</h1>}>
+            <Routes>
+              <Route index element={<h1>index</h1>} />
+              <Route path="queue" element={<Queue />} />
+              <Route path="search" element={<Search />} />
+              <Route path="artists" element={<Artists />} />
+              <Route path="artist/:id" element={<Artist />} />
+              <Route path="albums" element={<Albums />} />
+              <Route path="album/:id" element={<Album />} />
+              <Route path="playlists" element={<Playlists />} />
+              <Route path="playlist/:id" element={<Playlist />} />
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </React.Suspense>
+        </NavbarContent>
+        <Player />
+        <ScrollToTop
+          ele={ref.current?.firstChild as HTMLElement | undefined | null}
+        />
+      </main>
     </JotaiProvider>
   );
 };
