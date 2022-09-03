@@ -12,9 +12,8 @@ const ConnWrap: React.FC<
   React.PropsWithChildren<{ active: boolean; onClick?: any }>
 > = ({ active, onClick, children }) => (
   <div
-    className={`rounded-xl p-8 w-48 h-64 mx-6 cursor-pointer bg-neutral-200 dark:bg-neutral-800 ${
-      active ? RING_ALWAYS : ""
-    }`}
+    className={`rounded-xl p-8 w-48 h-64 mx-6 cursor-pointer bg-neutral-200 dark:bg-neutral-800 ${active ? RING_ALWAYS : ""
+      }`}
     onClick={onClick}
   >
     {children}
@@ -96,7 +95,7 @@ const Welcome = () => {
             </Link>
           </section>
           <footer className="flex mt-16 items-center justify-center">
-            <article className="prose prose-stone xl:max-w-2xl">
+            <article className="prose dark:prose-invert prose-neutral xl:max-w-2xl">
               You can click on one connection to set it as{" "}
               <span className="text-red-500 dark:text-red-400">default</span>.
               The next time you come to{" "}

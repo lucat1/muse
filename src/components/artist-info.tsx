@@ -11,7 +11,7 @@ const SECITON_CLASSES = "py-4 pt-8 flex flex-row items-end";
 const IMAGE_CLASSES = "w-32 md:w-48 lg:w-64 aspect-square rounded-lg";
 const HEADING_CLASSES = "mx-8 text-2xl md:text-3xl xl:text-4xl font-extrabold";
 const ARTICLE_CLASSES =
-  "w-full prose prose-sm xl:prose-base max-w-none text-justify font-serif";
+  "w-full prose dark: prose-invert prose-neutral prose-sm xl:prose-base max-w-none text-justify font-serif";
 
 const RawArtistInfo: React.FC<{ id: string }> = ({ id }) => {
   const { data: artist } = useSubsonic<SubsonicArtist>(
