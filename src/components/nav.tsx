@@ -1,12 +1,11 @@
 import * as React from "react";
-import { useLocation, useNavigate, Link } from "react-router-dom";
-import { useAtom, useAtomValue } from "jotai";
+import { useLocation, Link } from "react-router-dom";
+import { useAtomValue } from "jotai";
 import {
   HomeIcon as HomeFull,
   MagnifyingGlassIcon as SearchFull,
   UsersIcon as UsersFull,
   RectangleStackIcon as CollectionFull,
-  ArrowLeftOnRectangleIcon as LogoutIcon,
 } from "@heroicons/react/24/solid";
 import {
   HomeIcon as HomeOutline,
@@ -15,35 +14,12 @@ import {
   RectangleStackIcon as CollectionOutline,
 } from "@heroicons/react/24/outline";
 
-import { connectionsAtom, connectionAtom } from "../stores/connection";
-import { usePlayer } from "../stores/player";
-import { GET_COVER_ART, RING } from "../const";
-import { getURL } from "../fetcher";
-
-import Image from "./img";
+import { connectionAtom } from "../stores/connection";
+import { RING } from "../const";
 import Playlists from "./playlists";
-import ThemeButton from "./theme-button";
-import Settings from "./settings";
-import Logo from "./logo";
-import IconButton from "./icon-button";
-
-export const NavbarContent = React.forwardRef<
-  HTMLElement,
-  React.PropsWithChildren<{}>
->(({ children }, ref) => (
-  <main
-    ref={ref}
-    className="fixed left-48 md:left-64 xl:left-72 top-0 bottom-24 right-0 flex flex-col"
-  >
-    {children}
-  </main>
-));
 
 const Navbar: React.FC = () => {
-  const [_, setConns] = useAtom(connectionsAtom);
   const connection = useAtomValue(connectionAtom);
-  const { song } = usePlayer();
-  const navigate = useNavigate();
   const { pathname } = useLocation();
   const section = React.useMemo(() => {
     if (/artists?/.test(pathname)) return "artists";
@@ -84,23 +60,7 @@ const Navbar: React.FC = () => {
   );
 
   return (
-    <nav className="fixed w-48 md:w-64 xl:w-72 h-screen flex flex-col border-r dark:border-neutral-700">
-      <section className="flex flex-row justify-between items-center p-4 border-b dark:border-neutral-700">
-        <Logo to={`/${connection.id}/`} />
-        <div className="flex">
-          <Settings className="md:mr-3" />
-          <ThemeButton className="md:mr-3" />
-          <IconButton
-            aria-label="Logout"
-            onClick={(_) => {
-              setConns((c) => ({ ...c, default: undefined }));
-              navigate("/");
-            }}
-          >
-            <LogoutIcon />
-          </IconButton>
-        </div>
-      </section>
+    <nav className="hidden col-start-1 col-end-1 md:flex flex-col border-r dark:border-neutral-700">
       <section className="flex flex-col py-6 p-4 border-b dark:border-neutral-700">
         {paths.map((path, i) => (
           <Link
@@ -121,7 +81,7 @@ const Navbar: React.FC = () => {
           </Link>
         ))}
       </section>
-      <section className="flex flex-1 overflow-auto flex-col py-2 p-4">
+      <section className="flex flex-1 overflow-y-auto flex-col py-2 p-4">
         <Link
           className={`text-xl font-bold my-3 ${RING}`}
           to={`/${connection.id}/playlists`}
@@ -130,42 +90,6 @@ const Navbar: React.FC = () => {
         </Link>
         <Playlists />
       </section>
-      {song && (
-        <section className="flex flex-1 flex-row justify-center">
-          <main className="flex flex-col m-4 mb-8 w-full truncate self-end">
-            <Link
-              className="flex justify-center"
-              to={`/${connection.id}/album/${song.albumId}`}
-            >
-              <Image
-                className="w-full"
-                src={getURL(`${GET_COVER_ART}?id=${song.coverArt}`, connection)}
-              />
-            </Link>
-            <div className="flex flex-0 flex-col">
-              <h2 className="text-2xl lg:text-3xl pt-2 truncate">
-                <Link
-                  to={`/${connection.id}/album/${song.albumId}?song=${song.id}`}
-                >
-                  {song.title}
-                </Link>
-              </h2>
-              <Link
-                className="pt-2 text-lg"
-                to={`/${connection.id}/album/${song.albumId}`}
-              >
-                {song.album}
-              </Link>
-              <Link
-                className="pt-1 text-md text-red-500 dark:text-red-400"
-                to={`/${connection.id}/artist/${song.artistId}`}
-              >
-                {song.artist}
-              </Link>
-            </div>
-          </main>
-        </section>
-      )}
     </nav>
   );
 };
