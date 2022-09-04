@@ -1,8 +1,7 @@
 import * as React from "react";
 import { createRoot } from "react-dom/client";
-import { Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 
-import App from "./app";
 import ScrollToTop from "./components/scroll-to-top";
 import Welcome from "./pages/welcome";
 import Connect from "./pages/connect";
@@ -10,14 +9,17 @@ import NotFound from "./pages/not-found";
 import Provider from "./pages/provider";
 
 createRoot(document.getElementById("root")!).render(
-  <App>
-    <Routes>
-      <Route index element={<Welcome />} />
-      <Route path="connect" element={<Connect />} />
-      <Route path=":server/*" element={<Provider />} />
-      {/*<Route index element={<Home />} /> <Route path="albums" element={<Teams />} />*/}
-      <Route path="*" element={<NotFound />} />
-    </Routes>
-    <ScrollToTop ele={document.body} />
-  </App>
+  <React.StrictMode>
+    <React.Suspense fallback={<h1>loading</h1>}>
+      <BrowserRouter basename={import.meta.env.BASE_URL}>
+        <Routes>
+          <Route index element={<Welcome />} />
+          <Route path="connect" element={<Connect />} />
+          <Route path=":server/*" element={<Provider />} />
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+        <ScrollToTop ele={document.body} />
+      </BrowserRouter>
+    </React.Suspense>
+  </React.StrictMode>
 );

@@ -15,9 +15,8 @@ import {
   stackAtom,
   DEFAULT_STATE as QUEUE_DEFAULT_STATE,
 } from "../stores/queue";
-import Player from "../components/player";
-import Navbar, { NavbarContent } from "../components/nav";
-import ScrollToTop from "../components/scroll-to-top";
+
+import App from "../components/app";
 
 import Search from "./search";
 import Artists from "./artists";
@@ -30,7 +29,6 @@ import NotFound from "./not-found";
 import Queue from "./queue";
 
 const Provider: React.FunctionComponent = () => {
-  const ref = React.useRef<HTMLElement>(null);
   const { server } = useParams();
   const conns = useAtomValue(connectionsListAtom);
   const id = parseInt(server!);
@@ -45,29 +43,20 @@ const Provider: React.FunctionComponent = () => {
         [stackAtom, QUEUE_DEFAULT_STATE],
       ]}
     >
-      <main className="w-screen h-screen grid grid-cols-[minmax(12rem,_16rem)_autofit]">
-        <Navbar />
-        <NavbarContent ref={ref}>
-          <React.Suspense fallback={<h1>loading in provider</h1>}>
-            <Routes>
-              <Route index element={<h1>index</h1>} />
-              <Route path="queue" element={<Queue />} />
-              <Route path="search" element={<Search />} />
-              <Route path="artists" element={<Artists />} />
-              <Route path="artist/:id" element={<Artist />} />
-              <Route path="albums" element={<Albums />} />
-              <Route path="album/:id" element={<Album />} />
-              <Route path="playlists" element={<Playlists />} />
-              <Route path="playlist/:id" element={<Playlist />} />
-              <Route path="*" element={<NotFound />} />
-            </Routes>
-          </React.Suspense>
-        </NavbarContent>
-        <Player />
-        <ScrollToTop
-          ele={ref.current?.firstChild as HTMLElement | undefined | null}
-        />
-      </main>
+      <App>
+        <Routes>
+          <Route index element={<h1>index</h1>} />
+          <Route path="queue" element={<Queue />} />
+          <Route path="search" element={<Search />} />
+          <Route path="artists" element={<Artists />} />
+          <Route path="artist/:id" element={<Artist />} />
+          <Route path="albums" element={<Albums />} />
+          <Route path="album/:id" element={<Album />} />
+          <Route path="playlists" element={<Playlists />} />
+          <Route path="playlist/:id" element={<Playlist />} />
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </App>
     </JotaiProvider>
   );
 };

@@ -14,13 +14,14 @@ import {
   BackwardIcon as Backward,
 } from "@heroicons/react/24/solid";
 
-import Audio from "./audio";
-import IconButton from "../icon-button";
-import { connectionAtom } from "../../stores/connection";
-import { usePlayer, PlayerStatus } from "../../stores/player";
-import { useQueue, useStack } from "../../stores/queue";
-import { StandardWidth } from "../standard";
-import { RING } from "../../const";
+import { connectionAtom } from "../stores/connection";
+import { usePlayer, PlayerStatus } from "../stores/player";
+import { useQueue, useStack } from "../stores/queue";
+import { RING } from "../const";
+
+import { StandardWidth } from "./standard";
+import Audio from "./player-audio";
+import IconButton from "./icon-button";
 
 const SpinningCircle: React.FC<React.SVGProps<SVGSVGElement>> = ({
   className,
@@ -83,7 +84,7 @@ const Player: React.FunctionComponent = () => {
       ? SpinningCircle
       : Play;
   return (
-    <section className="fixed left-48 md:left-64 xl:left-72 right-0 bottom-0 h-24 flex border-t dark:border-neutral-700">
+    <section className="flex border-t dark:border-neutral-700">
       <Audio onTime={setTime} seek={seekTime} onEnd={nextTrack} />
       <StandardWidth className="mx-auto align-center justify-between py-3">
         <div className="flex flex-1 flex-row items-center justify-between">

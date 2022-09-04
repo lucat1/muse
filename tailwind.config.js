@@ -17,14 +17,12 @@ module.exports = {
       "3xl": "1792px",
     },
     extend: {
-      animation: {
-        scale: "scale-in 250ms ease-out",
+      gridTemplateColumns: {
+        layout: "minmax(12rem, 16rem) auto",
+        smlayout: "auto",
       },
-      keyframes: {
-        "scale-in": {
-          "0%": { opacity: 0, transform: "scale(0)" },
-          "100%": { opacity: 1, transform: "scale(1)" },
-        },
+      gridTemplateRows: {
+        layout: "4rem minmax(0, auto) 6rem",
       },
     },
   },

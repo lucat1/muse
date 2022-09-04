@@ -8,7 +8,7 @@ import {
 const Dot: React.FC<PrimitiveDivProps & SeparatorProps> = (props) => (
   <Root
     {...props}
-    className={`inline-flex w-1 h-1 mx-2 rounded-full bg-current ${
+    className={`inline-flex w-1 h-1 shrink-0 mx-2 rounded-full bg-current ${
       props.className || ""
     }`}
   />
