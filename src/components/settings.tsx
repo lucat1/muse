@@ -63,12 +63,7 @@ const Settings: React.FC<
             description="Scrobble to last.fm or listembrainz.org when listeinig to tracks"
             atom={scrobbleAtom}
           ></SettingBoolean>
-          <Separator />
-          <SettingBoolean
-            title="Scrobble"
-            description="Scrobble to last.fm or listembrainz.org when listeinig to tracks"
-            atom={scrobbleAtom}
-          ></SettingBoolean>
+          {/*<Separator />*/}
         </main>
       </Dialog.Content>
     </Dialog.Portal>
