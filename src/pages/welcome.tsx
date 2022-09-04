@@ -1,6 +1,6 @@
 import * as React from "react";
-import { useNavigate, Link } from "react-router-dom";
-import { useAtom } from "jotai";
+import { useNavigate, Link, Navigate } from "react-router-dom";
+import { useAtom, useAtomValue } from "jotai";
 import debounce from "debounce";
 
 import { RING_ALWAYS } from "../const";
@@ -66,14 +66,10 @@ const Welcome = () => {
   React.useEffect(() => {
     setTitle("Home");
   }, []);
-  const navigate = useNavigate();
-  const [conns] = useAtom(connectionsAtom);
-  const memo = React.useMemo(() => conns, []);
-  React.useEffect(() => {
-    if (memo.list.length == 0) return navigate("/connect", { replace: true });
-    if (memo.default != undefined)
-      navigate(`/${memo.default}/`, { replace: true });
-  }, [memo]);
+  const conns = useAtomValue(connectionsAtom);
+  if (conns.list.length == 0) return <Navigate to="/connect" replace={true} />;
+  if (conns.default != undefined)
+    return <Navigate to={`/${conns.default}/`} replace={true} />;
 
   return (
     <MinimalWrapper>

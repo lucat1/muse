@@ -13,8 +13,15 @@ const SettingBoolean: React.FC<
         checked={val}
         onCheckedChange={setVal}
         value={val ? "on" : "off"}
+        className="w-14 h-8 bg-neutral-200 dark:bg-neutral-800 rounded-full"
       >
-        <Switch.Thumb />
+        <Switch.Thumb
+          className={`block w-6 h-6 m-1 rounded-full transition-all ease-in-out [&[data-state="checked"]]:translate-x-6 ${
+            val
+              ? "bg-red-500 dark:bg-red-400"
+              : "bg-neutral-900 dark:bg-neutral-100"
+          }`}
+        />
       </Switch.Root>
     </Setting>
   );

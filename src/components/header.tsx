@@ -10,6 +10,7 @@ import { connectionsAtom, connectionAtom } from "../stores/connection";
 import ThemeButton from "./theme-button";
 import Logo from "./logo";
 import IconButton from "./icon-button";
+import Settings from "./settings";
 
 const Header: React.FC = () => {
   const connection = useAtomValue(connectionAtom);
@@ -25,6 +26,7 @@ const Header: React.FC = () => {
         <Logo to={`/${connection.id}/`} />
       </div>
       <div className="flex">
+        <Settings className="mr-3" />
         <ThemeButton className="mr-3" />
         <IconButton
           aria-label="Logout"

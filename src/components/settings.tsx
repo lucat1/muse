@@ -56,7 +56,7 @@ const Settings: React.FC<
         </Dialog.Close>
         <main
           role="list"
-          className="grid grid-cols-[5fr_2fr] py-4 overflow-y-auto"
+          className="grid grid-cols-[auto,fit-content(8rem)] py-4 overflow-y-auto"
         >
           <SettingBoolean
             title="Scrobble"

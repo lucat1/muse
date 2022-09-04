@@ -2,8 +2,10 @@ import * as React from "react";
 import { useAtomValue } from "jotai";
 
 import { PlayerStatus, usePlayer } from "../stores/player";
-import { getURL } from "../fetcher";
+import { fetcher, getURL } from "../fetcher";
+import { SCROBBLE } from "../const";
 import { connectionAtom } from "../stores/connection";
+import { scrobbleAtom } from "../stores/settings";
 
 export interface AudioProps {
   onTime(time: number): void;
@@ -13,6 +15,7 @@ export interface AudioProps {
 
 const Audio: React.FC<AudioProps> = ({ onTime, seek, onEnd }) => {
   const connection = useAtomValue(connectionAtom);
+  const shouldScrobble = useAtomValue(scrobbleAtom);
   const { song, status, loading, play } = usePlayer();
   const audio = React.useRef<HTMLAudioElement>(null);
   React.useEffect(() => {
@@ -37,13 +40,16 @@ const Audio: React.FC<AudioProps> = ({ onTime, seek, onEnd }) => {
     };
   }, [audio.current, loading, play, onTime, onEnd]);
 
+  // TODO: debounce scrobble
+  const scrobble = () => {
+    if (song?.id && shouldScrobble)
+      fetcher(`${SCROBBLE}?id=${song.id}`, connection, {
+        method: "POST",
+      });
+  };
   React.useEffect(() => {
     if (audio.current) audio.current.currentTime = 0;
-    // TODO: reintroduce scrobbling
-    // if (player.song)
-    //   fetcher(`${SCROBBLE}?id=${player.song.id}`, connection, {
-    //     method: "POST",
-    //   });
+    scrobble();
   }, [audio.current?.src]);
   React.useEffect(() => {
     if (!audio.current) return;
