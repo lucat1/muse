@@ -5,17 +5,19 @@ import { useAtom } from "jotai";
 
 import { PING } from "../const";
 import { Connection, connectionsAtom } from "../stores/connection";
+import { defaultSettings } from "../stores/settings";
 import { titleAtom } from "../stores/title";
 import { getURL } from "../fetcher";
-import Input from "../components/input";
-import Button from "../components/button";
-import MinimalWrapper from "../components/minimal-wrapper";
 import type {
   SubsonicWrapperResponse,
   SubsonicBaseResponse,
   SubsonicPingResponse,
   SubsonicErrorResponse,
 } from "../types";
+
+import Input from "../components/input";
+import Button from "../components/button";
+import MinimalWrapper from "../components/minimal-wrapper";
 
 const salt = (len: number) => {
   let result = "";
@@ -38,6 +40,12 @@ const Label: React.FC<
   />
 );
 
+interface FormData {
+  host: string;
+  username: string;
+  password: string;
+}
+
 const SALT_LENGTH = 32;
 const Welcome = () => {
   const [_, setTitle] = useAtom(titleAtom);
@@ -53,19 +61,24 @@ const Welcome = () => {
     setError,
     clearErrors,
     formState: { errors },
-  } = useForm<Connection & { account: any }>();
+  } = useForm<FormData & { account: any }>();
   const onSubmit = React.useCallback(
-    async (conn: Connection) => {
+    async (conn: FormData) => {
       setLoading(true);
       clearErrors("account");
-      const connection: Connection = { ...conn, salt: salt(SALT_LENGTH) };
+      const id = conns.list.length;
+      const connection: Connection = {
+        ...conn,
+        id,
+        salt: salt(SALT_LENGTH),
+        settings: defaultSettings,
+      };
       try {
         const res = await fetch(getURL(PING, connection));
         const json: SubsonicWrapperResponse<
           SubsonicBaseResponse<SubsonicPingResponse | SubsonicErrorResponse>
         > = await res.json();
         if (res.status == 200 && json["subsonic-response"].status == "ok") {
-          const id = conns.list.length;
           setConns({
             ...conns,
             default: conns.default != undefined ? conns.default : id,

@@ -1,12 +1,19 @@
-export type OptionType = "boolean" | "multi";
-export interface Option<T> {
-  type: OptionType;
-  values: T[];
-  default: T;
+import { focusAtom } from "jotai/optics";
+
+import { connectionAtom } from "./connection";
+
+export interface Settings {
+  scrobble: boolean;
 }
 
-export interface BooleanOption extends Option<boolean> {
-  type: "boolean";
-  values: [true, false];
-  default: false;
-}
+export const defaultSettings: Settings = {
+  scrobble: false,
+};
+
+export const settingsAtom = focusAtom(connectionAtom, (optic) =>
+  optic.prop("settings")
+);
+
+export const scrobbleAtom = focusAtom(settingsAtom, (optic) =>
+  optic.prop("scrobble")
+);

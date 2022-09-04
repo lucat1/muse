@@ -2,12 +2,14 @@ import { atom, SetStateAction } from "jotai";
 import { atomWithStorage, splitAtom } from "jotai/utils";
 import { focusAtom } from "jotai/optics";
 
+import type { Settings } from "./settings";
+
 interface InternalConnection {
   host: string;
   username: string;
   password: string;
   salt: string;
-  // settings: Settings;
+  settings: Settings;
 }
 
 export interface Connection extends InternalConnection {
@@ -48,6 +50,7 @@ export const connectionsAtom = atom(
         username: c.username,
         password: c.password,
         salt: c.salt,
+        settings: c.settings,
       })),
     } as InternalConnections);
   }

@@ -27,9 +27,11 @@
   "dependencies": {
     "@heroicons/react": "^2.0.0",
     "@radix-ui/react-context-menu": "^1.0.0",
+    "@radix-ui/react-dialog": "^1.0.0",
     "@radix-ui/react-select": "^1.0.0",
     "@radix-ui/react-separator": "^1.0.0",
     "@radix-ui/react-slider": "^0.1.4",
+    "@radix-ui/react-switch": "^1.0.0",
     "blueimp-md5": "^2.19.0",
     "debounce": "^1.2.1",
     "format-duration": "^2.0.0",

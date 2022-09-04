@@ -23,6 +23,7 @@ import { getURL } from "../fetcher";
 import Image from "./img";
 import Playlists from "./playlists";
 import ThemeButton from "./theme-button";
+import Settings from "./settings";
 import Logo from "./logo";
 import IconButton from "./icon-button";
 
@@ -87,7 +88,8 @@ const Navbar: React.FC = () => {
       <section className="flex flex-row justify-between items-center p-4 border-b dark:border-neutral-700">
         <Logo to={`/${connection.id}/`} />
         <div className="flex">
-          <ThemeButton className="mr-3" />
+          <Settings className="md:mr-3" />
+          <ThemeButton className="md:mr-3" />
           <IconButton
             aria-label="Logout"
             onClick={(_) => {

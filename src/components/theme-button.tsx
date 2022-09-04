@@ -8,7 +8,7 @@ const ThemeButton: React.FC<
     React.ButtonHTMLAttributes<HTMLButtonElement>,
     HTMLButtonElement
   >
-> = ({ children: _, ...props }) => {
+> = ({ ref: _, ...props }) => {
   const [isDark, setDark] = React.useState(
     document.documentElement.classList.contains("dark")
   );
