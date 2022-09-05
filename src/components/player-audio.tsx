@@ -21,22 +21,22 @@ const Audio: React.FC<AudioProps> = ({ onTime, seek, onEnd }) => {
   React.useEffect(() => {
     if (!audio.current) return;
     const handleTime = () => onTime(audio.current?.currentTime || 0);
-    const handleSeeking = () => loading();
-    const handleSeeked = () => play();
+    const handleLoading = () => loading();
+    const handleNotLoading = () => play();
 
     audio.current.addEventListener("canplay", play);
     audio.current.addEventListener("timeupdate", handleTime);
     audio.current.addEventListener("ended", onEnd);
-    audio.current.addEventListener("seeking", handleSeeking);
-    audio.current.addEventListener("seeked", handleSeeked);
+    audio.current.addEventListener("waiting", handleLoading);
+    audio.current.addEventListener("loadeddata", handleNotLoading);
     return () => {
       if (!audio.current) return;
 
       audio.current.removeEventListener("canplay", play);
       audio.current.removeEventListener("timeupdate", handleTime);
       audio.current.removeEventListener("ended", onEnd);
-      audio.current.removeEventListener("seeking", handleSeeking);
-      audio.current.removeEventListener("seeked", handleSeeked);
+      audio.current.removeEventListener("waiting", handleLoading);
+      audio.current.removeEventListener("loadeddata", handleNotLoading);
     };
   }, [audio.current, loading, play, onTime, onEnd]);
 
