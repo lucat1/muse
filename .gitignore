@@ -131,3 +131,5 @@ dist
 
 
 build
+public/*.png
+public/*.jpg

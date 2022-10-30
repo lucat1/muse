@@ -1,0 +1,7 @@
+{
+  "name": "Muse - Subsonic client",
+  "short_name": "Muse",
+  "start_url": "/muse/",
+  "display": "standalone",
+  "theme_color": "#ef4444"
+}

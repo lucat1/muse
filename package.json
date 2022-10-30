@@ -16,13 +16,14 @@
     "optics-ts": "^2.3.0",
     "postcss": "^8.4.12",
     "prettier": "^2.6.2",
+    "pwa-asset-generator": "^6.2.0",
     "snowpack": "^3.8.8",
     "tailwindcss": "^3.0.24",
     "typescript": "^4.6.3"
   },
   "scripts": {
     "dev": "snowpack dev",
-    "build": "snowpack build"
+    "build": "cd public && pwa-asset-generator --dark-mode --background \"#262626\" logo-dark.svg -i index.html -m manifest.json --path \"/muse\" && pwa-asset-generator --background \"#f5f5f5\" logo-light.svg -i index.html -m manifest.json --path \"/muse\" && cd .. && snowpack build"
   },
   "dependencies": {
     "@heroicons/react": "^2.0.0",
