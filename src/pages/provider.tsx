@@ -18,15 +18,15 @@ import {
 
 import App from "../components/app";
 
-import Search from "./search";
-import Artists from "./artists";
-import Artist from "./artist";
-import Albums from "./albums";
-import Album from "./album";
-import Playlists from "./playlists";
-import Playlist from "./playlist";
-import NotFound from "./not-found";
 import Queue from "./queue";
+const Search = React.lazy(() => import("./search"))
+const Artists = React.lazy(() => import("./artists"))
+const Artist = React.lazy(() => import("./artist"))
+const Albums = React.lazy(() => import("./albums"))
+const Album = React.lazy(() => import("./playlist"))
+const Playlists = React.lazy(() => import("./playlists"))
+const Playlist = React.lazy(() => import("./playlist"))
+const NotFound = React.lazy(() => import("./not-found"))
 
 const Provider: React.FunctionComponent = () => {
   const { server } = useParams();

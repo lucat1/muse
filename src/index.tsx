@@ -2,11 +2,14 @@ import * as React from "react";
 import { createRoot } from "react-dom/client";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
+import './index.css'
+
 import ScrollToTop from "./components/scroll-to-top";
 import Welcome from "./pages/welcome";
 import Connect from "./pages/connect";
 import NotFound from "./pages/not-found";
-import Provider from "./pages/provider";
+
+const Provider = React.lazy(() => import("./pages/provider"))
 
 createRoot(document.getElementById("root")!).render(
   <React.StrictMode>

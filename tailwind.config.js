@@ -2,7 +2,7 @@
 module.exports = {
   mode: "jit",
   darkMode: "class",
-  content: ["./public/**/*.html", "./src/**/*.{ts,tsx,css}"],
+  content: ["./index.html", "./src/**/*.{ts,tsx,css}"],
   plugins: [require("@tailwindcss/typography")],
   theme: {
     fontFamily: {
