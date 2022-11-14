@@ -53,11 +53,11 @@ jobs:
       - name: Build with Snowpack
         run: ${{ steps.detect-package-manager.outputs.runner }} build
       - name: Link index.html to 404.html
-        run: cp build/index.html build/404.html
+        run: cp dist/index.html dist/404.html
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v1
         with:
-          path: ./build
+          path: ./dist
 
   # Deployment job
   deploy:
