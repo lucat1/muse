@@ -18,7 +18,7 @@
   },
   "scripts": {
     "dev": "vite",
-    "build": "vite build --emptyOutDir && cd dist && pwa-asset-generator --dark-mode --background \"#262626\" logo-dark.svg -i index.html -m manifest.json --path \"/muse\" && pwa-asset-generator --background \"#f5f5f5\" logo-light.svg -i index.html -m manifest.json --path \"/muse\""
+    "build": "vite build --base '/muse/' --emptyOutDir && cd dist && pwa-asset-generator --dark-mode --background \"#262626\" logo-dark.svg -i index.html -m manifest.json --path \"/muse\" && pwa-asset-generator --background \"#f5f5f5\" logo-light.svg -i index.html -m manifest.json --path \"/muse\""
   },
   "dependencies": {
     "@heroicons/react": "^2.0.0",
