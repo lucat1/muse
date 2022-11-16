@@ -30,7 +30,11 @@ const RawArtistReleases: React.FC<{
       }
     >
       {expanded ? (
-        <div className="flex flex-row flex-wrap">{albums}</div>
+        <div className="flex items-center justify-center flex-nowrap">
+          <div className="flex flex-row flex-wrap shrink basis-11/12">
+          {albums}
+          </div>
+        </div>
       ) : (
         <ScrollView className="flex flex-row overflow-x-auto">
           {albums}
