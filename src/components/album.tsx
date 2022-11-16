@@ -1,11 +1,11 @@
-import * as React from "react";
-import { Link } from "react-router-dom";
-import formatDuration from "format-duration";
-import { useURL } from "../fetcher";
-import type { SubsonicAlbumBase } from "../types";
+import * as React from "react"
+import { Link } from "react-router-dom"
+import formatDuration from "format-duration"
+import { useURL } from "../fetcher"
+import type { SubsonicAlbumBase } from "../types"
 
-import Image from "./img";
-import Dot from "./dot";
+import Image from "./img"
+import Dot from "./dot"
 
 const Album: React.FC<{ album: SubsonicAlbumBase }> = ({ album }) => (
   <div className="w-32 lg:w-64 mx-8 my-4 flex-shrink-0">
@@ -27,6 +27,6 @@ const Album: React.FC<{ album: SubsonicAlbumBase }> = ({ album }) => (
       </span>
     </div>
   </div>
-);
+)
 
-export default Album;
+export default Album

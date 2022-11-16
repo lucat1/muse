@@ -1,21 +1,21 @@
-import * as React from "react";
-import { Link } from "react-router-dom";
-import { useAtomValue } from "jotai";
+import * as React from "react"
+import { Link } from "react-router-dom"
+import { useAtomValue } from "jotai"
 import {
   HeartIcon as HeartOutline,
   ChevronRightIcon as ChevronRight,
   ChevronDoubleRightIcon as ChevronDoubleRight,
   ChevronDoubleLeftIcon as ChevronDoubleLeft,
   ArrowLongDownIcon as ArrowDown,
-  InformationCircleIcon as Info,
-} from "@heroicons/react/24/outline";
-import { HeartIcon as HeartSolid } from "@heroicons/react/24/solid";
-import formatDuration from "format-duration";
+  InformationCircleIcon as Info
+} from "@heroicons/react/24/outline"
+import { HeartIcon as HeartSolid } from "@heroicons/react/24/solid"
+import formatDuration from "format-duration"
 
-import { fetcher, useURL } from "../fetcher";
-import { connectionAtom } from "../stores/connection";
-import { STAR, UNSTAR } from "../const";
-import Image from "./img";
+import { fetcher, useURL } from "../fetcher"
+import { connectionAtom } from "../stores/connection"
+import { STAR, UNSTAR } from "../const"
+import Image from "./img"
 import {
   Root,
   Trigger,
@@ -25,10 +25,10 @@ import {
   Content,
   Item,
   ItemIcon,
-  ITEM_ICON_CLASS,
-} from "./contex-menu";
-import type { SubsonicSong } from "../types";
-import IconButton from "./icon-button";
+  ITEM_ICON_CLASS
+} from "./contex-menu"
+import type { SubsonicSong } from "../types"
+import IconButton from "./icon-button"
 
 export enum Fields {
   NUMBER = "number",
@@ -38,60 +38,57 @@ export enum Fields {
   ALBUM = "album",
   ARTIST = "artist",
   LENGTH = "length",
-  FORMAT = "format",
+  FORMAT = "format"
 }
-export type TrackProps = { [key in Fields]?: number };
+export type TrackProps = { [key in Fields]?: number }
 export interface TrackActions {
-  play(): void;
+  play(): void
 }
 
-const show = (val: number | undefined) => val && val != 0;
+const show = (val: number | undefined) => val && val != 0
 const Center: React.FC<
   React.PropsWithChildren<React.HTMLProps<HTMLElement> & { as?: string }>
 > = ({ as, ...props }) => {
-  const AS = as || ("div" as any);
+  const AS = as || ("div" as any)
   return (
     <AS
       {...props}
       className={`flex flex-row items-center ${props.className || ""}`}
     />
-  );
-};
+  )
+}
 
 const BASE_BG =
-  "group-focus:bg-neutral-200 group-hover:bg-neutral-200 dark:group-focus:bg-neutral-800 dark:group-hover:bg-neutral-800";
-const BASE = `min-h-[3.5rem] min-h-fit p-2 lg:px-4 ${BASE_BG}`;
+  "group-focus:bg-neutral-200 group-hover:bg-neutral-200 dark:group-focus:bg-neutral-800 dark:group-hover:bg-neutral-800"
+const BASE = `min-h-[3.5rem] min-h-fit p-2 lg:px-4 ${BASE_BG}`
 const Track: React.FC<TrackProps & { song: SubsonicSong } & TrackActions> = ({
   song,
   play,
   ...fields
 }) => {
-  const connection = useAtomValue(connectionAtom);
-  const Heart = song.starred ? HeartSolid : HeartOutline;
+  const connection = useAtomValue(connectionAtom)
+  const Heart = song.starred ? HeartSolid : HeartOutline
 
   const handlePlay = React.useCallback(
     (e: Event) => {
-      e.preventDefault();
-      e.stopPropagation();
-      play();
+      e.preventDefault()
+      e.stopPropagation()
+      play()
     },
     [play]
-  );
-  const [starring, isStarring] = React.useState(false);
+  )
+  const [starring, isStarring] = React.useState(false)
   const like = React.useCallback(async () => {
-    isStarring(true);
+    isStarring(true)
     try {
-      await fetcher(
-        `${song.starred ? UNSTAR : STAR}?id=${song.id}`,
-        connection
-      );
-      song.starred = song.starred ? undefined : new Date().toString();
+      await fetcher(`${song.starred ? UNSTAR : STAR}?id=${song.id}`, connection)
+      song.starred = song.starred ? undefined : new Date().toString()
     } catch (err) {
       // TODO: handle fetch errors
-      console.warn(`Could not like track ${song.id}:`, err);
+      console.warn(`Could not like track ${song.id}:`, err)
     }
-    isStarring(false);
-  }, [song, isStarring]);
+    isStarring(false)
+  }, [song, isStarring])
 
   return (
     <Root>
@@ -219,6 +216,6 @@ const Track: React.FC<TrackProps & { song: SubsonicSong } & TrackActions> = ({
         </Content>
       </Portal>
     </Root>
-  );
-};
-export default Track;
+  )
+}
+export default Track

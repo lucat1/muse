@@ -1,6 +1,6 @@
-import * as React from "react";
+import * as React from "react"
 
-import { RING } from "../const";
+import { RING } from "../const"
 
 const Input = React.forwardRef<
   HTMLInputElement,
@@ -24,7 +24,7 @@ const Input = React.forwardRef<
         {placeholder}
       </label>
     </>
-  );
-});
+  )
+})
 
-export default Input;
+export default Input

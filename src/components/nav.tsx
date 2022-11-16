@@ -1,33 +1,33 @@
-import * as React from "react";
-import { useLocation, Link } from "react-router-dom";
-import { useAtomValue } from "jotai";
+import * as React from "react"
+import { useLocation, Link } from "react-router-dom"
+import { useAtomValue } from "jotai"
 import {
   HomeIcon as HomeFull,
   MagnifyingGlassIcon as SearchFull,
   UsersIcon as UsersFull,
-  RectangleStackIcon as CollectionFull,
-} from "@heroicons/react/24/solid";
+  RectangleStackIcon as CollectionFull
+} from "@heroicons/react/24/solid"
 import {
   HomeIcon as HomeOutline,
   MagnifyingGlassIcon as SearchOutline,
   UsersIcon as UsersOutline,
-  RectangleStackIcon as CollectionOutline,
-} from "@heroicons/react/24/outline";
+  RectangleStackIcon as CollectionOutline
+} from "@heroicons/react/24/outline"
 
-import { connectionAtom } from "../stores/connection";
-import { RING } from "../const";
-import Playlists from "./playlists";
+import { connectionAtom } from "../stores/connection"
+import { RING } from "../const"
+import Playlists from "./playlists"
 
 const Navbar: React.FC = () => {
-  const connection = useAtomValue(connectionAtom);
-  const { pathname } = useLocation();
+  const connection = useAtomValue(connectionAtom)
+  const { pathname } = useLocation()
   const section = React.useMemo(() => {
-    if (/artists?/.test(pathname)) return "artists";
-    else if (/albums?/.test(pathname)) return "albums";
-    else if (/playlists?/.test(pathname)) return "playlists";
-    else if (/search/.test(pathname)) return "search";
-    else return "home";
-  }, [pathname]);
+    if (/artists?/.test(pathname)) return "artists"
+    else if (/albums?/.test(pathname)) return "albums"
+    else if (/playlists?/.test(pathname)) return "playlists"
+    else if (/search/.test(pathname)) return "search"
+    else return "home"
+  }, [pathname])
 
   const paths = React.useMemo(
     () => [
@@ -35,29 +35,29 @@ const Navbar: React.FC = () => {
         selected: section == "home",
         link: `/${connection.id}/`,
         name: "Home",
-        icon: section == "home" ? HomeFull : HomeOutline,
+        icon: section == "home" ? HomeFull : HomeOutline
       },
       {
         selected: section == "search",
         link: `/${connection.id}/search`,
         name: "Search",
-        icon: section == "search" ? SearchFull : SearchOutline,
+        icon: section == "search" ? SearchFull : SearchOutline
       },
       {
         selected: section == "artists",
         link: `/${connection.id}/artists`,
         name: "Artists",
-        icon: section == "artists" ? UsersFull : UsersOutline,
+        icon: section == "artists" ? UsersFull : UsersOutline
       },
       {
         selected: section == "albums",
         link: `/${connection.id}/albums`,
         name: "Albums",
-        icon: section == "albums" ? CollectionFull : CollectionOutline,
-      },
+        icon: section == "albums" ? CollectionFull : CollectionOutline
+      }
     ],
     [section]
-  );
+  )
 
   return (
     <nav className="hidden col-start-1 col-end-1 md:flex flex-col border-r dark:border-neutral-700">
@@ -91,7 +91,7 @@ const Navbar: React.FC = () => {
         <Playlists />
       </section>
     </nav>
-  );
-};
+  )
+}
 
-export default Navbar;
+export default Navbar

@@ -1,12 +1,12 @@
-import * as React from "react";
-import { PrimitiveAtom, useAtom } from "jotai";
-import * as Switch from "@radix-ui/react-switch";
-import { Setting, SettingProps } from "./settings";
+import * as React from "react"
+import { PrimitiveAtom, useAtom } from "jotai"
+import * as Switch from "@radix-ui/react-switch"
+import { Setting, SettingProps } from "./settings"
 
 const SettingBoolean: React.FC<
   SettingProps & { atom: PrimitiveAtom<boolean> }
 > = ({ atom, ...props }) => {
-  const [val, setVal] = useAtom(atom);
+  const [val, setVal] = useAtom(atom)
   return (
     <Setting {...props}>
       <Switch.Root
@@ -24,7 +24,7 @@ const SettingBoolean: React.FC<
         />
       </Switch.Root>
     </Setting>
-  );
-};
+  )
+}
 
-export default SettingBoolean;
+export default SettingBoolean

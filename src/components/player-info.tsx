@@ -1,19 +1,19 @@
-import * as React from "react";
-import { Link } from "react-router-dom";
-import { useAtomValue } from "jotai";
+import * as React from "react"
+import { Link } from "react-router-dom"
+import { useAtomValue } from "jotai"
 
-import { usePlayer } from "../stores/player";
-import { connectionAtom } from "../stores/connection";
-import { getURL } from "../fetcher";
-import { GET_COVER_ART } from "../const";
-import Image, { ImageSkeleton } from "./img";
-import Dot from "./dot";
+import { usePlayer } from "../stores/player"
+import { connectionAtom } from "../stores/connection"
+import { getURL } from "../fetcher"
+import { GET_COVER_ART } from "../const"
+import Image, { ImageSkeleton } from "./img"
+import Dot from "./dot"
 
-const IMAGE_CLASS = "w-16 h-16";
+const IMAGE_CLASS = "w-16 h-16"
 
 const PlayerInfo: React.FC = () => {
-  const connection = useAtomValue(connectionAtom);
-  const { song } = usePlayer();
+  const connection = useAtomValue(connectionAtom)
+  const { song } = usePlayer()
   return (
     <section className="hidden md:flex flex items-center px-4 border-t dark:border-neutral-700">
       {song ? (
@@ -69,7 +69,7 @@ const PlayerInfo: React.FC = () => {
         </div>
       </div>
     </section>
-  );
-};
+  )
+}
 
-export default PlayerInfo;
+export default PlayerInfo

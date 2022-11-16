@@ -1,9 +1,9 @@
-import * as React from "react";
+import * as React from "react"
 import {
   Root,
   PrimitiveDivProps,
-  SeparatorProps,
-} from "@radix-ui/react-separator";
+  SeparatorProps
+} from "@radix-ui/react-separator"
 
 const Dot: React.FC<PrimitiveDivProps & SeparatorProps> = (props) => (
   <Root
@@ -12,6 +12,6 @@ const Dot: React.FC<PrimitiveDivProps & SeparatorProps> = (props) => (
       props.className || ""
     }`}
   />
-);
+)
 
-export default Dot;
+export default Dot

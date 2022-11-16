@@ -1,10 +1,10 @@
-import * as React from "react";
+import * as React from "react"
 
-import Logo from "../components/logo";
-import ThemeButton from "../components/theme-button";
+import Logo from "../components/logo"
+import ThemeButton from "../components/theme-button"
 
 const MinimalWrapper: React.FC<React.PropsWithChildren<{}>> = ({
-  children,
+  children
 }) => (
   <>
     <div className="fixed top-0 left-0 p-4">
@@ -15,6 +15,6 @@ const MinimalWrapper: React.FC<React.PropsWithChildren<{}>> = ({
     </div>
     {children}
   </>
-);
+)
 
 export default MinimalWrapper

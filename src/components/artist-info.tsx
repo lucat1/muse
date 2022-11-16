@@ -1,29 +1,27 @@
-import * as React from "react";
-import { useAtom } from "jotai";
-import type { SubsonicArtistInfoResponse, SubsonicArtist } from "../types";
-import useSubsonic from "../fetcher";
-import { GET_ARTIST, GET_ARTIST_INFO } from "../const";
-import { titleAtom } from "../stores/title";
+import * as React from "react"
+import { useAtom } from "jotai"
+import type { SubsonicArtistInfoResponse, SubsonicArtist } from "../types"
+import useSubsonic from "../fetcher"
+import { GET_ARTIST, GET_ARTIST_INFO } from "../const"
+import { titleAtom } from "../stores/title"
 
-import Image, { ImageSkeleton } from "../components/img";
+import Image, { ImageSkeleton } from "../components/img"
 
-const SECITON_CLASSES = "py-4 pt-8 flex flex-row items-end";
-const IMAGE_CLASSES = "w-32 md:w-48 lg:w-64 aspect-square rounded-lg";
-const HEADING_CLASSES = "mx-8 text-2xl md:text-3xl xl:text-4xl font-extrabold";
+const SECITON_CLASSES = "py-4 pt-8 flex flex-row items-end"
+const IMAGE_CLASSES = "w-32 md:w-48 lg:w-64 aspect-square rounded-lg"
+const HEADING_CLASSES = "mx-8 text-2xl md:text-3xl xl:text-4xl font-extrabold"
 const ARTICLE_CLASSES =
-  "w-full prose dark:prose-invert prose-neutral prose-sm xl:prose-base max-w-none text-justify font-serif";
+  "w-full prose dark:prose-invert prose-neutral prose-sm xl:prose-base max-w-none text-justify font-serif"
 
 const RawArtistInfo: React.FC<{ id: string }> = ({ id }) => {
-  const { data: artist } = useSubsonic<SubsonicArtist>(
-    `${GET_ARTIST}?id=${id}`
-  );
-  const [_, setTitle] = useAtom(titleAtom);
+  const { data: artist } = useSubsonic<SubsonicArtist>(`${GET_ARTIST}?id=${id}`)
+  const [_, setTitle] = useAtom(titleAtom)
   React.useEffect(() => {
-    setTitle(artist?.name || "Unkown artist");
-  }, [artist]);
+    setTitle(artist?.name || "Unkown artist")
+  }, [artist])
   const { data: artistInfo } = useSubsonic<SubsonicArtistInfoResponse>(
     `${GET_ARTIST_INFO}?id=${artist?.id}`
-  );
+  )
   return (
     <>
       <section className={SECITON_CLASSES}>
@@ -41,12 +39,12 @@ const RawArtistInfo: React.FC<{ id: string }> = ({ id }) => {
       <article
         className={ARTICLE_CLASSES}
         dangerouslySetInnerHTML={{
-          __html: artistInfo?.biography as string,
+          __html: artistInfo?.biography as string
         }}
       />
     </>
-  );
-};
+  )
+}
 
 export const ArtistInfoSkeleton: React.FC = () => {
   return (
@@ -61,15 +59,15 @@ export const ArtistInfoSkeleton: React.FC = () => {
         className={`w-full h-24 rounded-lg bg-neutral-200 dark:bg-neutral-700 ${ARTICLE_CLASSES}`}
       />
     </>
-  );
-};
+  )
+}
 
 const ArtistInfo: React.FC<{ id: string }> = ({ id }) => {
   return (
     <React.Suspense fallback={<ArtistInfoSkeleton />}>
       <RawArtistInfo id={id} />
     </React.Suspense>
-  );
-};
+  )
+}
 
-export default ArtistInfo;
+export default ArtistInfo

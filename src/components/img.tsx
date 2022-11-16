@@ -1,25 +1,25 @@
-import * as React from "react";
-import { useIntersectionObserver } from "react-intersection-observer-hook";
-import { ErrorBoundary } from "react-error-boundary";
-import { createResource, Resource } from "../util";
+import * as React from "react"
+import { useIntersectionObserver } from "react-intersection-observer-hook"
+import { ErrorBoundary } from "react-error-boundary"
+import { createResource, Resource } from "../util"
 
 const CLASSES =
-  "aspect-square object-cover rounded-lg drop-shadow-md select-none pointer-events-none";
-const cache = new Map<string, Resource<string>>();
+  "aspect-square object-cover rounded-lg drop-shadow-md select-none pointer-events-none"
+const cache = new Map<string, Resource<string>>()
 
 const fetchImage = (source: string): Resource<string> => {
-  let resource = cache.get(source);
-  if (resource) return resource;
+  let resource = cache.get(source)
+  if (resource) return resource
 
   resource = createResource<string>(async () => {
-    const img = new window.Image();
-    img.src = source;
-    await img.decode();
-    return source;
-  });
-  cache.set(source, resource);
-  return resource;
-};
+    const img = new window.Image()
+    img.src = source
+    await img.decode()
+    return source
+  })
+  cache.set(source, resource)
+  return resource
+}
 
 const RawImage = React.forwardRef<
   HTMLImageElement,
@@ -28,7 +28,7 @@ const RawImage = React.forwardRef<
     HTMLImageElement
   >
 >(({ className, src, alt, ...props }, ref) => {
-  src = fetchImage(src!).read();
+  src = fetchImage(src!).read()
   return (
     <img
       {...props}
@@ -37,14 +37,14 @@ const RawImage = React.forwardRef<
       alt={alt}
       className={`${CLASSES} ${className || ""}`}
     />
-  );
-});
+  )
+})
 
 export const ImageSkeleton = React.forwardRef<
   HTMLDivElement,
   {
-    className?: string;
-    alt?: string;
+    className?: string
+    alt?: string
   }
 >(({ className, alt }, ref) => (
   <div
@@ -55,7 +55,7 @@ export const ImageSkeleton = React.forwardRef<
       className || ""
     } bg-neutral-200 dark:bg-neutral-700`}
   />
-));
+))
 
 const Image: React.FC<
   React.DetailedHTMLProps<
@@ -63,9 +63,9 @@ const Image: React.FC<
     HTMLImageElement
   >
 > = ({ className, alt, ...props }) => {
-  const [ref, { entry }] = useIntersectionObserver();
-  const inView = entry && entry.isIntersecting;
-  const fallback = <ImageSkeleton ref={ref} className={className} alt={alt} />;
+  const [ref, { entry }] = useIntersectionObserver()
+  const inView = entry && entry.isIntersecting
+  const fallback = <ImageSkeleton ref={ref} className={className} alt={alt} />
   return (
     <ErrorBoundary fallback={fallback}>
       <React.Suspense fallback={fallback}>
@@ -81,7 +81,7 @@ const Image: React.FC<
         )}
       </React.Suspense>
     </ErrorBoundary>
-  );
-};
+  )
+}
 
-export default Image;
+export default Image

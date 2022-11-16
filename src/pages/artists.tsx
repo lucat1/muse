@@ -1,19 +1,19 @@
-import * as React from "react";
-import { useAtom } from "jotai";
-import useSubsonic from "../fetcher";
-import { GET_ARTISTS } from "../const";
-import { titleAtom } from "../stores/title";
-import type { SubsonicArtistsResponse } from "../types";
+import * as React from "react"
+import { useAtom } from "jotai"
+import useSubsonic from "../fetcher"
+import { GET_ARTISTS } from "../const"
+import { titleAtom } from "../stores/title"
+import type { SubsonicArtistsResponse } from "../types"
 
-import Artist from "../components/artist";
-import Standard from "../components/standard";
+import Artist from "../components/artist"
+import Standard from "../components/standard"
 
 const Artists = () => {
-  const { data } = useSubsonic<SubsonicArtistsResponse>(GET_ARTISTS);
-  const [_, setTitle] = useAtom(titleAtom);
+  const { data } = useSubsonic<SubsonicArtistsResponse>(GET_ARTISTS)
+  const [_, setTitle] = useAtom(titleAtom)
   React.useEffect(() => {
-    setTitle("Artists");
-  }, []);
+    setTitle("Artists")
+  }, [])
 
   return (
     <Standard>
@@ -28,7 +28,7 @@ const Artists = () => {
         </section>
       ))}
     </Standard>
-  );
-};
+  )
+}
 
-export default Artists;
+export default Artists

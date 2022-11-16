@@ -1,32 +1,32 @@
-import * as React from "react";
-import { useNavigate } from "react-router";
-import { useForm } from "react-hook-form";
-import { useAtom } from "jotai";
+import * as React from "react"
+import { useNavigate } from "react-router"
+import { useForm } from "react-hook-form"
+import { useAtom } from "jotai"
 
-import { PING } from "../const";
-import { Connection, connectionsAtom } from "../stores/connection";
-import { defaultSettings } from "../stores/settings";
-import { titleAtom } from "../stores/title";
-import { getURL } from "../fetcher";
+import { PING } from "../const"
+import { Connection, connectionsAtom } from "../stores/connection"
+import { defaultSettings } from "../stores/settings"
+import { titleAtom } from "../stores/title"
+import { getURL } from "../fetcher"
 import type {
   SubsonicWrapperResponse,
   SubsonicBaseResponse,
   SubsonicPingResponse,
-  SubsonicErrorResponse,
-} from "../types";
+  SubsonicErrorResponse
+} from "../types"
 
-import Input from "../components/input";
-import Button from "../components/button";
-import MinimalWrapper from "../components/minimal-wrapper";
+import Input from "../components/input"
+import Button from "../components/button"
+import MinimalWrapper from "../components/minimal-wrapper"
 
 const salt = (len: number) => {
-  let result = "";
+  let result = ""
   const characters =
-    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
   for (let i = 0; i < len; ++i)
-    result += characters.charAt(Math.floor(Math.random() * characters.length));
-  return result;
-};
+    result += characters.charAt(Math.floor(Math.random() * characters.length))
+  return result
+}
 
 const Label: React.FC<
   React.DetailedHTMLProps<
@@ -38,67 +38,67 @@ const Label: React.FC<
     className={`text-red-500 dark:text-red-400 ${className || ""}`}
     {...props}
   />
-);
+)
 
 interface FormData {
-  host: string;
-  username: string;
-  password: string;
+  host: string
+  username: string
+  password: string
 }
 
-const SALT_LENGTH = 32;
+const SALT_LENGTH = 32
 const Welcome = () => {
-  const [_, setTitle] = useAtom(titleAtom);
+  const [_, setTitle] = useAtom(titleAtom)
   React.useEffect(() => {
-    setTitle("New connection");
-  }, []);
-  const navigate = useNavigate();
-  const [conns, setConns] = useAtom(connectionsAtom);
-  const [loading, setLoading] = React.useState(false);
+    setTitle("New connection")
+  }, [])
+  const navigate = useNavigate()
+  const [conns, setConns] = useAtom(connectionsAtom)
+  const [loading, setLoading] = React.useState(false)
   const {
     register,
     handleSubmit,
     setError,
     clearErrors,
-    formState: { errors },
-  } = useForm<FormData & { account: any }>();
+    formState: { errors }
+  } = useForm<FormData & { account: any }>()
   const onSubmit = React.useCallback(
     async (conn: FormData) => {
-      setLoading(true);
-      clearErrors("account");
-      const id = conns.list.length;
+      setLoading(true)
+      clearErrors("account")
+      const id = conns.list.length
       const connection: Connection = {
         ...conn,
         id,
         salt: salt(SALT_LENGTH),
-        settings: defaultSettings,
-      };
+        settings: defaultSettings
+      }
       try {
-        const res = await fetch(getURL(PING, connection));
+        const res = await fetch(getURL(PING, connection))
         const json: SubsonicWrapperResponse<
           SubsonicBaseResponse<SubsonicPingResponse | SubsonicErrorResponse>
-        > = await res.json();
+        > = await res.json()
         if (res.status == 200 && json["subsonic-response"].status == "ok") {
           setConns({
             ...conns,
             default: conns.default != undefined ? conns.default : id,
-            list: conns.list.concat(connection),
-          });
-          navigate(`/${id}/`);
+            list: conns.list.concat(connection)
+          })
+          navigate(`/${id}/`)
         } else {
-          const err = json["subsonic-response"].error as SubsonicErrorResponse;
+          const err = json["subsonic-response"].error as SubsonicErrorResponse
           setError("account", {
             type: "custom",
-            message: `${err.message} (code: ${err.code})`,
-          });
+            message: `${err.message} (code: ${err.code})`
+          })
         }
       } catch (err) {
-        setError("host", { type: "custom", message: "Host unreachable" });
+        setError("host", { type: "custom", message: "Host unreachable" })
       }
-      setLoading(false);
+      setLoading(false)
     },
     [conns, setConns]
-  );
+  )
 
   return (
     <MinimalWrapper>
@@ -116,7 +116,7 @@ const Welcome = () => {
             {...register("host", {
               required: true,
               pattern:
-                /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/i,
+                /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/i
             })}
           />
           {errors.host && <Label htmlFor="host">Invalid host</Label>}
@@ -149,7 +149,7 @@ const Welcome = () => {
         </form>
       </main>
     </MinimalWrapper>
-  );
-};
+  )
+}
 
-export default Welcome;
+export default Welcome

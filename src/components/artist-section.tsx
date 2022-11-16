@@ -1,6 +1,6 @@
-import * as React from "react";
+import * as React from "react"
 
-import Separator from "./separator";
+import Separator from "./separator"
 
 const ArtistSection: React.FC<
   React.PropsWithChildren<{ header: string; extra?: any }>
@@ -16,7 +16,7 @@ const ArtistSection: React.FC<
       </div>
       {children}
     </section>
-  );
-};
+  )
+}
 
-export default ArtistSection;
+export default ArtistSection

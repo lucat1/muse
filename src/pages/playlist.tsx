@@ -1,28 +1,28 @@
-import * as React from "react";
-import { useParams } from "react-router-dom";
-import formatDuration from "format-duration";
-import { useAtom } from "jotai";
+import * as React from "react"
+import { useParams } from "react-router-dom"
+import formatDuration from "format-duration"
+import { useAtom } from "jotai"
 
-import useSubsonic from "../fetcher";
-import { GET_PLAYLIST } from "../const";
-import { titleAtom } from "../stores/title";
-import type { SubsonicPlaylistResponse } from "../types";
+import useSubsonic from "../fetcher"
+import { GET_PLAYLIST } from "../const"
+import { titleAtom } from "../stores/title"
+import type { SubsonicPlaylistResponse } from "../types"
 
-import Standard from "../components/standard";
-import Tracks from "../components/tracks";
-import Dot from "../components/dot";
-import Button from "../components/button";
+import Standard from "../components/standard"
+import Tracks from "../components/tracks"
+import Dot from "../components/dot"
+import Button from "../components/button"
 
 const Playlist = () => {
-  const { id } = useParams();
-  console.log('drawing a playlist', id)
+  const { id } = useParams()
+  console.log("drawing a playlist", id)
   const { data } = useSubsonic<SubsonicPlaylistResponse>(
     `${GET_PLAYLIST}?id=${id}`
-  );
-  const [_, setTitle] = useAtom(titleAtom);
+  )
+  const [_, setTitle] = useAtom(titleAtom)
   React.useEffect(() => {
-    setTitle(data?.name || "Unkown playlist");
-  }, [data]);
+    setTitle(data?.name || "Unkown playlist")
+  }, [data])
 
   return (
     <Standard>
@@ -60,7 +60,7 @@ const Playlist = () => {
         format={-1}
       />
     </Standard>
-  );
-};
+  )
+}
 
-export default Playlist;
+export default Playlist

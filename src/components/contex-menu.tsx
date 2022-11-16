@@ -1,5 +1,5 @@
-import * as React from "react";
-export { Root, Trigger, Portal, Group } from "@radix-ui/react-context-menu";
+import * as React from "react"
+export { Root, Trigger, Portal, Group } from "@radix-ui/react-context-menu"
 import {
   Item as ContextItem,
   ContextMenuItemProps,
@@ -8,8 +8,8 @@ import {
   Separator as ContextSeparator,
   ContextMenuSeparatorProps,
   ItemIndicator as ContextItemIndicator,
-  ContextMenuItemIndicatorProps,
-} from "@radix-ui/react-context-menu";
+  ContextMenuItemIndicatorProps
+} from "@radix-ui/react-context-menu"
 
 export const Content = React.forwardRef<
   HTMLDivElement,
@@ -23,7 +23,7 @@ export const Content = React.forwardRef<
       props.className || ""
     }`}
   />
-));
+))
 
 export const Item: React.FC<
   ContextMenuItemProps & React.RefAttributes<HTMLDivElement>
@@ -34,16 +34,16 @@ export const Item: React.FC<
       props.className || ""
     }`}
   />
-);
+)
 
 const LEFT_CLASS =
-  "absolute left-0 top-0 w-10 h-10 px-2 py-1 inline-flex justify-center items-center";
+  "absolute left-0 top-0 w-10 h-10 px-2 py-1 inline-flex justify-center items-center"
 export const ItemIcon: React.FC<
   React.PropsWithChildren<React.HTMLAttributes<HTMLDivElement>>
 > = (props) => (
   <div {...props} className={`${LEFT_CLASS} ${props.className || ""}`} />
-);
-export const ITEM_ICON_CLASS = "h-8 w-8";
+)
+export const ITEM_ICON_CLASS = "h-8 w-8"
 
 export const ItemIndicator: React.FC<
   ContextMenuItemIndicatorProps & React.RefAttributes<HTMLDivElement>
@@ -52,7 +52,7 @@ export const ItemIndicator: React.FC<
     {...props}
     className={`${LEFT_CLASS} ${props.className || ""}`}
   />
-);
+)
 
 export const Separator: React.FC<
   ContextMenuSeparatorProps & React.RefAttributes<HTMLDivElement>
@@ -63,4 +63,4 @@ export const Separator: React.FC<
       props.className || ""
     }`}
   />
-);
+)

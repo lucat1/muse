@@ -1,12 +1,12 @@
-import * as React from "react";
-import { useNavigate, Link, Navigate } from "react-router-dom";
-import { useAtom, useAtomValue } from "jotai";
-import debounce from "debounce";
+import * as React from "react"
+import { useNavigate, Link, Navigate } from "react-router-dom"
+import { useAtom, useAtomValue } from "jotai"
+import debounce from "debounce"
 
-import { RING_ALWAYS } from "../const";
-import { Connection, connectionsAtom } from "../stores/connection";
-import { titleAtom } from "../stores/title";
-import MinimalWrapper from "../components/minimal-wrapper";
+import { RING_ALWAYS } from "../const"
+import { Connection, connectionsAtom } from "../stores/connection"
+import { titleAtom } from "../stores/title"
+import MinimalWrapper from "../components/minimal-wrapper"
 
 const ConnWrap: React.FC<
   React.PropsWithChildren<{ active: boolean; onClick?: any }>
@@ -19,33 +19,33 @@ const ConnWrap: React.FC<
   >
     {children}
   </div>
-);
+)
 
-let debouncer: (Function & { clear(): void }) | null;
+let debouncer: (Function & { clear(): void }) | null
 const Conn: React.FC<{
-  conn: Connection;
+  conn: Connection
 }> = ({ conn }) => {
-  const [conns, setConns] = useAtom(connectionsAtom);
-  const navigate = useNavigate();
+  const [conns, setConns] = useAtom(connectionsAtom)
+  const navigate = useNavigate()
   const handleClick = (e: MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
+    e.preventDefault()
+    e.stopPropagation()
     switch (e.detail) {
       case 1:
         debouncer = debounce(() => {
-          setConns((s) => ({ ...s, default: conn.id }));
-        }, 200);
-        debouncer();
-        break;
+          setConns((s) => ({ ...s, default: conn.id }))
+        }, 200)
+        debouncer()
+        break
       case 2:
         if (debouncer) {
-          debouncer.clear();
-          debouncer = null;
+          debouncer.clear()
+          debouncer = null
         }
-        navigate(`/${conn.id}/`);
-        break;
+        navigate(`/${conn.id}/`)
+        break
     }
-  };
+  }
 
   return (
     <ConnWrap active={conn.id == conns.default} onClick={handleClick}>
@@ -58,18 +58,18 @@ const Conn: React.FC<{
         <span className="text-xs">{new URL(conn.host).hostname}</span>
       </div>
     </ConnWrap>
-  );
-};
+  )
+}
 
 const Welcome = () => {
-  const [_, setTitle] = useAtom(titleAtom);
+  const [_, setTitle] = useAtom(titleAtom)
   React.useEffect(() => {
-    setTitle("Home");
-  }, []);
-  const conns = useAtomValue(connectionsAtom);
-  if (conns.list.length == 0) return <Navigate to="/connect" replace={true} />;
+    setTitle("Home")
+  }, [])
+  const conns = useAtomValue(connectionsAtom)
+  if (conns.list.length == 0) return <Navigate to="/connect" replace={true} />
   if (conns.default != undefined)
-    return <Navigate to={`/${conns.default}/`} replace={true} />;
+    return <Navigate to={`/${conns.default}/`} replace={true} />
 
   return (
     <MinimalWrapper>
@@ -109,7 +109,7 @@ const Welcome = () => {
         </div>
       </main>
     </MinimalWrapper>
-  );
-};
+  )
+}
 
-export default Welcome;
+export default Welcome

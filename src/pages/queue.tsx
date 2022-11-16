@@ -1,15 +1,15 @@
-import * as React from "react";
+import * as React from "react"
 
-import Standard, { StandardWidth } from "../components/standard";
-import Tracks from "../components/tracks";
-import Song from "../components/song";
-import { usePlayer } from "../stores/player";
-import { useStack, useQueue } from "../stores/queue";
+import Standard, { StandardWidth } from "../components/standard"
+import Tracks from "../components/tracks"
+import Song from "../components/song"
+import { usePlayer } from "../stores/player"
+import { useStack, useQueue } from "../stores/queue"
 
 const Queue: React.FC = () => {
-  const { stack } = useStack();
-  const { song } = usePlayer();
-  const { queue } = useQueue();
+  const { stack } = useStack()
+  const { song } = usePlayer()
+  const { queue } = useQueue()
 
   return (
     <main className="flex flex-1 flex-col items-center overflow-hidden">
@@ -54,7 +54,7 @@ const Queue: React.FC = () => {
         </section>
       </StandardWidth>
     </main>
-  );
-};
+  )
+}
 
-export default Queue;
+export default Queue

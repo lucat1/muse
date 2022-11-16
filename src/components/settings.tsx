@@ -1,32 +1,32 @@
-import * as React from "react";
-import * as Dialog from "@radix-ui/react-dialog";
-import { CogIcon as Cog, XMarkIcon as X } from "@heroicons/react/24/outline";
+import * as React from "react"
+import * as Dialog from "@radix-ui/react-dialog"
+import { CogIcon as Cog, XMarkIcon as X } from "@heroicons/react/24/outline"
 
-import IconButton from "./icon-button";
-import Sep from "./separator";
+import IconButton from "./icon-button"
+import Sep from "./separator"
 
-import SettingBoolean from "./setting-boolean";
-import { scrobbleAtom } from "../stores/settings";
+import SettingBoolean from "./setting-boolean"
+import { scrobbleAtom } from "../stores/settings"
 
 export type SettingProps = React.PropsWithChildren<{
-  title: string;
-  description: string;
-}>;
+  title: string
+  description: string
+}>
 export const Setting: React.FC<SettingProps> = ({
   title,
   description,
-  children,
+  children
 }) => (
   <section role="listitem" className="contents">
     <h3 className="col-span-2 font-semibold text-lg my-2">{title}</h3>
     <span className="prose prose-neutral dark:prose-invert">{description}</span>
     <div>{children}</div>
   </section>
-);
+)
 
 const Separator: React.FC = () => (
   <Sep orientation="horizontal" className="col-span-2 mx-0 my-2" />
-);
+)
 
 const Settings: React.FC<
   React.DetailedHTMLProps<
@@ -68,6 +68,6 @@ const Settings: React.FC<
       </Dialog.Content>
     </Dialog.Portal>
   </Dialog.Root>
-);
+)
 
-export default Settings;
+export default Settings

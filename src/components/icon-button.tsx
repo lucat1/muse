@@ -1,6 +1,6 @@
-import * as React from "react";
+import * as React from "react"
 
-import { RING } from "../const";
+import { RING } from "../const"
 
 const IconButton = React.forwardRef<
   HTMLButtonElement,
@@ -16,6 +16,6 @@ const IconButton = React.forwardRef<
       className || ""
     }`}
   />
-));
+))
 
-export default IconButton;
+export default IconButton

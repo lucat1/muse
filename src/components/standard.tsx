@@ -1,4 +1,4 @@
-import * as React from "react";
+import * as React from "react"
 
 export const StandardWidth: React.FC<
   React.PropsWithChildren<{ className?: string }>
@@ -10,18 +10,18 @@ export const StandardWidth: React.FC<
   >
     {children}
   </div>
-);
+)
 
 const Standard: React.FC<
   React.PropsWithChildren<
     React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & {
-      parentClassName?: string;
+      parentClassName?: string
     }
   >
 > = ({ children, parentClassName, ...props }) => (
   <main className={`flex flex-col items-center ${parentClassName || ""}`}>
     <StandardWidth {...props}>{children}</StandardWidth>
   </main>
-);
+)
 
-export default Standard;
+export default Standard

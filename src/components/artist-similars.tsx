@@ -1,27 +1,27 @@
-import * as React from "react";
-import type { SubsonicArtistInfoResponse } from "../types";
-import useSubsonic from "../fetcher";
-import { GET_ARTIST_INFO } from "../const";
+import * as React from "react"
+import type { SubsonicArtistInfoResponse } from "../types"
+import useSubsonic from "../fetcher"
+import { GET_ARTIST_INFO } from "../const"
 
-import ArtistSection from "../components/artist-section";
-import ScrollView from "./scroll-view";
-import Button from "./button";
-import Artist from "../components/artist";
+import ArtistSection from "../components/artist-section"
+import ScrollView from "./scroll-view"
+import Button from "./button"
+import Artist from "../components/artist"
 
 const ArtistSimilars: React.FC<{ id: string }> = ({ id }) => {
   const { data: artistInfo } = useSubsonic<SubsonicArtistInfoResponse>(
     `${GET_ARTIST_INFO}?id=${id}`
-  );
+  )
 
-  const [expanded, setExpanded] = React.useState(false);
+  const [expanded, setExpanded] = React.useState(false)
   const artists = React.useMemo(
     () =>
       artistInfo?.similarArtist?.map((artist) => (
         <Artist key={artist.id} artist={artist} />
       )),
     [artistInfo?.similarArtist]
-  );
-  if (!artistInfo?.similarArtist?.length) return null;
+  )
+  if (!artistInfo?.similarArtist?.length) return null
 
   return (
     <ArtistSection
@@ -44,11 +44,11 @@ const ArtistSimilars: React.FC<{ id: string }> = ({ id }) => {
         </ScrollView>
       )}
     </ArtistSection>
-  );
-};
+  )
+}
 
 export const ArtistSimilarsSkeleton: React.FC = () => {
-  return null;
-};
+  return null
+}
 
-export default ArtistSimilars;
+export default ArtistSimilars

@@ -1,23 +1,23 @@
-import * as React from "react";
-import { Routes, Route, useParams } from "react-router-dom";
-import { useAtomValue, Provider as JotaiProvider } from "jotai";
+import * as React from "react"
+import { Routes, Route, useParams } from "react-router-dom"
+import { useAtomValue, Provider as JotaiProvider } from "jotai"
 
 import {
   internalConnectionAtom,
-  connectionsListAtom,
-} from "../stores/connection";
+  connectionsListAtom
+} from "../stores/connection"
 import {
   playerAtom,
-  DEFAULT_STATE as PLAYER_DEFAULT_STATE,
-} from "../stores/player";
+  DEFAULT_STATE as PLAYER_DEFAULT_STATE
+} from "../stores/player"
 import {
   queueAtom,
   stackAtom,
-  DEFAULT_STATE as QUEUE_DEFAULT_STATE,
-} from "../stores/queue";
+  DEFAULT_STATE as QUEUE_DEFAULT_STATE
+} from "../stores/queue"
 
-import App from "../components/app";
-import Queue from "./queue";
+import App from "../components/app"
+import Queue from "./queue"
 
 const Index = React.lazy(() => import("./index"))
 const Search = React.lazy(() => import("./search"))
@@ -30,10 +30,10 @@ const Playlist = React.lazy(() => import("./playlist"))
 const NotFound = React.lazy(() => import("./not-found"))
 
 const Provider: React.FunctionComponent = () => {
-  const { server } = useParams();
-  const conns = useAtomValue(connectionsListAtom);
-  const id = parseInt(server!);
-  if (server == undefined || !conns[id]) return <NotFound />;
+  const { server } = useParams()
+  const conns = useAtomValue(connectionsListAtom)
+  const id = parseInt(server!)
+  if (server == undefined || !conns[id]) return <NotFound />
 
   return (
     <JotaiProvider
@@ -41,7 +41,7 @@ const Provider: React.FunctionComponent = () => {
         [internalConnectionAtom, conns[id]],
         [playerAtom, PLAYER_DEFAULT_STATE],
         [queueAtom, QUEUE_DEFAULT_STATE],
-        [stackAtom, QUEUE_DEFAULT_STATE],
+        [stackAtom, QUEUE_DEFAULT_STATE]
       ]}
     >
       <App>
@@ -59,7 +59,7 @@ const Provider: React.FunctionComponent = () => {
         </Routes>
       </App>
     </JotaiProvider>
-  );
-};
+  )
+}
 
-export default Provider;
+export default Provider

@@ -1,30 +1,30 @@
-import * as React from "react";
-import { useParams, Link } from "react-router-dom";
-import formatDuration from "format-duration";
-import { useAtom } from "jotai";
-import type { SubsonicAlbumResponse } from "../types";
-import useSubsonic, { useURL } from "../fetcher";
-import { GET_ALBUM } from "../const";
-import { titleAtom } from "../stores/title";
+import * as React from "react"
+import { useParams, Link } from "react-router-dom"
+import formatDuration from "format-duration"
+import { useAtom } from "jotai"
+import type { SubsonicAlbumResponse } from "../types"
+import useSubsonic, { useURL } from "../fetcher"
+import { GET_ALBUM } from "../const"
+import { titleAtom } from "../stores/title"
 
-import Standard from "../components/standard";
-import Tracks from "../components/tracks";
-import Button from "../components/button";
-import Image from "../components/img";
-import Dot from "../components/dot";
+import Standard from "../components/standard"
+import Tracks from "../components/tracks"
+import Button from "../components/button"
+import Image from "../components/img"
+import Dot from "../components/dot"
 
 const Album = () => {
-  const { id } = useParams();
+  const { id } = useParams()
   const { data: album } = useSubsonic<SubsonicAlbumResponse>(
     `${GET_ALBUM}?id=${id}`
-  );
-  const albumArt = useURL(`getCoverArt?id=${album?.coverArt}`);
-  const [_, setTitle] = useAtom(titleAtom);
+  )
+  const albumArt = useURL(`getCoverArt?id=${album?.coverArt}`)
+  const [_, setTitle] = useAtom(titleAtom)
   React.useEffect(() => {
     setTitle(
       `${album?.name || "Unkown Album"} - ${album?.artist || "Unkown Artist"}`
-    );
-  }, [album]);
+    )
+  }, [album])
 
   return (
     <Standard>
@@ -69,7 +69,7 @@ const Album = () => {
         format={-1}
       />
     </Standard>
-  );
-};
+  )
+}
 
-export default Album;
+export default Album

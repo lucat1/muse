@@ -1,24 +1,21 @@
-import * as React from "react";
-import type {
-  SubsonicArtistResponse,
-  SubsonicTopSongsResponse,
-} from "../types";
-import useSubsonic from "../fetcher";
-import { GET_ARTIST, GET_TOP_SONGS } from "../const";
+import * as React from "react"
+import type { SubsonicArtistResponse, SubsonicTopSongsResponse } from "../types"
+import useSubsonic from "../fetcher"
+import { GET_ARTIST, GET_TOP_SONGS } from "../const"
 
-import Button from "./button";
-import ArtistSection from "./artist-section";
-import Tracks from "./tracks";
+import Button from "./button"
+import ArtistSection from "./artist-section"
+import Tracks from "./tracks"
 
 const RawArtistTopSongs: React.FC<{ id: string }> = ({ id }) => {
   const { data: artist } = useSubsonic<SubsonicArtistResponse>(
     `${GET_ARTIST}?id=${id}`
-  );
-  const [more, setMore] = React.useState(false);
+  )
+  const [more, setMore] = React.useState(false)
   const { data: topSongs } = useSubsonic<SubsonicTopSongsResponse>(
     `${GET_TOP_SONGS}?count=10&artist=${artist?.name}`
-  );
-  if (!topSongs?.song?.length) return null;
+  )
+  if (!topSongs?.song?.length) return null
   return (
     <ArtistSection
       header="Top songs"
@@ -36,19 +33,19 @@ const RawArtistTopSongs: React.FC<{ id: string }> = ({ id }) => {
         length={-1}
       />
     </ArtistSection>
-  );
-};
+  )
+}
 
 export const ArtistTopSongsSkeleton: React.FC = () => {
-  return null;
-};
+  return null
+}
 
 const ArtistTopSongs: React.FC<{ id: string }> = ({ id }) => {
   return (
     <React.Suspense fallback={<ArtistTopSongsSkeleton />}>
       <RawArtistTopSongs id={id} />
     </React.Suspense>
-  );
-};
+  )
+}
 
-export default ArtistTopSongs;
+export default ArtistTopSongs

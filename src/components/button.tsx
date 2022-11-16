@@ -1,6 +1,6 @@
-import * as React from "react";
+import * as React from "react"
 
-import { RING } from "../const";
+import { RING } from "../const"
 
 const Button: React.FC<
   React.PropsWithChildren<React.ButtonHTMLAttributes<HTMLButtonElement>>
@@ -11,6 +11,6 @@ const Button: React.FC<
       props.className || ""
     }`}
   />
-);
+)
 
-export default Button;
+export default Button
