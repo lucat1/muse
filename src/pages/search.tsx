@@ -9,6 +9,7 @@ import { SEARCH } from "../const";
 import { titleAtom } from "../stores/title";
 import type { SubsonicSearchResponse } from "../types";
 
+import Loading from '../components/loading'
 import Standard from "../components/standard";
 import Input from "../components/input";
 import Album from "../components/album";
@@ -127,7 +128,11 @@ const Search: React.FC = () => {
           {...register("query", { required: true })}
         />
       </form>
-      <React.Suspense fallback={<h1>loading</h1>}>
+      <React.Suspense fallback={
+        <div className="m-32 flex flex-1 items-center">
+          <Loading />
+        </div>
+      }>
         <Results query={query} />
       </React.Suspense>
     </Standard>

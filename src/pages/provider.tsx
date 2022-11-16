@@ -17,13 +17,14 @@ import {
 } from "../stores/queue";
 
 import App from "../components/app";
-
 import Queue from "./queue";
+
+const Index = React.lazy(() => import("./index"))
 const Search = React.lazy(() => import("./search"))
 const Artists = React.lazy(() => import("./artists"))
 const Artist = React.lazy(() => import("./artist"))
 const Albums = React.lazy(() => import("./albums"))
-const Album = React.lazy(() => import("./playlist"))
+const Album = React.lazy(() => import("./album"))
 const Playlists = React.lazy(() => import("./playlists"))
 const Playlist = React.lazy(() => import("./playlist"))
 const NotFound = React.lazy(() => import("./not-found"))
@@ -45,7 +46,7 @@ const Provider: React.FunctionComponent = () => {
     >
       <App>
         <Routes>
-          <Route index element={<h1>index</h1>} />
+          <Route index element={<Index />} />
           <Route path="queue" element={<Queue />} />
           <Route path="search" element={<Search />} />
           <Route path="artists" element={<Artists />} />
