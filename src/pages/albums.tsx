@@ -8,6 +8,7 @@ import type { SubsonicAlbumsResponse } from "../types";
 
 import Album from "../components/album";
 import Standard from "../components/standard";
+import Loading from '../components/loading';
 
 const PER_PAGE = 50;
 const types = [
@@ -64,15 +65,14 @@ const Albums = () => {
           .map((album, i) => (
             <Album key={i} album={album} />
           ))}
-        {hasNextPage && (
-          <div
-            ref={sentryRef}
-            className="flex flex-1 justify-center align-center"
-          >
-            LOADING DATA TODO
-          </div>
-        )}
       </main>
+      {hasNextPage && (
+        <div
+          className="flex flex-1 justify-center align-center m-32"
+        >
+          <Loading />
+        </div>
+      )}
     </Standard>
   );
 };
