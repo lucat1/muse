@@ -7,7 +7,7 @@ export interface Settings {
 }
 
 export const defaultSettings: Settings = {
-  scrobble: false
+  scrobble: import.meta.env.PROD
 }
 
 export const settingsAtom = focusAtom(connectionAtom, (optic) =>
