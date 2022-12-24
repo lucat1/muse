@@ -17,7 +17,7 @@ const App: React.FunctionComponent<React.PropsWithChildren<{}>> = ({
       <Navbar />
       <main
         ref={ref}
-        className="col-stat-1 col-end-2 row-start-2 row-end-3 md:col-start-2 md:row-start-1 overflow-auto"
+        className="flex col-stat-1 col-end-2 row-start-2 row-end-3 md:col-start-2 md:row-start-1 overflow-auto"
       >
         <React.Suspense
           fallback={

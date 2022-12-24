@@ -19,7 +19,9 @@ const Standard: React.FC<
     }
   >
 > = ({ children, parentClassName, ...props }) => (
-  <main className={`flex flex-col items-center ${parentClassName || ""}`}>
+  <main
+    className={`flex flex-1 flex-col items-center ${parentClassName || ""}`}
+  >
     <StandardWidth {...props}>{children}</StandardWidth>
   </main>
 )
