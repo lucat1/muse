@@ -1,6 +1,6 @@
 import * as React from "react"
 import * as Slider from "@radix-ui/react-slider"
-import { useNavigate } from "react-router-dom"
+import { useLocation, useNavigate } from "react-router-dom"
 import { useAtomValue } from "jotai"
 import formatDuration from "format-duration"
 import {
@@ -26,6 +26,7 @@ import { Spinner } from "./loading"
 
 const Player: React.FunctionComponent = () => {
   const connection = useAtomValue(connectionAtom)
+  const location = useLocation()
   const navigate = useNavigate()
   const { song, status, load, play, pause } = usePlayer()
   const { queue, next, prepend } = useQueue()
@@ -91,7 +92,11 @@ const Player: React.FunctionComponent = () => {
           </div>
           <IconButton
             aria-label="Queue"
-            onClick={() => navigate(`/${connection.id}/queue`)}
+            onClick={() => {
+              const queue = `/${connection.id}/queue`
+              if (location.pathname == queue) navigate(-1)
+              else navigate(queue)
+            }}
           >
             <Queue />
           </IconButton>
