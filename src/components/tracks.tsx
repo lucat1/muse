@@ -1,28 +1,23 @@
 import * as React from "react"
 
-import Track, { Fields, TrackProps } from "./track"
+import Track, { Fields, TrackProps, TrackActions } from "./track"
 import type { SubsonicSong } from "../types"
 import { usePlayer } from "../stores/player"
 import { useQueue, useStack } from "../stores/queue"
 
-const SongList: React.FC<{ songs: SubsonicSong[] } & TrackProps> = ({
+interface SongListProps {
+  songs: SubsonicSong[]
+}
+
+export const SongList: React.FC<SongListProps & TrackProps & TrackActions> = ({
   songs,
   ...fields
 }) => {
-  const { song, load } = usePlayer()
-  const { append, clear: clearQueue } = useQueue()
-  const { push, clear: clearStack } = useStack()
-  const playTrack = React.useCallback(
-    (i: number) => {
-      if (songs[i] == song) return
-
-      clearStack()
-      clearQueue()
-      push(songs.slice(0, i).reverse())
-      append(songs.slice(i + 1))
-      load(songs[i])
-    },
-    [songs, song, load, append, clearQueue, clearStack, push]
+  const renderTrack = React.useCallback(
+    (song: SubsonicSong, i: number) => (
+      <Track key={i} index={i} song={song} {...fields} />
+    ),
+    [fields]
   )
 
   return (
@@ -36,11 +31,30 @@ const SongList: React.FC<{ songs: SubsonicSong[] } & TrackProps> = ({
           .join(" ")} auto`
       }}
     >
-      {songs.map((song, i) => (
-        <Track key={i} song={song} play={() => playTrack(i)} {...fields} />
-      ))}
+      {songs.map(renderTrack)}
     </main>
   )
 }
 
-export default SongList
+const Tracks: React.FC<SongListProps & TrackProps> = ({ songs, ...fields }) => {
+  const { song, load } = usePlayer()
+  const { append, clear: clearQueue } = useQueue()
+  const { push, clear: clearStack } = useStack()
+  const play = React.useCallback(
+    (_: SubsonicSong, i: number) => {
+      // TODO: add a setting for this
+      // don't play if the song is already playing
+      // if (s == song) return
+
+      clearStack()
+      clearQueue()
+      push(songs.slice(0, i).reverse())
+      append(songs.slice(i + 1))
+      load(songs[i])
+    },
+    [songs, /* TODO song,*/ load, append, clearQueue, clearStack, push]
+  )
+  return <SongList songs={songs} play={play} {...fields} />
+}
+
+export default Tracks

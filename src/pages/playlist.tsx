@@ -15,7 +15,6 @@ import Button from "../components/button"
 
 const Playlist = () => {
   const { id } = useParams()
-  console.log("drawing a playlist", id)
   const { data } = useSubsonic<SubsonicPlaylistResponse>(
     `${GET_PLAYLIST}?id=${id}`
   )

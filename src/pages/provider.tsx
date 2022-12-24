@@ -1,5 +1,7 @@
 import * as React from "react"
 import { Routes, Route, useParams } from "react-router-dom"
+import { DndProvider } from "react-dnd"
+import { HTML5Backend } from "react-dnd-html5-backend"
 import { useAtomValue, Provider as JotaiProvider } from "jotai"
 
 import {
@@ -45,18 +47,20 @@ const Provider: React.FunctionComponent = () => {
       ]}
     >
       <App>
-        <Routes>
-          <Route index element={<Index />} />
-          <Route path="queue" element={<Queue />} />
-          <Route path="search" element={<Search />} />
-          <Route path="artists" element={<Artists />} />
-          <Route path="artist/:id" element={<Artist />} />
-          <Route path="albums" element={<Albums />} />
-          <Route path="album/:id" element={<Album />} />
-          <Route path="playlists" element={<Playlists />} />
-          <Route path="playlist/:id" element={<Playlist />} />
-          <Route path="*" element={<NotFound />} />
-        </Routes>
+        <DndProvider backend={HTML5Backend}>
+          <Routes>
+            <Route index element={<Index />} />
+            <Route path="queue" element={<Queue />} />
+            <Route path="search" element={<Search />} />
+            <Route path="artists" element={<Artists />} />
+            <Route path="artist/:id" element={<Artist />} />
+            <Route path="albums" element={<Albums />} />
+            <Route path="album/:id" element={<Album />} />
+            <Route path="playlists" element={<Playlists />} />
+            <Route path="playlist/:id" element={<Playlist />} />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </DndProvider>
       </App>
     </JotaiProvider>
   )

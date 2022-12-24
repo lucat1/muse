@@ -40,9 +40,12 @@ export enum Fields {
   LENGTH = "length",
   FORMAT = "format"
 }
-export type TrackProps = { [key in Fields]?: number }
+export type TrackProps = {
+  [key in Fields]?: number
+}
 export interface TrackActions {
-  play(): void
+  play?: (song: SubsonicSong, i: number) => void
+  remove?: (song: SubsonicSong, i: number) => void
 }
 
 const show = (val: number | undefined) => val && val != 0
@@ -61,11 +64,9 @@ const Center: React.FC<
 const BASE_BG =
   "group-focus:bg-neutral-200 group-hover:bg-neutral-200 dark:group-focus:bg-neutral-800 dark:group-hover:bg-neutral-800"
 const BASE = `min-h-[3.5rem] min-h-fit p-2 lg:px-4 ${BASE_BG}`
-const Track: React.FC<TrackProps & { song: SubsonicSong } & TrackActions> = ({
-  song,
-  play,
-  ...fields
-}) => {
+const Track: React.FC<
+  TrackProps & { song: SubsonicSong; index: number } & TrackActions
+> = ({ song, index, play, remove, ...fields }) => {
   const connection = useAtomValue(connectionAtom)
   const Heart = song.starred ? HeartSolid : HeartOutline
 
@@ -73,7 +74,7 @@ const Track: React.FC<TrackProps & { song: SubsonicSong } & TrackActions> = ({
     (e: Event) => {
       e.preventDefault()
       e.stopPropagation()
-      play()
+      play!(song, index)
     },
     [play]
   )
@@ -115,7 +116,7 @@ const Track: React.FC<TrackProps & { song: SubsonicSong } & TrackActions> = ({
             <Center
               as="button"
               className={`${BASE} cursor-pointer`}
-              onClick={handlePlay as any}
+              onClick={play ? (handlePlay as any) : undefined}
             >
               <span className="font-semibold">{song.title}</span>
             </Center>
