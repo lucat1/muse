@@ -11,7 +11,6 @@ const Queue: React.FC = () => {
   const { song } = usePlayer()
   const { queue, move } = useQueue()
 
-  console.log(stack, queue)
   return (
     <Standard className="grid grid-cols-1 md:grid-cols-4 overflow-hidden">
       <section className="flex flex-col items-center justify-center">
@@ -28,12 +27,11 @@ const Queue: React.FC = () => {
             <h2 className="text-xl font-bold">Previous</h2>
             <SongList
               songs={stack}
+              index={(n) => -(stack.length - n + 1)}
               art={-1}
-              title={9}
-              heart={-1}
-              album={3}
-              artist={3}
-              length={-1}
+              title={16}
+              artist={6}
+              length={2}
             />
           </>
         )}
@@ -43,15 +41,10 @@ const Queue: React.FC = () => {
             <SongList
               songs={queue}
               art={-1}
-              title={9}
-              heart={-1}
-              album={3}
-              artist={3}
-              length={-1}
-              move={(ia, ib) => {
-                console.log("swapping", ia, ib)
-                move(ia, ib)
-              }}
+              title={16}
+              artist={6}
+              length={2}
+              move={move}
             />
           </>
         )}

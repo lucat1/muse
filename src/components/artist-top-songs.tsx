@@ -28,7 +28,7 @@ const RawArtistTopSongs: React.FC<{ id: string }> = ({ id }) => {
       <Tracks
         songs={topSongs.song.filter((_, i) => i < (more ? 10 : 5))}
         art={-1}
-        title={14}
+        title={22}
         heart={-1}
         length={2}
       />

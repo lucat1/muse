@@ -32,8 +32,9 @@ import {
   ItemIcon,
   ITEM_ICON_CLASS
 } from "./contex-menu"
-import type { SubsonicSong } from "../types"
+import type { AgumentedSubsonicSong, AugmentedSubsonicSong } from "./tracks"
 import IconButton from "./icon-button"
+import type { SubsonicSong } from "src/types"
 
 export enum Fields {
   ART = "art",
@@ -49,6 +50,7 @@ export type TrackProps = {
 }
 export type TrackAction = (song: SubsonicSong, i: number) => void
 export interface TrackActions {
+  previewMove?: (ia: number, ib: number) => void
   move?: (ia: number, ib: number) => void
   play?: TrackAction
   remove?: TrackAction
@@ -101,105 +103,108 @@ const Like: React.FC<{ song: SubsonicSong; connection: Connection }> = ({
   )
 }
 
-const TrackContent = React.forwardRef<
-  HTMLDivElement,
-  TrackProps & { song: SubsonicSong; index: number } & TrackActions & {
-      handlerId?: Identifier | null
-      dragging: boolean
-    }
->(({ song, index, play, remove, handlerId, dragging, ...fields }, ref) => {
-  const connection = useAtomValue(connectionAtom)
-  return (
-    <div
-      ref={ref as any}
-      data-handler-id={handlerId}
-      className={`w-full my-1 px-2 lg:px-4 rounded-lg group grid gap-x-2 focus:bg-neutral-200 hover:bg-neutral-200 dark:focus:bg-neutral-800 dark:hover:bg-neutral-800 ${
-        dragging ? "opacity-0" : ""
-      }`}
-      style={{
-        gridTemplateColumns: `auto ${Object.values(Fields)
-          .map((f) => fields[f] || 0)
-          .filter((f) => f != 0)
-          .map((f) => (f < 0 ? "auto" : `${f}fr`))
-          .join(" ")}`
-      }}
-    >
-      <Center
-        className={`w-7 p-1 justify-end ${play ? "group-hover:hidden" : ""}`}
+const TrackContent = React.memo(
+  React.forwardRef<
+    HTMLDivElement,
+    TrackProps & { song: SubsonicSong; index: number } & TrackActions & {
+        handlerId?: Identifier | null
+        dragging: boolean
+      }
+  >(({ song, index, play, remove, handlerId, dragging, ...fields }, ref) => {
+    const connection = useAtomValue(connectionAtom)
+    return (
+      <div
+        ref={ref as any}
+        data-handler-id={handlerId}
+        className={`w-full my-1 px-2 lg:px-4 rounded-lg group grid gap-x-2 focus:bg-neutral-200 hover:bg-neutral-200 dark:focus:bg-neutral-800 dark:hover:bg-neutral-800 ${
+          dragging ? "opacity-0" : ""
+        }`}
+        style={{
+          gridTemplateColumns: `auto ${Object.values(Fields)
+            .map((f) => fields[f] || 0)
+            .filter((f) => f != 0)
+            .map((f) => (f < 0 ? "auto" : `${f}fr`))
+            .join(" ")}`
+        }}
       >
-        {index + 1}
-      </Center>
-      {play && (
-        <Center className={`p-0 hidden group-hover:flex justify-end`}>
-          <IconButton className="p-1" onClick={() => play(song, index)}>
-            <Play />
-          </IconButton>
+        <Center
+          className={`w-7 p-1 justify-end ${play ? "group-hover:hidden" : ""}`}
+        >
+          {index + 1}
         </Center>
-      )}
-      {/* Fields.ART */}
-      {show(fields[Fields.ART]) && (
-        <Center>
-          <Link to={`/${connection.id}/album/${song.albumId}`}>
-            <Image
-              className="w-10"
-              src={useURL(`getCoverArt?id=${song.coverArt}`)}
-            />
-          </Link>
-        </Center>
-      )}
-      {/* Fields.TITLE */}
-      {show(fields[Fields.TITLE]) && (
-        <Center>
-          <span className="font-semibold">{song.title}</span>
-        </Center>
-      )}
-      {/* Fields.HEART */}
-      {show(fields[Fields.HEART]) && (
-        <Center>
-          <Like song={song} connection={connection} />
-        </Center>
-      )}
-      {/* Fields.ALBUM */}
-      {show(fields[Fields.ALBUM]) && (
-        <Center className="text-red-500 dark:text-red-400">
-          <Link
-            to={song.albumId ? `/${connection.id}/album/${song.albumId}` : ""}
-          >
-            {song.album}
-          </Link>
-        </Center>
-      )}
-      {/* Fields.ARTIST */}
-      {show(fields[Fields.ARTIST]) && (
-        <Center className="text-red-500 dark:text-red-400">
-          <Link
-            to={
-              song.artistId ? `/${connection.id}/artist/${song.artistId}` : ""
-            }
-          >
-            {song.artist}
-          </Link>
-        </Center>
-      )}
-      {/* Fields.LENGTH */}
-      {show(fields[Fields.LENGTH]) && (
-        <Center>{formatDuration(song.duration * 1000)}</Center>
-      )}
-      {/* Fields.FORMAT */}
-      {show(fields[Fields.FORMAT]) && <Center>{song.suffix}</Center>}
-    </div>
-  )
-})
+        {play && (
+          <Center className={`p-0 hidden group-hover:flex justify-end`}>
+            <IconButton className="p-1" onClick={() => play(song, index)}>
+              <Play />
+            </IconButton>
+          </Center>
+        )}
+        {/* Fields.ART */}
+        {show(fields[Fields.ART]) && (
+          <Center>
+            <Link to={`/${connection.id}/album/${song.albumId}`}>
+              <Image
+                className="w-10"
+                src={useURL(`getCoverArt?id=${song.coverArt}`)}
+              />
+            </Link>
+          </Center>
+        )}
+        {/* Fields.TITLE */}
+        {show(fields[Fields.TITLE]) && (
+          <Center className="truncate">
+            <span className="font-semibold truncate">{song.title}</span>
+          </Center>
+        )}
+        {/* Fields.HEART */}
+        {show(fields[Fields.HEART]) && (
+          <Center>
+            <Like song={song} connection={connection} />
+          </Center>
+        )}
+        {/* Fields.ALBUM */}
+        {show(fields[Fields.ALBUM]) && (
+          <Center className="text-red-500 dark:text-red-400 truncate">
+            <Link
+              className="truncate"
+              to={song.albumId ? `/${connection.id}/album/${song.albumId}` : ""}
+            >
+              {song.album}
+            </Link>
+          </Center>
+        )}
+        {/* Fields.ARTIST */}
+        {show(fields[Fields.ARTIST]) && (
+          <Center className="text-red-500 dark:text-red-400 truncate">
+            <Link
+              className="truncate"
+              to={
+                song.artistId ? `/${connection.id}/artist/${song.artistId}` : ""
+              }
+            >
+              {song.artist}
+            </Link>
+          </Center>
+        )}
+        {/* Fields.LENGTH */}
+        {show(fields[Fields.LENGTH]) && (
+          <Center>{formatDuration(song.duration * 1000)}</Center>
+        )}
+        {/* Fields.FORMAT */}
+        {show(fields[Fields.FORMAT]) && <Center>{song.suffix}</Center>}
+      </div>
+    )
+  })
+)
 
 interface DragItem {
-  index: number
-  originalIndex: number
+  id: number
+  oid: number
 }
 
 const DraggableTrackContent: React.FC<
-  TrackProps & { song: SubsonicSong; index: number } & TrackActions
-> = ({ move, song, index, ...fields }) => {
-  const originalIndex = React.useMemo(() => index, [song.id])
+  TrackProps & { song: AugmentedSubsonicSong; index: number } & TrackActions
+> = ({ move, previewMove, song, index, ...fields }) => {
   const ref = React.useRef<HTMLDivElement>(null)
   const [{ handlerId }, drop] = useDrop<
     DragItem,
@@ -216,7 +221,7 @@ const DraggableTrackContent: React.FC<
       if (!ref.current) {
         return
       }
-      const dragIndex = item.index
+      const dragIndex = item.id
       const hoverIndex = index
 
       // Don't replace items with themselves
@@ -252,32 +257,33 @@ const DraggableTrackContent: React.FC<
       }
 
       // Time to actually perform the action
-      move!(dragIndex, hoverIndex)
+      previewMove!(dragIndex, hoverIndex)
 
       // Note: we're mutating the monitor item here!
       // Generally it's better to avoid mutations,
       // but it's good here for the sake of performance
       // to avoid expensive index searches.
-      item.index = hoverIndex
+      item.id = hoverIndex
     }
   })
 
   const [{ isDragging }, drag] = useDrag({
     type: DragType.TRACK,
     item: () => {
-      return { index, originalIndex }
+      return { id: index, oid: song.i }
     },
     collect: (monitor: any) => ({
       isDragging: monitor.isDragging()
     }),
     end: (item, monitor) => {
       if (!monitor.didDrop()) {
-        move!(item.index, item.originalIndex)
+        previewMove!(item.id, item.oid)
+      } else {
+        move!(item.oid, index)
       }
     }
   })
 
-  console.log(index, isDragging)
   drag(drop(ref))
   return (
     <TrackContent
@@ -292,7 +298,7 @@ const DraggableTrackContent: React.FC<
 }
 
 const Track: React.FC<
-  TrackProps & { song: SubsonicSong; index: number } & TrackActions
+  TrackProps & { song: AugmentedSubsonicSong; index: number } & TrackActions
 > = ({ move, play, ...fields }) => (
   <Root>
     <Trigger>
