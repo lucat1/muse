@@ -20,20 +20,7 @@ export const SongList: React.FC<SongListProps & TrackProps & TrackActions> = ({
     [fields]
   )
 
-  return (
-    <main
-      className="w-full grid gap-y-2"
-      style={{
-        gridTemplateColumns: `auto ${Object.values(Fields)
-          .map((f) => fields[f] || 0)
-          .filter((f) => f != 0)
-          .map((f) => (f < 0 ? "auto" : `${f}fr`))
-          .join(" ")} auto`
-      }}
-    >
-      {songs.map(renderTrack)}
-    </main>
-  )
+  return <main>{songs.map(renderTrack)}</main>
 }
 
 const Tracks: React.FC<SongListProps & TrackProps> = ({ songs, ...fields }) => {
