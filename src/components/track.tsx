@@ -192,10 +192,8 @@ const TrackContent = React.forwardRef<
 })
 
 interface DragItem {
-  song: SubsonicSong
   index: number
   originalIndex: number
-  type: string
 }
 
 const DraggableTrackContent: React.FC<
@@ -267,7 +265,7 @@ const DraggableTrackContent: React.FC<
   const [{ isDragging }, drag] = useDrag({
     type: DragType.TRACK,
     item: () => {
-      return { song, index, originalIndex }
+      return { index, originalIndex }
     },
     collect: (monitor: any) => ({
       isDragging: monitor.isDragging()
@@ -279,6 +277,7 @@ const DraggableTrackContent: React.FC<
     }
   })
 
+  console.log(index, isDragging)
   drag(drop(ref))
   return (
     <TrackContent

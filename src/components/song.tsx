@@ -15,14 +15,6 @@ import Dot from "./dot"
 const Song: React.FC<{ song: SubsonicSong }> = ({ song }) => {
   const conn = useAtomValue(connectionAtom)
   const { play, load } = usePlayer()
-  const handlePlay = React.useCallback(
-    (e: any) => {
-      e.preventDefault()
-      load(song)
-      play()
-    },
-    [song]
-  )
 
   return (
     <div className="w-32 lg:w-64 mx-8 my-4 flex-shrink-0">
@@ -33,7 +25,9 @@ const Song: React.FC<{ song: SubsonicSong }> = ({ song }) => {
         />
       </a>
       <div className="mt-2 truncate">
-        <a onClick={handlePlay}>{song.title}</a>
+        <Link to={`/${conn.id}/album/${song.albumId}?song=${song.id}`}>
+          {song.title}
+        </Link>
         <br />
         <span className="text-xs">
           <Link to={`/${conn.id}/album/${song.albumId}`}>{song.album}</Link>

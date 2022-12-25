@@ -69,9 +69,9 @@ const queueReducer = (state: QueueState, { type, payload }: QueueAction) => {
 const stackReducer = (state: StackState, { type, payload }: StackAction) => {
   switch (type) {
     case StackActionType.PUSH:
-      return payload ? [...payload, ...state] : state
+      return payload ? [...state, ...payload] : state
     case StackActionType.POP:
-      return state.slice(1)
+      return state.slice(0, -1)
     case StackActionType.CLEAR:
       return DEFAULT_STATE
   }
