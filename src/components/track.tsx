@@ -1,6 +1,5 @@
 import * as React from "react"
 import { Link } from "react-router-dom"
-import type { Identifier } from "dnd-core"
 import { useDrag, useDrop } from "react-dnd"
 import { useAtomValue } from "jotai"
 import {
@@ -11,8 +10,12 @@ import {
   ArrowLongDownIcon as ArrowDown,
   InformationCircleIcon as Info
 } from "@heroicons/react/24/outline"
-import { HeartIcon as HeartSolid } from "@heroicons/react/24/solid"
+import {
+  HeartIcon as HeartSolid,
+  PlayIcon as Play
+} from "@heroicons/react/24/solid"
 import formatDuration from "format-duration"
+import type { Identifier, XYCoord } from "dnd-core"
 
 import { fetcher, useURL } from "../fetcher"
 import { Connection, connectionAtom } from "../stores/connection"
@@ -33,7 +36,6 @@ import type { SubsonicSong } from "../types"
 import IconButton from "./icon-button"
 
 export enum Fields {
-  NUMBER = "number",
   ART = "art",
   TITLE = "title",
   HEART = "heart",
@@ -47,7 +49,7 @@ export type TrackProps = {
 }
 export type TrackAction = (song: SubsonicSong, i: number) => void
 export interface TrackActions {
-  swap?: (a: SubsonicSong, ia: number, b: SubsonicSong, ib: number) => void
+  move?: (ia: number, ib: number) => void
   play?: TrackAction
   remove?: TrackAction
 }
@@ -60,7 +62,9 @@ const Center: React.FC<
   return (
     <AS
       {...props}
-      className={`flex flex-row items-center ${props.className || ""}`}
+      className={`min-h-fit p-2 flex flex-row items-center ${
+        props.className || ""
+      }`}
     />
   )
 }
@@ -89,9 +93,7 @@ const Like: React.FC<{ song: SubsonicSong; connection: Connection }> = ({
       aria-label={`${song.starred ? "Unlike" : "Like"} this song`}
       aria-checked={song.starred ? true : false}
       disabled={starring}
-      className={`w-7 h-7 ${
-        song.starred ? "text-red-500 dark:text-red-400" : ""
-      }`}
+      className={song.starred ? "text-red-500 dark:text-red-400" : ""}
       onClick={like}
     >
       <Heart />
@@ -99,38 +101,44 @@ const Like: React.FC<{ song: SubsonicSong; connection: Connection }> = ({
   )
 }
 
-const BASE_BG =
-  "group-focus:bg-neutral-200 group-hover:bg-neutral-200 dark:group-focus:bg-neutral-800 dark:group-hover:bg-neutral-800"
-const BASE = `min-h-[3.5rem] min-h-fit p-2 lg:px-4 ${BASE_BG}`
 const TrackContent = React.forwardRef<
   HTMLDivElement,
   TrackProps & { song: SubsonicSong; index: number } & TrackActions & {
-      handlerId?: string
+      handlerId?: Identifier | null
+      dragging: boolean
     }
->(({ song, index, play, remove, handlerId, ...fields }, ref) => {
+>(({ song, index, play, remove, handlerId, dragging, ...fields }, ref) => {
   const connection = useAtomValue(connectionAtom)
-
   return (
     <div
       ref={ref as any}
       data-handler-id={handlerId}
-      className="w-full grid gap-y-2"
+      className={`w-full my-1 px-2 lg:px-4 rounded-lg group grid gap-x-2 focus:bg-neutral-200 hover:bg-neutral-200 dark:focus:bg-neutral-800 dark:hover:bg-neutral-800 ${
+        dragging ? "opacity-0" : ""
+      }`}
       style={{
         gridTemplateColumns: `auto ${Object.values(Fields)
           .map((f) => fields[f] || 0)
           .filter((f) => f != 0)
           .map((f) => (f < 0 ? "auto" : `${f}fr`))
-          .join(" ")} auto`
+          .join(" ")}`
       }}
     >
-      <div className={`${BASE_BG} rounded-l-lg w-2`} />
-      {/* Fields.NUMBER */}
-      {show(fields[Fields.NUMBER]) && (
-        <Center className={`${BASE} justify-end`}>{song.track}</Center>
+      <Center
+        className={`w-7 p-1 justify-end ${play ? "group-hover:hidden" : ""}`}
+      >
+        {index + 1}
+      </Center>
+      {play && (
+        <Center className={`p-0 hidden group-hover:flex justify-end`}>
+          <IconButton className="p-1" onClick={() => play(song, index)}>
+            <Play />
+          </IconButton>
+        </Center>
       )}
       {/* Fields.ART */}
       {show(fields[Fields.ART]) && (
-        <Center className={BASE}>
+        <Center>
           <Link to={`/${connection.id}/album/${song.albumId}`}>
             <Image
               className="w-10"
@@ -141,23 +149,19 @@ const TrackContent = React.forwardRef<
       )}
       {/* Fields.TITLE */}
       {show(fields[Fields.TITLE]) && (
-        <Center
-          as="button"
-          className={`${BASE} cursor-pointer`}
-          onClick={play ? () => play(song, index) : undefined}
-        >
+        <Center>
           <span className="font-semibold">{song.title}</span>
         </Center>
       )}
       {/* Fields.HEART */}
       {show(fields[Fields.HEART]) && (
-        <Center className={BASE}>
+        <Center>
           <Like song={song} connection={connection} />
         </Center>
       )}
       {/* Fields.ALBUM */}
       {show(fields[Fields.ALBUM]) && (
-        <Center className={`${BASE} text-red-500 dark:text-red-400`}>
+        <Center className="text-red-500 dark:text-red-400">
           <Link
             to={song.albumId ? `/${connection.id}/album/${song.albumId}` : ""}
           >
@@ -167,7 +171,7 @@ const TrackContent = React.forwardRef<
       )}
       {/* Fields.ARTIST */}
       {show(fields[Fields.ARTIST]) && (
-        <Center className={`${BASE} text-red-500 dark:text-red-400`}>
+        <Center className="text-red-500 dark:text-red-400">
           <Link
             to={
               song.artistId ? `/${connection.id}/artist/${song.artistId}` : ""
@@ -179,13 +183,10 @@ const TrackContent = React.forwardRef<
       )}
       {/* Fields.LENGTH */}
       {show(fields[Fields.LENGTH]) && (
-        <Center className={BASE}>{formatDuration(song.duration * 1000)}</Center>
+        <Center>{formatDuration(song.duration * 1000)}</Center>
       )}
       {/* Fields.FORMAT */}
-      {show(fields[Fields.FORMAT]) && (
-        <Center className={BASE}>{song.suffix}</Center>
-      )}
-      <div className={`${BASE_BG} rounded-r-lg w-2`} />
+      {show(fields[Fields.FORMAT]) && <Center>{song.suffix}</Center>}
     </div>
   )
 })
@@ -193,13 +194,14 @@ const TrackContent = React.forwardRef<
 interface DragItem {
   song: SubsonicSong
   index: number
+  originalIndex: number
   type: string
 }
 
-const DraggableTrackContent = React.forwardRef<
-  HTMLDivElement,
+const DraggableTrackContent: React.FC<
   TrackProps & { song: SubsonicSong; index: number } & TrackActions
->(({ swap, song, index, ...fields }, rref) => {
+> = ({ move, song, index, ...fields }) => {
+  const originalIndex = React.useMemo(() => index, [song.id])
   const ref = React.useRef<HTMLDivElement>(null)
   const [{ handlerId }, drop] = useDrop<
     DragItem,
@@ -211,41 +213,94 @@ const DraggableTrackContent = React.forwardRef<
       return {
         handlerId: monitor.getHandlerId()
       }
+    },
+    hover(item: DragItem, monitor) {
+      if (!ref.current) {
+        return
+      }
+      const dragIndex = item.index
+      const hoverIndex = index
+
+      // Don't replace items with themselves
+      if (dragIndex === hoverIndex) {
+        return
+      }
+
+      // Determine rectangle on screen
+      const hoverBoundingRect = ref.current?.getBoundingClientRect()
+
+      // Get vertical middle
+      const hoverMiddleY =
+        (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2
+
+      // Determine mouse position
+      const clientOffset = monitor.getClientOffset()
+
+      // Get pixels to the top
+      const hoverClientY = (clientOffset as XYCoord).y - hoverBoundingRect.top
+
+      // Only perform the move when the mouse has crossed half of the items height
+      // When dragging downwards, only move when the cursor is below 50%
+      // When dragging upwards, only move when the cursor is above 50%
+
+      // Dragging downwards
+      if (dragIndex < hoverIndex && hoverClientY < hoverMiddleY) {
+        return
+      }
+
+      // Dragging upwards
+      if (dragIndex > hoverIndex && hoverClientY > hoverMiddleY) {
+        return
+      }
+
+      // Time to actually perform the action
+      move!(dragIndex, hoverIndex)
+
+      // Note: we're mutating the monitor item here!
+      // Generally it's better to avoid mutations,
+      // but it's good here for the sake of performance
+      // to avoid expensive index searches.
+      item.index = hoverIndex
     }
   })
 
   const [{ isDragging }, drag] = useDrag({
     type: DragType.TRACK,
     item: () => {
-      return { song, index }
+      return { song, index, originalIndex }
     },
     collect: (monitor: any) => ({
       isDragging: monitor.isDragging()
-    })
+    }),
+    end: (item, monitor) => {
+      if (!monitor.didDrop()) {
+        move!(item.index, item.originalIndex)
+      }
+    }
   })
 
   drag(drop(ref))
-  console.log(handlerId, isDragging)
   return (
     <TrackContent
       ref={ref}
       handlerId={handlerId}
       song={song}
       index={index}
+      dragging={isDragging}
       {...fields}
     />
   )
-})
+}
 
 const Track: React.FC<
   TrackProps & { song: SubsonicSong; index: number } & TrackActions
-> = ({ swap, play, ...fields }) => (
+> = ({ move, play, ...fields }) => (
   <Root>
-    <Trigger asChild={true}>
-      {swap ? (
-        <DraggableTrackContent swap={swap} play={play} {...fields} />
+    <Trigger>
+      {move ? (
+        <DraggableTrackContent move={move} play={play} {...fields} />
       ) : (
-        <TrackContent play={play} {...fields} />
+        <TrackContent play={play} dragging={false} {...fields} />
       )}
     </Trigger>
     <Portal>

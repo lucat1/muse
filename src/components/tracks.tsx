@@ -1,6 +1,6 @@
 import * as React from "react"
 
-import Track, { Fields, TrackProps, TrackActions } from "./track"
+import Track, { TrackProps, TrackActions } from "./track"
 import type { SubsonicSong } from "../types"
 import { usePlayer } from "../stores/player"
 import { useQueue, useStack } from "../stores/queue"
@@ -24,7 +24,7 @@ export const SongList: React.FC<SongListProps & TrackProps & TrackActions> = ({
 }
 
 const Tracks: React.FC<SongListProps & TrackProps> = ({ songs, ...fields }) => {
-  const { song, load } = usePlayer()
+  const { /*song,*/ load } = usePlayer()
   const { append, clear: clearQueue } = useQueue()
   const { push, clear: clearStack } = useStack()
   const play = React.useCallback(

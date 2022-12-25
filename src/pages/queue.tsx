@@ -1,7 +1,7 @@
 import * as React from "react"
 
 import Standard from "../components/standard"
-import SongList from "../components/tracks"
+import { SongList } from "../components/tracks"
 import Song from "../components/song"
 import { usePlayer } from "../stores/player"
 import { useStack, useQueue } from "../stores/queue"
@@ -9,8 +9,9 @@ import { useStack, useQueue } from "../stores/queue"
 const Queue: React.FC = () => {
   const { stack } = useStack()
   const { song } = usePlayer()
-  const { queue } = useQueue()
+  const { queue, move } = useQueue()
 
+  console.log(stack, queue)
   return (
     <Standard className="grid grid-cols-1 md:grid-cols-4 overflow-hidden">
       <section className="flex flex-col items-center justify-center">
@@ -47,7 +48,10 @@ const Queue: React.FC = () => {
               album={3}
               artist={3}
               length={-1}
-              swap={console.log}
+              move={(ia, ib) => {
+                console.log("swapping", ia, ib)
+                move(ia, ib)
+              }}
             />
           </>
         )}

@@ -50,7 +50,6 @@ const Playlist = () => {
           data?.entry.map((entry, i) => ({ ...entry, track: i + 1 })) || []
         }
         art={-1}
-        number={-1}
         title={9}
         heart={-1}
         album={3}
