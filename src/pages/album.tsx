@@ -61,11 +61,11 @@ const Album = () => {
       </section>
       <Tracks
         songs={album?.song || []}
-        title={9}
+        title={16}
         heart={-1}
-        artist={3}
-        length={-1}
-        format={-1}
+        artist={5}
+        length={2}
+        format={1}
       />
     </Standard>
   )

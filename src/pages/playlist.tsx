@@ -46,16 +46,14 @@ const Playlist = () => {
         </div>
       </section>
       <Tracks
-        songs={
-          data?.entry.map((entry, i) => ({ ...entry, track: i + 1 })) || []
-        }
+        songs={data?.entry || []}
         art={-1}
-        title={9}
+        title={13}
         heart={-1}
-        album={3}
-        artist={3}
-        length={-1}
-        format={-1}
+        album={4}
+        artist={4}
+        length={2}
+        format={1}
       />
     </Standard>
   )
