@@ -2,10 +2,16 @@ import * as React from "react"
 import { useParams, Link } from "react-router-dom"
 import formatDuration from "format-duration"
 import { useAtom } from "jotai"
-import type { SubsonicAlbumResponse } from "../types"
+import {
+  PlayIcon as Play,
+  ArrowsRightLeftIcon as Shuffle
+} from "@heroicons/react/24/solid"
+
 import useSubsonic, { useURL } from "../fetcher"
+import { usePlay } from "../hooks"
 import { GET_ALBUM } from "../const"
 import { titleAtom } from "../stores/title"
+import type { SubsonicAlbumResponse } from "../types"
 
 import Standard from "../components/standard"
 import Tracks from "../components/tracks"
@@ -19,6 +25,7 @@ const Album = () => {
     `${GET_ALBUM}?id=${id}`
   )
   const albumArt = useURL(`getCoverArt?id=${album?.coverArt}`)
+  const { play } = usePlay()
   const [_, setTitle] = useAtom(titleAtom)
   React.useEffect(() => {
     setTitle(
@@ -53,9 +60,21 @@ const Album = () => {
             </span>
           </div>
           <div className="flex flex-row items-center">
-            <Button className="mr-2">Play</Button>
+            <Button
+              className="mx-2 pl-5 flex flex-row items-center"
+              onClick={(_) => play(album?.song || [], 0)}
+            >
+              <Play className="w-5 h-5 mr-2" />
+              Play
+            </Button>
             <Dot />
-            <Button className="ml-2">Shuffle</Button>
+            <Button
+              className="mx-2 pl-5 flex flex-row items-center"
+              onClick={(_) => play(album?.song || [], -1)}
+            >
+              <Shuffle className="w-5 h-5 mr-2" />
+              Shuffle
+            </Button>
           </div>
         </div>
       </section>

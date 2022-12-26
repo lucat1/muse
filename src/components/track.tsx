@@ -32,7 +32,7 @@ import {
   ItemIcon,
   ITEM_ICON_CLASS
 } from "./contex-menu"
-import type { AgumentedSubsonicSong, AugmentedSubsonicSong } from "./tracks"
+import type { AugmentedSubsonicSong } from "./tracks"
 import IconButton from "./icon-button"
 import type { SubsonicSong } from "src/types"
 
@@ -224,45 +224,24 @@ const DraggableTrackContent: React.FC<
       const dragIndex = item.id
       const hoverIndex = index
 
-      // Don't replace items with themselves
       if (dragIndex === hoverIndex) {
         return
       }
 
-      // Determine rectangle on screen
       const hoverBoundingRect = ref.current?.getBoundingClientRect()
-
-      // Get vertical middle
       const hoverMiddleY =
         (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2
-
-      // Determine mouse position
       const clientOffset = monitor.getClientOffset()
-
-      // Get pixels to the top
       const hoverClientY = (clientOffset as XYCoord).y - hoverBoundingRect.top
 
-      // Only perform the move when the mouse has crossed half of the items height
-      // When dragging downwards, only move when the cursor is below 50%
-      // When dragging upwards, only move when the cursor is above 50%
-
-      // Dragging downwards
-      if (dragIndex < hoverIndex && hoverClientY < hoverMiddleY) {
+      if (
+        (dragIndex < hoverIndex && hoverClientY < hoverMiddleY) ||
+        (dragIndex > hoverIndex && hoverClientY > hoverMiddleY)
+      ) {
         return
       }
 
-      // Dragging upwards
-      if (dragIndex > hoverIndex && hoverClientY > hoverMiddleY) {
-        return
-      }
-
-      // Time to actually perform the action
       previewMove!(dragIndex, hoverIndex)
-
-      // Note: we're mutating the monitor item here!
-      // Generally it's better to avoid mutations,
-      // but it's good here for the sake of performance
-      // to avoid expensive index searches.
       item.id = hoverIndex
     }
   })
@@ -277,8 +256,10 @@ const DraggableTrackContent: React.FC<
     }),
     end: (item, monitor) => {
       if (!monitor.didDrop()) {
+        // If dragged outside, reset
         previewMove!(item.id, item.oid)
       } else {
+        // Else, apply the move
         move!(item.oid, index)
       }
     }
@@ -299,29 +280,34 @@ const DraggableTrackContent: React.FC<
 
 const Track: React.FC<
   TrackProps & { song: AugmentedSubsonicSong; index: number } & TrackActions
-> = ({ move, play, ...fields }) => (
+> = ({ move, play, song, ...fields }) => (
   <Root>
     <Trigger>
       {move ? (
-        <DraggableTrackContent move={move} play={play} {...fields} />
+        <DraggableTrackContent
+          move={move}
+          play={play}
+          song={song}
+          {...fields}
+        />
       ) : (
-        <TrackContent play={play} dragging={false} {...fields} />
+        <TrackContent play={play} dragging={false} song={song} {...fields} />
       )}
     </Trigger>
     <Portal>
       <Content>
         <Group>
           {play && (
-            <Item onSelect={() => play}>
+            <Item onSelect={() => play(song, index)}>
               <ItemIcon>
-                <ChevronRight className={ITEM_ICON_CLASS} />
+                <Play className={ITEM_ICON_CLASS} />
               </ItemIcon>
               Play
             </Item>
           )}
           <Item>
             <ItemIcon>
-              <ChevronDoubleLeft className={ITEM_ICON_CLASS} />
+              <ChevronRight className={ITEM_ICON_CLASS} />
             </ItemIcon>
             Play next
           </Item>
