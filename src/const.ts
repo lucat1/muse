@@ -19,3 +19,7 @@ export const SCROBBLE = "scrobble"
 export const RING =
   "outline-none focus:ring focus:ring-red-500 dark:focus:ring-red-400"
 export const RING_ALWAYS = "outline-none ring ring-red-500 dark:ring-red-400"
+
+export enum DragType {
+  TRACK = "track"
+}

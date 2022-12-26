@@ -57,9 +57,10 @@ const Results: React.FC<{ query: string | undefined }> = ({ query }) => {
             songs={songs}
             art={-1}
             heart={-1}
-            title={8}
-            artist={6}
-            length={-1}
+            title={12}
+            artist={5}
+            album={5}
+            length={2}
           />
         </ArtistSection>
       )}

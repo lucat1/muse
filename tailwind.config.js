@@ -6,7 +6,7 @@ module.exports = {
   plugins: [require("@tailwindcss/typography")],
   theme: {
     fontFamily: {
-      logo: ["'Cooper Black'", "serif"],
+      logo: ["'Cooper Black'", "serif"]
     },
     screens: {
       sm: "640px",
@@ -15,17 +15,17 @@ module.exports = {
       xl: "1280px",
       "2xl": "1536px",
       "3xl": "1792px",
-      "4xl": "2048px",
+      "4xl": "2048px"
     },
     extend: {
       gridTemplateColumns: {
         layout: "minmax(12rem, 16rem) auto",
-        smlayout: "auto",
+        smlayout: "auto"
       },
       gridTemplateRows: {
-        layout: "4rem minmax(0, auto) 6rem",
-      },
-    },
-  },
+        layout: "4rem minmax(0, auto) 6rem"
+      }
+    }
+  }
   // specify other options here
-};
+}

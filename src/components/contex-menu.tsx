@@ -19,7 +19,7 @@ export const Content = React.forwardRef<
     {...props}
     ref={ref}
     style={props.style}
-    className={`w-64 p-2 rounded-lg drop-shadow-xl bg-neutral-200 dark:bg-neutral-700 ${
+    className={`w-64 py-3 rounded-lg drop-shadow-xl bg-neutral-200 dark:bg-neutral-700 ${
       props.className || ""
     }`}
   />
@@ -30,14 +30,14 @@ export const Item: React.FC<
 > = (props) => (
   <ContextItem
     {...props}
-    className={`relative flex flex-row items-center h-10 pl-12 pr-2 py-1 cursor-default focus:outline-none rounded-lg focus:bg-red-500 dark:focus:bg-red-400 focus:text-neutral-100 ${
+    className={`relative flex flex-row items-center h-9 pl-16 pr-4 py-1 cursor-default focus:outline-none focus:bg-red-500 dark:focus:bg-red-400 focus:text-neutral-100 ${
       props.className || ""
     }`}
   />
 )
 
 const LEFT_CLASS =
-  "absolute left-0 top-0 w-10 h-10 px-2 py-1 inline-flex justify-center items-center"
+  "absolute left-0 top-0 w-14 h-9 px-4 py-1 inline-flex justify-center items-center"
 export const ItemIcon: React.FC<
   React.PropsWithChildren<React.HTMLAttributes<HTMLDivElement>>
 > = (props) => (
