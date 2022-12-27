@@ -57,7 +57,7 @@ export const SongList: React.FC<SongListProps & TrackProps & TrackActions> = ({
 }
 
 const Tracks: React.FC<SongListProps & TrackProps> = ({ songs, ...fields }) => {
-  const play = usePlay()
+  const { play } = usePlay()
   return <SongList songs={songs} play={(_, i) => play(songs, i)} {...fields} />
 }
 
