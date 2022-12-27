@@ -3,9 +3,8 @@ import update from "immutability-helper"
 
 import Track, { TrackProps, TrackActions } from "./track"
 import type { SubsonicSong } from "../types"
-import { usePlay } from "../hooks"
 
-interface SongListProps {
+interface TracksProps {
   songs: SubsonicSong[]
   index?: (n: number) => number
 }
@@ -16,7 +15,7 @@ export interface AugmentedSubsonicSong extends SubsonicSong {
 
 const augment = (s: SubsonicSong, i: number) => ({ i, ...s })
 
-export const SongList: React.FC<SongListProps & TrackProps & TrackActions> = ({
+const Tracks: React.FC<TracksProps & TrackProps & TrackActions> = ({
   songs: s,
   move,
   index,
@@ -46,6 +45,7 @@ export const SongList: React.FC<SongListProps & TrackProps & TrackActions> = ({
         index={index ? index(i) : i}
         previewMove={move ? previewMove : undefined}
         move={move}
+        songs={songs}
         song={song}
         {...fields}
       />
@@ -54,11 +54,6 @@ export const SongList: React.FC<SongListProps & TrackProps & TrackActions> = ({
   )
 
   return <main>{songs.map(renderTrack)}</main>
-}
-
-const Tracks: React.FC<SongListProps & TrackProps> = ({ songs, ...fields }) => {
-  const { play } = usePlay()
-  return <SongList songs={songs} play={(_, i) => play(songs, i)} {...fields} />
 }
 
 export default Tracks

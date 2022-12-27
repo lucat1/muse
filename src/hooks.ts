@@ -7,9 +7,9 @@ import type { SubsonicSong } from "./types"
 // Plays the i-th song from the list of given songs.
 // If i is -1 it shuffles and plays the first one
 export const usePlay = () => {
-  const { load } = usePlayer()
-  const { append, clear: clearQueue } = useQueue()
-  const { push, clear: clearStack } = useStack()
+  const { load, play: start, ...otherPlayer } = usePlayer()
+  const { append, clear: clearQueue, ...otherQueue } = useQueue()
+  const { push, clear: clearStack, ...otherStack } = useStack()
   return {
     load,
     append,
@@ -31,6 +31,10 @@ export const usePlay = () => {
         load(songs[i])
       },
       [load, append, clearQueue, clearStack, push]
-    )
+    ),
+    start,
+    ...otherPlayer,
+    ...otherQueue,
+    ...otherStack
   }
 }

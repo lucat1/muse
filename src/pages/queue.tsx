@@ -1,7 +1,7 @@
 import * as React from "react"
 
 import Standard from "../components/standard"
-import { SongList } from "../components/tracks"
+import Tracks from "../components/tracks"
 import Song from "../components/song"
 import { usePlayer } from "../stores/player"
 import { useStack, useQueue } from "../stores/queue"
@@ -25,7 +25,7 @@ const Queue: React.FC = () => {
         {stack.length > 0 && (
           <>
             <h2 className="text-xl font-bold">Previous</h2>
-            <SongList
+            <Tracks
               songs={stack}
               index={(n) => -(stack.length - n + 1)}
               art={-1}
@@ -38,7 +38,7 @@ const Queue: React.FC = () => {
         {queue.length > 0 && (
           <>
             <h2 className="text-xl font-bold">Next</h2>
-            <SongList
+            <Tracks
               songs={queue}
               art={-1}
               title={16}
