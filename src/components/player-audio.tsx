@@ -29,6 +29,8 @@ const Audio: React.FC<AudioProps> = ({ onTime, seek, onEnd }) => {
     audio.current.addEventListener("ended", onEnd)
     audio.current.addEventListener("waiting", handleLoading)
     audio.current.addEventListener("loadeddata", handleNotLoading)
+    // TODO
+    audio.current.volume = 0
     return () => {
       if (!audio.current) return
 

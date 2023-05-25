@@ -6,7 +6,7 @@ module.exports = {
   plugins: [require("@tailwindcss/typography")],
   theme: {
     fontFamily: {
-      logo: ["'Cooper Black'", "serif"]
+      logo: ["'Karmella'", "sans-serif"]
     },
     screens: {
       sm: "640px",
