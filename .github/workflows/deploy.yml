@@ -50,7 +50,7 @@ jobs:
           cache: ${{ steps.detect-package-manager.outputs.manager }}
       - name: Install dependencies
         run: ${{ steps.detect-package-manager.outputs.manager }} ${{ steps.detect-package-manager.outputs.command }}
-      - name: Build with Snowpack
+      - name: Build with vite
         run: ${{ steps.detect-package-manager.outputs.runner }} build
       - name: Link index.html to 404.html
         run: cp dist/index.html dist/404.html
